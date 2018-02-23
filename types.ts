@@ -8,11 +8,18 @@ export interface IArgument extends IType {
   defaultValue?: any
 }
 
+export interface IOptionalArgument extends IArgument {
+  defaultValue: any
+}
+
 export interface ISignature {
-  allArgs: string
   requiredArgs: IArgument[]
-  optionalArgs: IArgument[]
+  optionalArgs: IOptionalArgument[]
   returnValues: IArgument[]
+}
+
+export interface ICppSignature extends ISignature {
+  allArgs: string
 }
 
 export interface IFunction {
@@ -20,5 +27,5 @@ export interface IFunction {
   owner: string
   fnName: string
   hasAsync: boolean
-  signatures: ISignature[]
+  signatures: ICppSignature[]
 }
