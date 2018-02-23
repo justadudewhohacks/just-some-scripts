@@ -1,0 +1,21 @@
+{
+  "name": "just-some-scripts",
+  "version": "0.0.0",
+  "description": "",
+  "scripts": {
+    "test": "mocha -r ts-node/register ./tests/**/*.test.ts"
+  },
+  "author": "justadudewhohacks",
+  "dependencies": {
+    "@types/node": "^9.4.1",
+    "ts-node": "^5.0.0",
+    "tslib": "^1.9.0",
+    "typescript": "^2.7.2"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.1.2",
+    "@types/mocha": "^2.2.48",
+    "chai": "^4.1.2",
+    "mocha": "^5.0.1"
+  }
+}
