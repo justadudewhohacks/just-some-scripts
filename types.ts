@@ -27,5 +27,9 @@ export interface IFunction {
   owner: string
   fnName: string
   hasAsync: boolean
+  signatures: ISignature[]
+}
+
+export interface ICppFunction extends IFunction {
   signatures: ICppSignature[]
 }
