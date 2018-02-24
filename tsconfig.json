@@ -13,6 +13,7 @@
       "noUnusedParameters": true,
       "noFallthroughCasesInSwitch": true,
       "suppressImplicitAnyIndexErrors": true,
+      "strictNullChecks": true,
       "moduleResolution": "node",
       "module": "commonjs",
       "target": "es6",
@@ -33,6 +34,8 @@
   },
   "exclude": [
     "node_modules",
-    "dist"
+    "dist",
+    "generated",
+    "sample"
   ]
 }

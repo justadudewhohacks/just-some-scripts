@@ -23,3 +23,7 @@ const FunctionSchema = new Schema({
 FunctionSchema.index({ fnName: 1, owner: 1 }, { unique: true })
 
 export const FunctionModel: Model<IFunctionModel> = model<IFunctionModel>('Functions', FunctionSchema)
+
+export function findFunctionsByOwner(owner: string): Promise<IFunction[]> {
+  return FunctionModel.find({ owner }).exec()
+}

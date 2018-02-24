@@ -18,7 +18,7 @@ export interface IOptionalArgument extends IArgument {
 export interface ISignature {
   requiredArgs: IArgument[]
   optionalArgs: IOptionalArgument[]
-  returnValues: IArgument[]
+  returnValues?: IArgument[]
 }
 
 export interface ICppSignature extends ISignature {
@@ -27,7 +27,7 @@ export interface ICppSignature extends ISignature {
 
 export interface IFunction {
   cvModule: string
-  category: string
+  category?: string
   owner: string
   fnName: string
   hasAsync: boolean
