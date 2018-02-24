@@ -1,7 +1,13 @@
 import { IType, IArgument, IOptionalArgument } from '../types';
 
+const numberTypes = ['uint', 'int', 'uchar']
+
+export function transformType(type: string): string {
+  return numberTypes.some(t => t === type)  ? 'number' : type
+}
+
 export function typeOrArrayType(t: IType) : string {
-  return `${t.type}${Array(t.arrayDepth || 0).fill(0).map(_ => '[]').join('')}`
+  return `${transformType(t.type)}${Array(t.arrayDepth || 0).fill(0).map(_ => '[]').join('')}`
 }
 
 export function argWithType(arg: IArgument, opt = false) : string {
@@ -9,7 +15,7 @@ export function argWithType(arg: IArgument, opt = false) : string {
 }
 
 export function returnValue(returnValues: IArgument[]) : string {
-  return returnValues.length
+  return returnValues && returnValues.length
     ? (
       returnValues.length === 1
         ? typeOrArrayType(returnValues[0])
