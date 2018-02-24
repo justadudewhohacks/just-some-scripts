@@ -1,4 +1,4 @@
-import { IType, IArgument, IOptionalArgument } from '../types';
+import { IType, IArgument, IOptionalArgument, IDeclaration } from '../types';
 
 const numberTypes = ['uint', 'int', 'uchar']
 
@@ -10,11 +10,11 @@ export function typeOrArrayType(t: IType) : string {
   return `${transformType(t.type)}${Array(t.arrayDepth || 0).fill(0).map(_ => '[]').join('')}`
 }
 
-export function argWithType(arg: IArgument, opt = false) : string {
+export function argWithType(arg: IDeclaration, opt = false) : string {
   return `${arg.name}${opt ? '?' : ''}: ${typeOrArrayType(arg)}`
 }
 
-export function returnValue(returnValues: IArgument[]) : string {
+export function returnValue(returnValues?: IArgument[]) : string {
   return returnValues && returnValues.length
     ? (
       returnValues.length === 1
@@ -28,4 +28,8 @@ export function argList(requiredArgs: IArgument[], optionalArgs: IOptionalArgume
   return requiredArgs.map(arg => argWithType(arg, false))
     .concat(optionalArgs.map(arg => argWithType(arg, true)))
     .join(', ')
+}
+
+export function createClassFields(fields: IDeclaration[]) {
+  return fields.map(f => `readonly ${argWithType(f)}`)
 }

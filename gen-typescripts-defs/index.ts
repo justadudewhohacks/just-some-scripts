@@ -5,17 +5,25 @@ import '../.env'
 import { findByClassName } from './../persistence/class.model';
 import { findFunctionsByOwner } from './../persistence/function.model';
 import { IFunction } from './../types';
-import { createFunctionSignatures } from './createFunctionSignatures';
+import { createFunctionSignatures, createConstructor } from './createFunctionSignatures';
+import { createClassFields } from './commons';
 
 const lineBreak = '\r\n'
-const emptyLine = `${lineBreak}${lineBreak}`
 
 function indent(line: string): string {
   return `  ${line}`
 }
 
+function appendSemicolon(line: string): string {
+  return `${line};`
+}
+
+function addLineBreak(line: string): string {
+  return `${line}${lineBreak}`
+}
+
 function writeToFile(fileName: string, lines: string[]) {
-  fs.writeFileSync(path.resolve(__dirname, '../generated', fileName), lines.join(emptyLine))
+  fs.writeFileSync(path.resolve(__dirname, '../generated', fileName), lines.join(''))
 }
 
 function orderByFnName(classFns: IFunction[]): IFunction[] {
@@ -34,19 +42,25 @@ async function createClassDefinitions(className: string) {
 
   console.log('found %s member functions for class %s', classFns.length, className)
 
+  const fieldDefs = createClassFields(clazz.fields)
+  const constructorDefs = clazz.constructors.map(createConstructor)
+
   const classFnDefs = classFns
     .map(createFunctionSignatures)
-    .map(
-      fnDefs => fnDefs
-        .map(indent)
-        .join(lineBreak)
-    )
+    .reduce((all, arr) => all.concat(arr), [])
+
+  const allDefs = fieldDefs
+    .concat(constructorDefs)
+    .concat(classFnDefs)
+    .map(indent)
+    .map(appendSemicolon)
 
   const result = [
     `export class ${className} {`
   ]
-    .concat(classFnDefs)
+    .concat(allDefs)
     .concat('}')
+    .map(addLineBreak)
 
   writeToFile(`${className}.d.ts`, result)
 
@@ -55,7 +69,7 @@ async function createClassDefinitions(className: string) {
 
 async function run() {
   try {
-    await createClassDefinitions('Mat')
+    await createClassDefinitions('Vec')
   } catch (err) {
     console.error(err)
   }
