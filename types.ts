@@ -3,9 +3,12 @@ export interface IType {
   type: string
 }
 
-export interface IArgument extends IType {
+export interface IDeclaration extends IType {
   name: string
   defaultValue?: any
+}
+
+export interface IArgument extends IDeclaration {
 }
 
 export interface IOptionalArgument extends IArgument {
@@ -24,6 +27,7 @@ export interface ICppSignature extends ISignature {
 
 export interface IFunction {
   cvModule: string
+  category: string
   owner: string
   fnName: string
   hasAsync: boolean
@@ -32,4 +36,15 @@ export interface IFunction {
 
 export interface ICppFunction extends IFunction {
   signatures: ICppSignature[]
+}
+
+export interface IClass {
+  className: string,
+  cvModule: string,
+  fields: IDeclaration[],
+  constructors: [{
+    requiredArgs: IArgument[],
+    optionalArgs: IOptionalArgument[],
+    returnsOther: String
+  }]
 }

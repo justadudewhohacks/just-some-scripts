@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { syncFunctionSignature } from '../../gen-typescripts-defs/index';
+import { syncFunctionSignature } from '../../gen-typescripts-defs/createFunctionSignatures';
 
 export function syncFunctionSignatureTests() {
 

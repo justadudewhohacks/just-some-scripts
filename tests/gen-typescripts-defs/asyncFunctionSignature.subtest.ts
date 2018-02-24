@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { asyncFunctionSignature } from '../../gen-typescripts-defs/index';
+import { asyncFunctionSignature } from '../../gen-typescripts-defs/createFunctionSignatures';
 
 export function asyncFunctionSignatureTests() {
 

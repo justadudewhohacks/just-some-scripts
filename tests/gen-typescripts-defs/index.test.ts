@@ -3,7 +3,7 @@ import { IFunction } from './../../types';
 import { commonTests } from "./commons.subtest";
 import { syncFunctionSignatureTests } from './syncFunctionSignature.subtest';
 import { asyncFunctionSignatureTests } from './asyncFunctionSignature.subtest';
-import { createFunctionSignatures } from '../../gen-typescripts-defs/index';
+import { createFunctionSignatures } from '../../gen-typescripts-defs/createFunctionSignatures';
 
 
 describe('gen-typescripts-defs', () => {
@@ -38,6 +38,7 @@ describe('gen-typescripts-defs', () => {
       return {
         cvModule: 'whoCares...',
         owner: 'whoCares...',
+        category: 'whoCares...',
         fnName: 'myFunc',
         hasAsync,
         signatures: [
