@@ -1,0 +1,14 @@
+{
+  "name": "@opencv4nodejs-gen/persistence",
+  "version": "0.0.0",
+  "description": "",
+  "author": "justadudewhohacks",
+  "dependencies": {
+    "@types/mongoose": "^5.0.1",
+    "@types/node": "^9.4.1",
+    "mongoose": "^5.0.3",
+    "ts-node": "^5.0.0",
+    "tslib": "^1.9.0",
+    "typescript": "^2.7.2"
+  }
+}

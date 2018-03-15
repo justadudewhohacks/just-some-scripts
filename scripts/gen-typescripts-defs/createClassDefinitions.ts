@@ -1,10 +1,10 @@
-import { connection, connect } from 'mongoose'
 import * as path from 'path'
 import * as fs from 'fs'
-import '../.env'
-import { findByClassName } from './../persistence/class.model';
-import { findFunctionsByOwner } from './../persistence/function.model';
-import { IFunction } from './../types';
+import {
+  ClassDao,
+  FunctionDao,
+  IFunction
+} from '@opencv4nodejs-gen/persistence';
 import { createFunctionSignatures, createConstructor } from './createFunctionSignatures';
 import { createClassFields } from './commons';
 
@@ -30,15 +30,15 @@ function orderByFnName(classFns: IFunction[]): IFunction[] {
   return classFns.sort((c1: any, c2: any) => c1.fnName < c2.fnName ? -1 : 1)
 }
 
-async function createClassDefinitions(className: string) {
+export async function createClassDefinitions(className: string) {
   console.log('createClassDefinitions for %s', className)
 
-  const clazz = await findByClassName(className)
+  const clazz = await ClassDao.findByClassName(className)
 
   if (!clazz)
     throw new Error(`class '${className}' not found`)
 
-  const classFns = orderByFnName(await findFunctionsByOwner(className))
+  const classFns = orderByFnName(await FunctionDao.findFunctionsByOwner(className))
 
   console.log('found %s member functions for class %s', classFns.length, className)
 
@@ -66,16 +66,3 @@ async function createClassDefinitions(className: string) {
 
   console.log('done')
 }
-
-async function run() {
-  try {
-    await createClassDefinitions('Vec')
-  } catch (err) {
-    console.error(err)
-  }
-  connection.close()
-}
-
-connect(`mongodb://${process.env.MLAB_USER}:${process.env.MLAB_PW}@${process.env.MLAB_ADDRESS}`)
-  .then(run)
-  .catch(err => console.error(err))

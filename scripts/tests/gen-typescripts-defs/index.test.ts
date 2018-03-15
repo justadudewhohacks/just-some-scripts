@@ -1,8 +1,8 @@
 import { expect } from 'chai';
-import { IFunction } from './../../types';
-import { commonTests } from "./commons.subtest";
-import { syncFunctionSignatureTests } from './syncFunctionSignature.subtest';
-import { asyncFunctionSignatureTests } from './asyncFunctionSignature.subtest';
+import { IFunction } from '@opencv4nodejs-gen/persistence';
+import { commonTests } from "./commons.unit";
+import { syncFunctionSignatureTests } from './syncFunctionSignature.unit';
+import { asyncFunctionSignatureTests } from './asyncFunctionSignature.unit';
 import { createFunctionSignatures } from '../../gen-typescripts-defs/createFunctionSignatures';
 
 

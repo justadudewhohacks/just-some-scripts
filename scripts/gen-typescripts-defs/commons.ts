@@ -1,4 +1,4 @@
-import { IType, IArgument, IOptionalArgument, IDeclaration } from '../types';
+import { IType, IArgument, IOptionalArgument, IDeclaration } from '@opencv4nodejs-gen/persistence';
 
 const numberTypes = ['uint', 'int', 'uchar']
 
