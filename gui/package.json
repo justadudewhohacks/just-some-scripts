@@ -5,7 +5,7 @@
   "scripts": {
     "build": "tsc",
     "dev": "webpack-dev-server",
-    "start": "npm run build && electron ./dist/main.js"
+    "start": "npm run build && electron ./dist/gui/main.js"
   },
   "author": "justadudewhohacks",
   "license": "MIT",

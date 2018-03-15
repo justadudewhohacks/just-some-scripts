@@ -4,26 +4,31 @@ import { connect } from 'react-redux'
 import { MuiThemeProvider } from 'material-ui/styles';
 import { SignatureEditor } from './components/SignatureEditor'
 import { RootState } from './redux/rootReducer'
-import { actions as helloWorldActions } from './redux/HelloWorld'
+import { actions as databaseConnectionActions } from './redux/DatabaseConnection'
 
 function mapStateToProps(state: RootState) {
   return {
-    message: state.helloWorld.message
+    isConnectedToDatabase: state.databaseConnection.isConnected
   }
 }
 
 function mapDispatchToProps(dispatch: any) {
   return {
-    sayHello: (message: string) => dispatch(helloWorldActions.sayHello(message))
+    connectToDatabase: () => dispatch(databaseConnectionActions.connect())
   }
 }
 
 type RootProps = {
-  message: string,
-  sayHello: (message: string) => void
+  isConnectedToDatabase: boolean
+  connectToDatabase: () => any
 }
 
 class Root extends React.Component<RootProps> {
+  constructor(props: RootProps) {
+    super(props)
+    props.connectToDatabase()
+  }
+
   render() {
     return (
       <MuiThemeProvider>
@@ -39,8 +44,6 @@ class Root extends React.Component<RootProps> {
               render={
                 () => (
                   <SignatureEditor
-                    message={this.props.message}
-                    sayHello={this.props.sayHello}
                   />
                 )
               }
