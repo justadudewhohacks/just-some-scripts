@@ -32,3 +32,7 @@ ipcMain.on('close', (event: any) => {
       event.sender.send('close', { error })
     })
 })
+
+ipcMain.on('fetchFunctionSignature', (event: any) => {
+
+})
