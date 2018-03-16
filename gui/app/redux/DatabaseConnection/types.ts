@@ -16,7 +16,7 @@ export type State = {
 }
 
 export interface IConnectionService {
-  connect: () => Promise<any>
-  close: () => Promise<any>
+  connect: () => Promise<void>
+  close: () => Promise<void>
 }
 

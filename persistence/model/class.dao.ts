@@ -1,10 +1,6 @@
 import { ClassModel, IClassModel } from './class.model';
 
-function findByClassName(className: string): Promise<IClassModel | null> {
-  return ClassModel.findOne({ className }).exec()
-}
-
-async function findAllClasses(): Promise<string[]> {
+async function findAll(): Promise<string[]> {
   return (
     await ClassModel
       .find({}, 'className')
@@ -14,7 +10,11 @@ async function findAllClasses(): Promise<string[]> {
     .map(doc => doc.className)
 }
 
+function findByName(className: string): Promise<IClassModel | null> {
+  return ClassModel.findOne({ className }).lean().exec()
+}
+
 export const ClassDao = {
-  findAllClasses,
-  findByClassName
+  findAll,
+  findByName
 }

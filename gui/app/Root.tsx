@@ -5,6 +5,7 @@ import { MuiThemeProvider } from 'material-ui/styles';
 import { SignatureEditor } from './components/SignatureEditor'
 import { RootState } from './redux/rootReducer'
 import { actions as databaseConnectionActions } from './redux/DatabaseConnection'
+import { actions as signaturesActions } from './redux/Signatures'
 
 function mapStateToProps(state: RootState) {
   return {
@@ -14,13 +15,15 @@ function mapStateToProps(state: RootState) {
 
 function mapDispatchToProps(dispatch: any) {
   return {
-    connectToDatabase: () => dispatch(databaseConnectionActions.connect())
+    connectToDatabase: () => dispatch(databaseConnectionActions.connect()),
+    fetchFunctionSignature: (name: string) => dispatch(signaturesActions.fetchFunctionSignature(name))
   }
 }
 
 type RootProps = {
   isConnectedToDatabase: boolean
-  connectToDatabase: () => any
+  connectToDatabase: () => void,
+  fetchFunctionSignature: () => void
 }
 
 class Root extends React.Component<RootProps> {
@@ -44,6 +47,7 @@ class Root extends React.Component<RootProps> {
               render={
                 () => (
                   <SignatureEditor
+                    onSearch={this.props.fetchFunctionSignature}
                   />
                 )
               }

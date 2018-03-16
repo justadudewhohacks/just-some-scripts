@@ -10,6 +10,7 @@
   "author": "justadudewhohacks",
   "license": "MIT",
   "dependencies": {
+    "@opencv4nodejs-gen/persistence": "../persistence",
     "@types/electron": "^1.6.10",
     "@types/material-ui": "^0.21.1",
     "@types/node": "^9.4.1",

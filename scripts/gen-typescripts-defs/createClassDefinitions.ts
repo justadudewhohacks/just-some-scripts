@@ -33,12 +33,12 @@ function orderByFnName(classFns: IFunction[]): IFunction[] {
 export async function createClassDefinitions(className: string) {
   console.log('createClassDefinitions for %s', className)
 
-  const clazz = await ClassDao.findByClassName(className)
+  const clazz = await ClassDao.findByName(className)
 
   if (!clazz)
     throw new Error(`class '${className}' not found`)
 
-  const classFns = orderByFnName(await FunctionDao.findFunctionsByOwner(className))
+  const classFns = orderByFnName(await FunctionDao.findByOwner(className))
 
   console.log('found %s member functions for class %s', classFns.length, className)
 
