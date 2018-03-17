@@ -1,6 +1,6 @@
-import { Schema, Document, Model, model } from 'mongoose';
-import { declType, argType } from './commonTypes';
-import { IClass } from '../types';
+import { Schema, Document, Model, model } from 'mongoose'
+import { declType, argType } from './commonTypes'
+import { IClass } from '../types'
 
 export interface IClassModel extends IClass, Document {}
 
@@ -12,8 +12,10 @@ const ClassSchema = new Schema({
     type: [{
       optionalArgs: { type: [argType] },
       requiredArgs: { type: [argType] },
-      returnsOther: String
-    }]
+      returnsOther: String,
+      _id: false
+    }],
+    _id: false
   }
 })
 

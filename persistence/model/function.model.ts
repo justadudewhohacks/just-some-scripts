@@ -15,7 +15,8 @@ const FunctionSchema = new Schema({
       returnValues: { type: [argType] },
       optionalArgs: { type: [argType] },
       requiredArgs: { type: [argType] },
-      allArgs: { type: String }
+      allArgs: { type: String },
+      _id: false
     }
   ]
 })

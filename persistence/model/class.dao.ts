@@ -1,6 +1,11 @@
-import { ClassModel, IClassModel } from './class.model';
+import { ClassModel, IClassModel } from './class.model'
+import { IClass } from '../types';
 
-async function findAll(): Promise<string[]> {
+async function findAll(): Promise<IClassModel[]> {
+  return ClassModel.find({}).lean().exec()
+}
+
+async function findAllClassNames(): Promise<string[]> {
   return (
     await ClassModel
       .find({}, 'className')
@@ -14,7 +19,13 @@ function findByName(className: string): Promise<IClassModel | null> {
   return ClassModel.findOne({ className }).lean().exec()
 }
 
+function update(_id: string, doc: IClass): Promise<any> {
+  return ClassModel.update({ _id }, doc).exec()
+}
+
 export const ClassDao = {
   findAll,
-  findByName
+  findAllClassNames,
+  findByName,
+  update
 }
