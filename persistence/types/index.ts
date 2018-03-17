@@ -25,7 +25,7 @@ export interface ICppSignature extends ISignature {
   allArgs: string
 }
 
-export interface IFunction {
+export interface IFunctionDocument {
   cvModule: string
   category?: string
   owner: string
@@ -34,11 +34,15 @@ export interface IFunction {
   signatures: ISignature[]
 }
 
+export interface IFunction extends IFunctionDocument {
+  _id: string
+}
+
 export interface ICppFunction extends IFunction {
   signatures: ICppSignature[]
 }
 
-export interface IClass {
+export interface IClassDocument {
   className: string,
   cvModule: string,
   fields: IDeclaration[],
@@ -47,4 +51,8 @@ export interface IClass {
     optionalArgs: IOptionalArgument[],
     returnsOther: String
   }]
+}
+
+export interface IClass extends IClassDocument {
+  _id: string
 }

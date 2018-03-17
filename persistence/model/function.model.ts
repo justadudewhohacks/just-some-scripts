@@ -1,8 +1,8 @@
 import { Schema, Document, Model, model } from 'mongoose';
-import { IFunction } from '../types';
+import { IFunctionDocument } from '../types';
 import { argType } from './commonTypes';
 
-export interface IFunctionModel extends IFunction, Document {}
+export interface IFunctionModel extends IFunctionDocument, Document {}
 
 const FunctionSchema = new Schema({
   fnName: { type: String, required: true },

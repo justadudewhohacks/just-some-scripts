@@ -1,8 +1,8 @@
 import { Schema, Document, Model, model } from 'mongoose'
 import { declType, argType } from './commonTypes'
-import { IClass } from '../types'
+import { IClassDocument } from '../types'
 
-export interface IClassModel extends IClass, Document {}
+export interface IClassModel extends IClassDocument, Document {}
 
 const ClassSchema = new Schema({
   className: { type: String, required: true, unique: true },

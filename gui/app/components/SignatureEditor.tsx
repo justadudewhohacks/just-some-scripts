@@ -2,8 +2,11 @@ import * as React from 'react'
 import { Route, Switch, Link } from 'react-router-dom'
 import { FloatingActionButton, TextField } from 'material-ui'
 import ActionSearch from 'material-ui/svg-icons/action/search'
+import { IFunction } from '@opencv4nodejs-gen/persistence/types/index'
+import { SignatureTablist } from './SignatureTablist';
 
 type SignatureEditorProps = {
+  signatures: IFunction[]
   onSearch: (value: string) => void
 }
 
@@ -36,13 +39,17 @@ export class SignatureEditor extends React.Component<SignatureEditorProps, Signa
 
     return (
       <div>
+        <SignatureTablist
+          selectedIdx={0}
+          tabNames={this.props.signatures.map(s => s.fnName)}
+        />
         <TextField
           value={this.state.inputValue}
           onChange={this.onInputChanged}
           hintText="Load Function Signature"
           floatingLabelText="Load Function Signature"
         />
-        <FloatingActionButton 
+        <FloatingActionButton
           onClick={this.onSearch}
           style={{ marginRight: 20 }}
         >

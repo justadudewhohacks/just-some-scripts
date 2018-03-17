@@ -1,6 +1,6 @@
-import { connection, FunctionDao } from '../persistence'
+import { connection, FunctionDao, stringifyId } from '../persistence'
 import { ipcMain } from 'electron'
-import { FetchFunctionSignatureArgs } from './app/redux/Signatures/types';
+import { FetchFunctionSignatureArgs } from './app/redux/Signatures/types'
 
 let connected = false
 
@@ -37,7 +37,7 @@ ipcMain.on('close', (event: any) => {
 ipcMain.on('fetchFunctionSignature', async (event: any, args: FetchFunctionSignatureArgs) => {
   try {
     const result = await FunctionDao.find(args.owner, args.className)
-    event.sender.send('fetchFunctionSignature', { result })
+    event.sender.send('fetchFunctionSignature', { result: result ? stringifyId(result) : result })
   } catch (error) {
     event.sender.send('fetchFunctionSignature', { error })
   }
