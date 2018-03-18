@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { MuiThemeProvider } from 'material-ui/styles'
 import { ThemeProvider } from 'styled-components'
 import { IFunction } from '@opencv4nodejs-gen/persistence'
-import { SignatureEditor } from './components/SignatureEditor'
+import { Editor } from './components/Editor'
 import { RootState } from './redux/rootReducer'
 import { actions as databaseConnectionActions } from './redux/DatabaseConnection'
 import { actions as signaturesActions } from './redux/Signatures'
@@ -19,22 +19,24 @@ const theme = {
 function mapStateToProps(state: RootState) {
   return {
     isConnectedToDatabase: state.databaseConnection.isConnected,
-    signatures: state.signatures.signatures
+    functions: state.signatures.functions
   }
 }
 
 function mapDispatchToProps(dispatch: any) {
   return {
     connectToDatabase: () => dispatch(databaseConnectionActions.connect()),
-    fetchFunctionSignature: (name: string) => dispatch(signaturesActions.fetchFunctionSignature(name))
+    fetchFunction: (name: string) => dispatch(signaturesActions.fetchFunction(name)),
+    editFunction: (_id: string) => dispatch(signaturesActions.editFunction(_id))
   }
 }
 
 type RootProps = {
   isConnectedToDatabase: boolean
-  signatures: IFunction[]
+  functions: IFunction[]
   connectToDatabase: () => void
-  fetchFunctionSignature: () => void
+  fetchFunction: (name: string) => void
+  editFunction: (_id: string) => void
 }
 
 class Root extends React.Component<RootProps> {
@@ -52,15 +54,16 @@ class Root extends React.Component<RootProps> {
               <Redirect
                 exact
                 path={'/'}
-                to={'/signatures'}
+                to={'/functions'}
               />
               <Route
-                path={'/signatures'}
+                path={'/functions'}
                 render={
                   () => (
-                    <SignatureEditor
-                      signatures={this.props.signatures}
-                      onSearch={this.props.fetchFunctionSignature}
+                    <Editor
+                      functions={this.props.functions}
+                      editFunction={this.props.editFunction}
+                      onSearch={this.props.fetchFunction}
                     />
                   )
                 }

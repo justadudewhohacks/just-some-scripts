@@ -5,9 +5,9 @@ import { IFunction } from '@opencv4nodejs-gen/persistence';
 
 export default function() : ISignaturesService {
 
-  const fetchFunctionSignature = ipcHandlerFactory<FetchFunctionSignatureArgs, IFunction>('fetchFunctionSignature')
+  const fetchFunction = ipcHandlerFactory<FetchFunctionSignatureArgs, IFunction>('fetchFunction')
 
   return {
-    fetchFunctionSignature
+    fetchFunction
   }
 }

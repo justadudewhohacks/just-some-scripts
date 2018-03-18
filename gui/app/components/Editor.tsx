@@ -3,26 +3,30 @@ import { Route, Switch, Link } from 'react-router-dom'
 import { FloatingActionButton, TextField } from 'material-ui'
 import ActionSearch from 'material-ui/svg-icons/action/search'
 import { IFunction } from '@opencv4nodejs-gen/persistence/types/index'
-import { SignatureTablist } from './SignatureTablist';
+import { EditorTablist } from './EditorTablist';
 
-type SignatureEditorProps = {
-  signatures: IFunction[]
+type EditorProps = {
+  functions: IFunction[]
   onSearch: (value: string) => void
+  editFunction: (_id: string) => void
 }
 
-type SignatureEditorState = {
+type EditorState = {
   inputValue: string
 }
 
-export class SignatureEditor extends React.Component<SignatureEditorProps, SignatureEditorState> {
-  constructor(props: SignatureEditorProps) {
+export class Editor extends React.Component<EditorProps, EditorState> {
+  constructor(props: EditorProps) {
     super(props)
     this.state = {
       inputValue: ''
     }
 
     this.onInputChanged = this.onInputChanged.bind(this)
+    this.onKeyPress = this.onKeyPress.bind(this)
     this.onSearch = this.onSearch.bind(this)
+    this.onEditorTabSelected = this.onEditorTabSelected.bind(this)
+    this.onEditorTabClosed = this.onEditorTabClosed.bind(this)
   }
 
   onInputChanged(_: any, inputValue: string) {
@@ -31,21 +35,38 @@ export class SignatureEditor extends React.Component<SignatureEditorProps, Signa
     })
   }
 
+  onKeyPress(e: React.KeyboardEvent<any>) {
+    if (e.key === 'Enter')
+      this.props.onSearch(this.state.inputValue)
+  }
+
   onSearch() {
     this.props.onSearch(this.state.inputValue)
+  }
+
+  onEditorTabSelected(tabId: string) {
+    const fn = this.props.functions.find(f => f._id === tabId)
+    this.props.editFunction(fn._id)
+  }
+
+  onEditorTabClosed(tabId: string) {
+
   }
 
   render() {
 
     return (
       <div>
-        <SignatureTablist
-          selectedIdx={0}
-          tabNames={this.props.signatures.map(s => s.fnName)}
+        <EditorTablist
+          tabIdSelected={'0'}
+          tabs={this.props.functions.map(s =>({ tabName: s.fnName, tabId: s._id }))}
+          onSelect={this.onEditorTabSelected}
+          onClose={this.onEditorTabClosed}
         />
         <TextField
           value={this.state.inputValue}
           onChange={this.onInputChanged}
+          onKeyPress={this.onKeyPress}
           hintText="Load Function Signature"
           floatingLabelText="Load Function Signature"
         />

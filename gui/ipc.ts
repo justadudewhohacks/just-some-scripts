@@ -34,11 +34,11 @@ ipcMain.on('close', (event: any) => {
     })
 })
 
-ipcMain.on('fetchFunctionSignature', async (event: any, args: FetchFunctionSignatureArgs) => {
+ipcMain.on('fetchFunction', async (event: any, args: FetchFunctionSignatureArgs) => {
   try {
     const result = await FunctionDao.find(args.owner, args.className)
-    event.sender.send('fetchFunctionSignature', { result: result ? stringifyId(result) : result })
+    event.sender.send('fetchFunction', { result: result ? stringifyId(result) : result })
   } catch (error) {
-    event.sender.send('fetchFunctionSignature', { error })
+    event.sender.send('fetchFunction', { error })
   }
 })

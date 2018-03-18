@@ -1,50 +1,57 @@
 import { Dispatch } from 'redux'
-import { ActionTypes, Action, ISignaturesService } from './types'
+import { ISignaturesService } from './types';
+import { fetchFunctionSuccessAction, editFunctionAction } from './actionCreators';
+import { IAction } from '../reduxUtils';
 
 export default function(service: ISignaturesService) {
 
-  function fetchFunctionSignature(name: string) {
-    return async function(dispatch: Dispatch<Action>) {
+  function fetchFunction(name: string) {
+    return async function(dispatch: Dispatch<IAction<any>>) {
       const [first = '', className = ''] = name.split('.').map(s => s.trim())
       const owner = `${(first[0] || '').toUpperCase()}${first.substr(1)}`
 
       if (!owner || !className) {
         dispatch({
-          type: ActionTypes.FETCH_FUNCTION_SIGNATURE_INVALID_INPUT,
+          type: 'FETCH_FUNCTION_INVALID_INPUT',
           payload: { owner, className }
         })
         return
       }
 
       dispatch({
-        type: ActionTypes.FETCHING_FUNCTION_SIGNATURE,
+        type: 'FETCHING_FUNCTION',
         payload: { owner, className }
       })
 
       try {
-        const signature = await service.fetchFunctionSignature({ owner, className })
-        if (!signature) {
+        const fn = await service.fetchFunction({ owner, className })
+        if (!fn) {
           dispatch({
-            type: ActionTypes.FETCH_FUNCTION_SIGNATURE_NOT_FOUND,
+            type: 'FETCH_FUNCTION_NOT_FOUND',
             payload: { owner, className }
           })
           return
         }
-        dispatch({
-          type: ActionTypes.FETCH_FUNCTION_SIGNATURE_SUCCESS,
-          payload: { signature }
-        })
+
+        dispatch(fetchFunctionSuccessAction({ fn }))
       } catch (error) {
         dispatch({
-          type: ActionTypes.FETCH_FUNCTION_SIGNATURE_ERROR,
+          type: 'FETCH_FUNCTION_ERROR',
           payload: { error }
         })
       }
     }
   }
 
+  function editFunction(_id: string) {
+    return function(dispatch: Dispatch<IAction<any>>) {
+      dispatch(editFunctionAction({ _id }))
+    }
+  }
+
   return {
-    fetchFunctionSignature
+    fetchFunction,
+    editFunction
   }
 }
 

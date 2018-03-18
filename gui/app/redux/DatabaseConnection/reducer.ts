@@ -1,18 +1,16 @@
-import { ActionTypes, Action, State } from './types'
+import { State } from './types'
+import { connectToDatabaseSuccessAction } from './actionCreators';
+import { IAction, isType } from '../reduxUtils';
 
 const INITIAL_STATE : State = {
   isConnected: false
 }
 
-export default function(state = INITIAL_STATE, action: Action) : State {
+export default function(state = INITIAL_STATE, action: IAction<any>) : State {
   const { type, payload } = action
-
-  switch (type) {
-    case ActionTypes.CONNECT_TO_DATABASE_SUCCESS: {
-      return { ...state, isConnected: true }
-    }
-
-    default:
-      return state
+  if (isType(action, connectToDatabaseSuccessAction)) {
+    return { ...state, isConnected: true }
   }
+
+  return state
 }

@@ -1,22 +1,9 @@
 import { IFunction } from './../../../../persistence/types/index';
 
-export enum ActionTypes {
-  FETCHING_FUNCTION_SIGNATURE = 'FETCHING_FUNCTION_SIGNATURE',
-  FETCH_FUNCTION_SIGNATURE_SUCCESS = 'FETCH_FUNCTION_SIGNATURE_SUCCESS',
-  FETCH_FUNCTION_SIGNATURE_ERROR = 'FETCH_FUNCTION_SIGNATURE_ERROR',
-  FETCH_FUNCTION_SIGNATURE_NOT_FOUND = 'FETCH_FUNCTION_SIGNATURE_NOT_FOUND',
-  FETCH_FUNCTION_SIGNATURE_INVALID_INPUT = 'FETCH_FUNCTION_SIGNATURE_INVALID_INPUT'
-}
-
-export type Action = {
-  readonly type: ActionTypes
-  readonly payload: {
-    readonly signature: IFunction
-  }
-}
-
 export type State = {
-  readonly signatures: IFunction[]
+  readonly functions: IFunction[]
+  readonly editedFunctions: IFunction[]
+  readonly currentlyEditing: { _id?: string, signatureIdx?: number }
 }
 
 export type FetchFunctionSignatureArgs = {
@@ -25,6 +12,6 @@ export type FetchFunctionSignatureArgs = {
 }
 
 export interface ISignaturesService {
-  fetchFunctionSignature: (args: FetchFunctionSignatureArgs) => Promise<IFunction>
+  fetchFunction: (args: FetchFunctionSignatureArgs) => Promise<IFunction>
 }
 
