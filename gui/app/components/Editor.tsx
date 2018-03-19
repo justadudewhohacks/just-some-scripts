@@ -4,9 +4,11 @@ import { FloatingActionButton, TextField } from 'material-ui'
 import ActionSearch from 'material-ui/svg-icons/action/search'
 import { IFunction } from '@opencv4nodejs-gen/persistence/types/index'
 import { EditorTablist } from './EditorTablist';
+import { SignatureTablist } from './SignatureTablist';
 
 type EditorProps = {
   functions: IFunction[]
+  editContext?: { fn: IFunction, selectedSignatureIdx?: number }
   onSearch: (value: string) => void
   editFunction: (_id: string) => void
 }
@@ -54,12 +56,14 @@ export class Editor extends React.Component<EditorProps, EditorState> {
   }
 
   render() {
+    const { editContext } = this.props
+    console.log(editContext && editContext.fn._id)
 
     return (
       <div>
         <EditorTablist
-          tabIdSelected={'0'}
           tabs={this.props.functions.map(s =>({ tabName: s.fnName, tabId: s._id }))}
+          selectedTabId={editContext && editContext.fn._id}
           onSelect={this.onEditorTabSelected}
           onClose={this.onEditorTabClosed}
         />
@@ -76,6 +80,14 @@ export class Editor extends React.Component<EditorProps, EditorState> {
         >
           <ActionSearch />
         </FloatingActionButton>
+        {
+          editContext &&
+            <SignatureTablist
+              editContext={editContext}
+              selectedTab={editContext.selectedSignatureIdx}
+              onSelect={(e) => console.log(e)}
+            />
+        }
       </div>
     )
   }

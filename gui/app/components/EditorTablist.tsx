@@ -13,23 +13,19 @@ const Tablist = styled.div`
   overflow-y: hidden;
 `
 
-type Tab = {
-  tabName: string,
-  tabId: string
-}
-
 type Props = {
-  tabIdSelected: string
-  tabs: any[]
+  selectedTabId: string
+  tabs: { tabName: string, tabId: string }[]
   onSelect: (tabId: string) => void
   onClose: (tabId: string) => void
 }
 
-export const EditorTablist = ({ tabIdSelected, tabs, onSelect, onClose } : Props) => (
+export const EditorTablist = ({ selectedTabId, tabs, onSelect, onClose } : Props) => (
   <Tablist>
     {
-      tabs.map(({ tabName, tabId  }) =>
+      tabs.map(({ tabName, tabId }) =>
         <EditorTabIcon
+          isSelected={tabId === selectedTabId}
           key={tabId}
           tabName={tabName}
           onSelect={() => onSelect(tabId)}

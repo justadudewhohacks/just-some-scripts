@@ -5,21 +5,27 @@ import NavigationClose from 'material-ui/svg-icons/navigation/close'
 import FlatButton from 'material-ui/FlatButton'
 import styled from 'styled-components'
 
+type TabProps = {
+  isSelected: boolean,
+  theme?: any
+}
+
 const Tab = styled.div`
   display: flex;
   align-items: center;
-  background: ${props => props.theme.colors.active};
+  background: ${(props: TabProps) => props.theme.colors[props.isSelected ? 'active' : 'passive']};
   margin-right: 10px;
 `
 
 type Props = {
+  isSelected: boolean
   tabName: string
   onSelect: () => void
   onClose: () => void
 }
 
-export const EditorTabIcon = ({ tabName, onSelect, onClose } : Props) =>
-  <Tab>
+export const EditorTabIcon = ({ isSelected, tabName, onSelect, onClose } : Props) =>
+  <Tab isSelected={isSelected}>
     <FlatButton
       label={ tabName }
       style={{ height: '100%' }}

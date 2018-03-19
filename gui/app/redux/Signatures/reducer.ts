@@ -7,7 +7,7 @@ import { IAction, isType } from '../reduxUtils';
 const INITIAL_STATE : State = {
   functions: [],
   editedFunctions: [],
-  currentlyEditing: {}
+  currentlyEditing: { _id: null, selectedSignatureIdx: 0 }
 }
 
 function makeHasId(_id: string) {
@@ -30,11 +30,11 @@ export default function(state = INITIAL_STATE, action: IAction<any>) : State {
 
       return {
         ...state,
-        currentlyEditing: { _id },
+        currentlyEditing: { _id, selectedSignatureIdx: 0 },
         editedFunctions: state.editedFunctions.concat(fn || [])
       }
     }
-    return state
+    return { ...state, currentlyEditing: { ...state.currentlyEditing, _id } }
 
   } else if (isType(action, fetchFunctionSuccessAction)) {
 

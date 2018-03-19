@@ -12,14 +12,21 @@ import { actions as signaturesActions } from './redux/Signatures'
 const theme = {
   colors: {
     active: '#BBDEFB',
+    passive: '#CCC',
     button: '#90CAF9'
   }
 }
 
 function mapStateToProps(state: RootState) {
+  const { signatures } = state
+  const editedFunction = signatures.editedFunctions.find(f => f._id === signatures.currentlyEditing._id)
   return {
     isConnectedToDatabase: state.databaseConnection.isConnected,
-    functions: state.signatures.functions
+    editContext: editedFunction && {
+      fn: editedFunction,
+      selectedSignatureIdx: signatures.currentlyEditing.selectedSignatureIdx
+    },
+    functions: signatures.functions
   }
 }
 
@@ -34,6 +41,7 @@ function mapDispatchToProps(dispatch: any) {
 type RootProps = {
   isConnectedToDatabase: boolean
   functions: IFunction[]
+  editContext: { fn: IFunction | undefined, selectedSignatureIdx: number }
   connectToDatabase: () => void
   fetchFunction: (name: string) => void
   editFunction: (_id: string) => void
@@ -62,6 +70,7 @@ class Root extends React.Component<RootProps> {
                   () => (
                     <Editor
                       functions={this.props.functions}
+                      editContext={this.props.editContext}
                       editFunction={this.props.editFunction}
                       onSearch={this.props.fetchFunction}
                     />

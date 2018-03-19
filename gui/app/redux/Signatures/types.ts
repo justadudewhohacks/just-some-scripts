@@ -3,7 +3,7 @@ import { IFunction } from './../../../../persistence/types/index';
 export type State = {
   readonly functions: IFunction[]
   readonly editedFunctions: IFunction[]
-  readonly currentlyEditing: { _id?: string, signatureIdx?: number }
+  readonly currentlyEditing: { _id?: string, selectedSignatureIdx: number }
 }
 
 export type FetchFunctionSignatureArgs = {
