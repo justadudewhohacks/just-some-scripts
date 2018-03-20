@@ -1,6 +1,12 @@
 import { Dispatch } from 'redux'
 import { ISignaturesService } from './types';
-import { fetchFunctionSuccessAction, editFunctionAction } from './actionCreators';
+import {
+  fetchFunctionSuccessAction,
+  editFunctionAction,
+  editFunctionSignatureAction,
+  updateReturnValueTypeAction,
+  updateReturnValueNameAction
+} from './actionCreators';
 import { IAction } from '../reduxUtils';
 
 export default function(service: ISignaturesService) {
@@ -49,9 +55,30 @@ export default function(service: ISignaturesService) {
     }
   }
 
+  function editFunctionSignature(idx: number) {
+    return function(dispatch: Dispatch<IAction<any>>) {
+      dispatch(editFunctionSignatureAction({ idx }))
+    }
+  }
+
+  function updateReturnValueType(type: string, idx: number) {
+    return function(dispatch: Dispatch<IAction<any>>) {
+      dispatch(updateReturnValueTypeAction({ type, idx }))
+    }
+  }
+
+  function updateReturnValueName(name: string, idx: number) {
+    return function(dispatch: Dispatch<IAction<any>>) {
+      dispatch(updateReturnValueNameAction({ name, idx }))
+    }
+  }
+
   return {
     fetchFunction,
-    editFunction
+    editFunction,
+    editFunctionSignature,
+    updateReturnValueType,
+    updateReturnValueName
   }
 }
 

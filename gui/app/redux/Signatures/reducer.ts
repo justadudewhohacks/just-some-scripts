@@ -1,6 +1,6 @@
-import { IFunction } from '@opencv4nodejs-gen/persistence/index';
+import { IArgument, IFunction, ISignature } from '@opencv4nodejs-gen/persistence/index';
 import { State } from './types';
-import { fetchFunctionSuccessAction, editFunctionAction } from './actionCreators';
+import { fetchFunctionSuccessAction, editFunctionAction, updateReturnValueNameAction, updateReturnValueTypeAction, editFunctionSignatureAction } from './actionCreators';
 import { replaceItem } from '../immutibilityUtils';
 import { IAction, isType } from '../reduxUtils';
 
@@ -16,10 +16,25 @@ function makeHasId(_id: string) {
   }
 }
 
+function updateSignature(state: State, reduce: (currentSignature: ISignature) => any): State {
+  const currentFnIdx = state.editedFunctions.findIndex(makeHasId(state.currentlyEditing._id))
+  if (currentFnIdx === -1)
+    return state
+
+  const currentFn = state.editedFunctions[currentFnIdx]
+  const currentSignature = currentFn.signatures[state.currentlyEditing.selectedSignatureIdx]
+
+  const updatedSignature = { ...currentSignature, ...reduce(currentSignature) }
+  const updatedSignatures = replaceItem<ISignature>(currentFn.signatures, updatedSignature, state.currentlyEditing.selectedSignatureIdx)
+  const updatedFunction = { ...currentFn, signatures: updatedSignatures }
+
+  return {
+    ...state,
+    editedFunctions: replaceItem<IFunction>(state.editedFunctions, updatedFunction, currentFnIdx)
+   }
+}
+
 export default function(state = INITIAL_STATE, action: IAction<any>) : State {
-  function getIndex(functions: IFunction[], _id: string) {
-    return functions.findIndex(f => f._id === _id)
-  }
 
   if (isType(action, editFunctionAction)) {
 
@@ -36,6 +51,13 @@ export default function(state = INITIAL_STATE, action: IAction<any>) : State {
     }
     return { ...state, currentlyEditing: { ...state.currentlyEditing, _id } }
 
+  } else if (isType(action, editFunctionSignatureAction)) {
+
+    return {
+      ...state,
+      currentlyEditing: { ...state.currentlyEditing, selectedSignatureIdx: action.payload.idx }
+    }
+
   } else if (isType(action, fetchFunctionSuccessAction)) {
 
     const { fn } = action.payload
@@ -46,6 +68,33 @@ export default function(state = INITIAL_STATE, action: IAction<any>) : State {
     }
     return { ...state, functions: state.functions.concat(fn) }
 
+  } else if (isType(action, updateReturnValueTypeAction)) {
+
+    const { type, idx } = action.payload
+
+    return updateSignature(state, (currentSignature) => (
+      {
+        returnValues: replaceItem<IArgument>(
+          currentSignature.returnValues,
+          { ...currentSignature.returnValues[idx], type },
+          idx
+        )
+      }
+    ))
+
+  } else if (isType(action, updateReturnValueNameAction)) {
+
+    const { name, idx } = action.payload
+
+    return updateSignature(state, (currentSignature) => (
+      {
+        returnValues: replaceItem<IArgument>(
+          currentSignature.returnValues,
+          { ...currentSignature.returnValues[idx], name },
+          idx
+        )
+      }
+    ))
   }
 
   return state
