@@ -5,5 +5,7 @@ export const editFunctionAction = actionCreator<{ _id: string }>('EDIT_FUNCTION'
 export const editFunctionSignatureAction = actionCreator<{ idx: number }>('EDIT_FUNCTION_SIGNATURE')
 export const fetchFunctionSuccessAction = actionCreator<{ fn: IFunction }>('FETCH_FUNCTION_SUCCESS')
 
-export const updateReturnValueTypeAction = actionCreator<{ type: string, idx: number }>('UPDATE_FUNCTION_RETURN_VALUE_TYPE')
-export const updateReturnValueNameAction = actionCreator<{ name: string, idx: number }>('UPDATE_FUNCTION_RETURN_VALUE_NAME')
+export const updateReturnValueTypeAction = actionCreator<{ type: string, argName: string }>('UPDATE_FUNCTION_RETURN_VALUE_TYPE')
+export const updateReturnValueNameAction = actionCreator<{ name: string, argName: string }>('UPDATE_FUNCTION_RETURN_VALUE_NAME')
+export const updateArgumentTypeAction = actionCreator<{ type: string, argName: string }>('UPDATE_FUNCTION_ARGUMENT_TYPE')
+export const updateArgumentNameAction = actionCreator<{ name: string, argName: string }>('UPDATE_FUNCTION_ARGUMENT_NAME')

@@ -9,8 +9,10 @@ import { actions as signaturesActions } from '../redux/Signatures'
 type Props = {
   editContext: { fn: IFunction, selectedSignatureIdx?: number }
   editFunctionSignature: (tabId: string) => void
-  updateReturnValueType: (type: string, idx: number) => void
-  updateReturnValueName: (name: string, idx: number) => void
+  updateReturnValueType: (type: string, argName: string) => void
+  updateReturnValueName: (name: string, argName: string) => void
+  updateArgumentType: (type: string, argName: string) => void
+  updateArgumentName: (name: string, argName: string) => void
 }
 
 function getTabId(fnId: string, idx: number) {
@@ -35,12 +37,14 @@ function mapStateToProps(state: RootState) {
 function mapDispatchToProps(dispatch: any) {
   return {
     editFunctionSignature: (tabId: string) => dispatch(signaturesActions.editFunctionSignature(getIndexFromTabId(tabId))),
-    updateReturnValueType: (type: string, idx: number) => dispatch(signaturesActions.updateReturnValueType(type, idx)),
-    updateReturnValueName: (name: string, idx: number) => dispatch(signaturesActions.updateReturnValueName(name, idx))
+    updateReturnValueType: (type: string, argName: string) => dispatch(signaturesActions.updateReturnValueType(type, argName)),
+    updateReturnValueName: (name: string, argName: string) => dispatch(signaturesActions.updateReturnValueName(name, argName)),
+    updateArgumentType: (name: string, argName: string) => dispatch(signaturesActions.updateArgumentType(name, argName)),
+    updateArgumentName: (name: string, argName: string) => dispatch(signaturesActions.updateArgumentName(name, argName))
   }
 }
 
-const SignatureTablist = ({ editContext, editFunctionSignature, updateReturnValueType, updateReturnValueName } : Props) => {
+const SignatureTablist = ({ editContext, editFunctionSignature, updateReturnValueType, updateReturnValueName, updateArgumentType, updateArgumentName } : Props) => {
   if (!editContext)
     return null
 
@@ -65,6 +69,8 @@ const SignatureTablist = ({ editContext, editFunctionSignature, updateReturnValu
                 signature={signature}
                 updateReturnValueType={updateReturnValueType}
                 updateReturnValueName={updateReturnValueName}
+                updateArgumentType={updateArgumentType}
+                updateArgumentName={updateArgumentName}
               />
             </Tab>
           )

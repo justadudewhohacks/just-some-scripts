@@ -5,7 +5,9 @@ import {
   editFunctionAction,
   editFunctionSignatureAction,
   updateReturnValueTypeAction,
-  updateReturnValueNameAction
+  updateReturnValueNameAction,
+  updateArgumentNameAction,
+  updateArgumentTypeAction
 } from './actionCreators';
 import { IAction } from '../reduxUtils';
 
@@ -61,15 +63,27 @@ export default function(service: ISignaturesService) {
     }
   }
 
-  function updateReturnValueType(type: string, idx: number) {
+  function updateReturnValueType(type: string, argName: string) {
     return function(dispatch: Dispatch<IAction<any>>) {
-      dispatch(updateReturnValueTypeAction({ type, idx }))
+      dispatch(updateReturnValueTypeAction({ type, argName }))
     }
   }
 
-  function updateReturnValueName(name: string, idx: number) {
+  function updateReturnValueName(name: string, argName: string) {
     return function(dispatch: Dispatch<IAction<any>>) {
-      dispatch(updateReturnValueNameAction({ name, idx }))
+      dispatch(updateReturnValueNameAction({ name, argName }))
+    }
+  }
+
+  function updateArgumentType(type: string, argName: string) {
+    return function(dispatch: Dispatch<IAction<any>>) {
+      dispatch(updateArgumentTypeAction({ type, argName }))
+    }
+  }
+
+  function updateArgumentName(name: string, argName: string) {
+    return function(dispatch: Dispatch<IAction<any>>) {
+      dispatch(updateArgumentNameAction({ name, argName }))
     }
   }
 
@@ -78,7 +92,9 @@ export default function(service: ISignaturesService) {
     editFunction,
     editFunctionSignature,
     updateReturnValueType,
-    updateReturnValueName
+    updateReturnValueName,
+    updateArgumentType,
+    updateArgumentName
   }
 }
 

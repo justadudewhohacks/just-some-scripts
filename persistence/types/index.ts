@@ -18,7 +18,7 @@ export interface IOptionalArgument extends IArgument {
 export interface ISignature {
   requiredArgs: IArgument[]
   optionalArgs: IOptionalArgument[]
-  returnValues?: IArgument[]
+  returnValues: IArgument[] | null
 }
 
 export interface ICppSignature extends ISignature {

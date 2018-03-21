@@ -1,6 +1,6 @@
-import { IArgument, IFunction, ISignature } from '@opencv4nodejs-gen/persistence/index';
+import { IArgument, IFunction, ISignature, IDeclaration, IType } from '@opencv4nodejs-gen/persistence/index';
 import { State } from './types';
-import { fetchFunctionSuccessAction, editFunctionAction, updateReturnValueNameAction, updateReturnValueTypeAction, editFunctionSignatureAction } from './actionCreators';
+import { fetchFunctionSuccessAction, editFunctionAction, updateReturnValueNameAction, updateReturnValueTypeAction, editFunctionSignatureAction, updateArgumentTypeAction, updateArgumentNameAction } from './actionCreators';
 import { replaceItem } from '../immutibilityUtils';
 import { IAction, isType } from '../reduxUtils';
 
@@ -16,7 +16,7 @@ function makeHasId(_id: string) {
   }
 }
 
-function updateSignature(state: State, reduce: (currentSignature: ISignature) => any): State {
+function updateSignature(state: State, target: string, argName: string, reduce: (arg: IArgument) => IArgument): State {
   const currentFnIdx = state.editedFunctions.findIndex(makeHasId(state.currentlyEditing._id))
   if (currentFnIdx === -1)
     return state
@@ -24,7 +24,19 @@ function updateSignature(state: State, reduce: (currentSignature: ISignature) =>
   const currentFn = state.editedFunctions[currentFnIdx]
   const currentSignature = currentFn.signatures[state.currentlyEditing.selectedSignatureIdx]
 
-  const updatedSignature = { ...currentSignature, ...reduce(currentSignature) }
+  const [idx, arg] = findArgumentByName(currentSignature[argName] || [], argName)
+
+  if (idx === -1)
+    return state
+
+  const updatedSignature = {
+    ...currentSignature,
+    [target]: replaceItem<IArgument>(
+      currentSignature[target],
+      reduce(arg),
+      idx
+    )
+  }
   const updatedSignatures = replaceItem<ISignature>(currentFn.signatures, updatedSignature, state.currentlyEditing.selectedSignatureIdx)
   const updatedFunction = { ...currentFn, signatures: updatedSignatures }
 
@@ -32,6 +44,11 @@ function updateSignature(state: State, reduce: (currentSignature: ISignature) =>
     ...state,
     editedFunctions: replaceItem<IFunction>(state.editedFunctions, updatedFunction, currentFnIdx)
    }
+}
+
+function findArgumentByName(args: IArgument[], argName: string): [number, IArgument | null] {
+  const idx = args.findIndex(arg => arg.name === argName)
+  return [idx, args[idx]]
 }
 
 export default function(state = INITIAL_STATE, action: IAction<any>) : State {
@@ -70,31 +87,33 @@ export default function(state = INITIAL_STATE, action: IAction<any>) : State {
 
   } else if (isType(action, updateReturnValueTypeAction)) {
 
-    const { type, idx } = action.payload
+    const { type, argName } = action.payload
 
-    return updateSignature(state, (currentSignature) => (
-      {
-        returnValues: replaceItem<IArgument>(
-          currentSignature.returnValues,
-          { ...currentSignature.returnValues[idx], type },
-          idx
-        )
-      }
-    ))
+    return updateSignature(
+      state,
+      'returnValues',
+      argName,
+      arg => ({ ...arg, type })
+    )
 
   } else if (isType(action, updateReturnValueNameAction)) {
 
-    const { name, idx } = action.payload
+    const { name, argName } = action.payload
 
-    return updateSignature(state, (currentSignature) => (
-      {
-        returnValues: replaceItem<IArgument>(
-          currentSignature.returnValues,
-          { ...currentSignature.returnValues[idx], name },
-          idx
-        )
-      }
-    ))
+    return updateSignature(
+      state,
+      'returnValues',
+      argName,
+      arg => ({ ...arg, name })
+    )
+  } else if (isType(action, updateArgumentTypeAction)) {
+
+
+    // TODO
+  } else if (isType(action, updateArgumentNameAction)) {
+
+
+        // TODO
   }
 
   return state
