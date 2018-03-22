@@ -10,19 +10,47 @@ const INITIAL_STATE : State = {
   currentlyEditing: { _id: null, selectedSignatureIdx: 0 }
 }
 
-function makeHasId(_id: string) {
+function hasFnIdPredicate(_id: string) {
   return function(fn: IFunction) {
     return fn._id === _id
   }
 }
 
-function updateSignature(state: State, target: string, argName: string, reduce: (arg: IArgument) => IArgument): State {
-  const currentFnIdx = state.editedFunctions.findIndex(makeHasId(state.currentlyEditing._id))
+function findArgumentByName(args: IArgument[], argName: string): [number, IArgument | null] {
+  const idx = args.findIndex(arg => arg.name === argName)
+  return [idx, args[idx]]
+}
+
+function hasArgumentWithName(args: IArgument[], argName: string): boolean {
+  return findArgumentByName(args, argName)[0] !== -1
+}
+
+function findTargetByArgName(signature: ISignature, argName: string) {
+  return [
+    'returnValue', 
+    'requiredArgs', 
+    'optionalArgs'
+  ]
+    .find(target => hasArgumentWithName(signature[target] || [], argName))
+}
+
+function getCurrentlyEdited(state: State) {
+  const currentFnIdx = state.editedFunctions.findIndex(hasFnIdPredicate(state.currentlyEditing._id))
   if (currentFnIdx === -1)
-    return state
+    return { currentFnIdx, currentFn: null, currentSignature: null }
 
   const currentFn = state.editedFunctions[currentFnIdx]
   const currentSignature = currentFn.signatures[state.currentlyEditing.selectedSignatureIdx]
+
+  return { currentFnIdx, currentFn, currentSignature }
+}
+
+function updateSignature(state: State, target: string, argName: string, reduce: (arg: IArgument) => IArgument): State {
+
+  const { currentFnIdx, currentFn, currentSignature } = getCurrentlyEdited(state)
+
+  if (!currentFn || !currentSignature)
+    return state
 
   const [idx, arg] = findArgumentByName(currentSignature[argName] || [], argName)
 
@@ -46,17 +74,12 @@ function updateSignature(state: State, target: string, argName: string, reduce: 
    }
 }
 
-function findArgumentByName(args: IArgument[], argName: string): [number, IArgument | null] {
-  const idx = args.findIndex(arg => arg.name === argName)
-  return [idx, args[idx]]
-}
-
 export default function(state = INITIAL_STATE, action: IAction<any>) : State {
 
   if (isType(action, editFunctionAction)) {
 
     const { _id } = action.payload
-    const hasId = makeHasId(_id)
+    const hasId = hasFnIdPredicate(_id)
     if (!state.editedFunctions.some(hasId)) {
       const fn = state.functions.find(hasId)
 
@@ -78,7 +101,7 @@ export default function(state = INITIAL_STATE, action: IAction<any>) : State {
   } else if (isType(action, fetchFunctionSuccessAction)) {
 
     const { fn } = action.payload
-    const idx = state.functions.findIndex(makeHasId(fn._id))
+    const idx = state.functions.findIndex(hasFnIdPredicate(fn._id))
 
     if (idx !== -1) {
       return { ...state, functions: replaceItem<IFunction>(state.functions, fn, idx) }
@@ -89,9 +112,14 @@ export default function(state = INITIAL_STATE, action: IAction<any>) : State {
 
     const { type, argName } = action.payload
 
+    const target = findTargetByArgName(getCurrentlyEdited(state).currentSignature, argName)
+    
+    if (target !== 'returnValues')
+      return state
+
     return updateSignature(
       state,
-      'returnValues',
+      target,
       argName,
       arg => ({ ...arg, type })
     )
@@ -100,20 +128,48 @@ export default function(state = INITIAL_STATE, action: IAction<any>) : State {
 
     const { name, argName } = action.payload
 
+    const target = findTargetByArgName(getCurrentlyEdited(state).currentSignature, argName)
+    
+    if (target !== 'returnValues')
+      return state
+
     return updateSignature(
       state,
-      'returnValues',
+      target,
       argName,
       arg => ({ ...arg, name })
     )
   } else if (isType(action, updateArgumentTypeAction)) {
 
+    const { type, argName } = action.payload
 
-    // TODO
+    const target = findTargetByArgName(getCurrentlyEdited(state).currentSignature, argName)
+    
+    if (target !== 'requiredArgs' && target !== 'optionalArg')
+      return state
+
+    return updateSignature(
+      state,
+      target,
+      argName,
+      arg => ({ ...arg, type })
+    )
+
   } else if (isType(action, updateArgumentNameAction)) {
 
+    const { name, argName } = action.payload
 
-        // TODO
+    const target = findTargetByArgName(getCurrentlyEdited(state).currentSignature, argName)
+    
+    if (target !== 'requiredArgs' && target !== 'optionalArg')
+      return state
+
+    return updateSignature(
+      state,
+      target,
+      argName,
+      arg => ({ ...arg, name })
+    )
   }
 
   return state

@@ -3,6 +3,7 @@ import AutoComplete from './AutoComplete';
 import TextField from 'material-ui/TextField';
 import { IFunction, ISignature } from '../../../persistence/types/index';
 import { EditTypeAndValue } from './EditTypeAndValue';
+import { AddButton } from './AddButton';
 
 type Props = {
   signature: ISignature
@@ -10,33 +11,67 @@ type Props = {
   updateReturnValueName: (name: string, argName: string) => void
   updateArgumentType: (type: string, argName: string) => void
   updateArgumentName: (name: string, argName: string) => void
+  addFunctionArgument: () => void
+  addFunctionReturnValue: () => void
+  removeReturnValue: (argName: string) => void
+  removeArgument: (argName: string) => void
 }
 
 const types = ['Mat', 'Vec', 'int', 'uint', 'string']
 
-export const EditSignature = ({ signature, updateReturnValueType, updateReturnValueName, updateArgumentType, updateArgumentName } : Props) => (
+
+export const EditSignature = ({ 
+  signature, 
+  updateReturnValueType, 
+  updateReturnValueName, 
+  updateArgumentType, 
+  updateArgumentName,
+  addFunctionArgument,
+  addFunctionReturnValue,
+  removeReturnValue,
+  removeArgument
+
+} : Props) => (
   <div>
-    <h1> {'Return Values'} </h1>
-    {
-      (signature.returnValues || []).map((ret, i) =>
-        <EditTypeAndValue
-          arg={ret}
-          types={types}
-          updateType={updateReturnValueType}
-          updateName={updateReturnValueName}
-        />
-      )
-    }
-    <h1> {'Arguments'} </h1>
-    {
-      (signature.requiredArgs.concat(signature.optionalArgs)).map((arg, i) =>
-        <EditTypeAndValue
-          arg={arg}
-          types={types}
-          updateType={updateArgumentType}
-          updateName={updateArgumentName}
-        />
-      )
-    }
+    <h3> {'Return Values'} </h3>
+    <div>
+      {
+        (signature.returnValues || []).map((ret, i) =>
+          <EditTypeAndValue
+            index={i}
+            arg={ret}
+            types={types}
+            updateType={updateReturnValueType}
+            updateName={updateReturnValueName}
+            onRemove={removeReturnValue}
+          />
+        )
+      }
+    </div>
+    <AddButton
+      label="Add Argument"
+      style={{ margin: '10px' }}
+      onClick={addFunctionReturnValue}
+    />
+    <h3> {'Arguments'} </h3>
+    <div>
+      {
+        (signature.requiredArgs.concat(signature.optionalArgs)).map((arg, i) =>
+          <EditTypeAndValue
+            index={i}
+            arg={arg}
+            types={types}
+            updateType={updateArgumentType}
+            updateName={updateArgumentName}
+            onRemove={removeArgument}
+          />
+        )
+      }
+    </div>
+    <AddButton
+      label="Add Argument"
+      style={{ margin: '10px' }}
+      onClick={addFunctionArgument}
+    />
   </div>
 )

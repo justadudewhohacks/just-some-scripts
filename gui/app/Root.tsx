@@ -12,7 +12,7 @@ import { actions as signaturesActions } from './redux/Signatures'
 const theme = {
   colors: {
     active: '#BBDEFB',
-    passive: '#CCC',
+    passive: '#FAFAFA',
     button: '#90CAF9'
   }
 }

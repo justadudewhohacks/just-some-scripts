@@ -1,5 +1,6 @@
 import * as React from 'react'
 import { Tabs, Tab } from 'material-ui/Tabs'
+import ContentAdd from 'material-ui/svg-icons/content/add';
 import { connect } from 'react-redux'
 import { IFunction } from '../../../persistence/types/index';
 import { EditSignature } from './EditSignature';
@@ -13,6 +14,10 @@ type Props = {
   updateReturnValueName: (name: string, argName: string) => void
   updateArgumentType: (type: string, argName: string) => void
   updateArgumentName: (name: string, argName: string) => void
+  addFunctionArgument: () => void
+  addFunctionReturnValue: () => void
+  removeFunctionReturnValue: (argName: string) => void
+  removeFunctionArgument: (argName: string) => void
 }
 
 function getTabId(fnId: string, idx: number) {
@@ -35,47 +40,81 @@ function mapStateToProps(state: RootState) {
 }
 
 function mapDispatchToProps(dispatch: any) {
+  function editFunctionSignature(tabId: string) {
+    return tabId === 'ADD_SIGNATURE_BUTTON'
+      ? dispatch(signaturesActions.addFunctionSignature())
+      : dispatch(signaturesActions.editFunctionSignature(getIndexFromTabId(tabId)))
+  }
+
   return {
-    editFunctionSignature: (tabId: string) => dispatch(signaturesActions.editFunctionSignature(getIndexFromTabId(tabId))),
+    editFunctionSignature,
     updateReturnValueType: (type: string, argName: string) => dispatch(signaturesActions.updateReturnValueType(type, argName)),
     updateReturnValueName: (name: string, argName: string) => dispatch(signaturesActions.updateReturnValueName(name, argName)),
     updateArgumentType: (name: string, argName: string) => dispatch(signaturesActions.updateArgumentType(name, argName)),
-    updateArgumentName: (name: string, argName: string) => dispatch(signaturesActions.updateArgumentName(name, argName))
+    updateArgumentName: (name: string, argName: string) => dispatch(signaturesActions.updateArgumentName(name, argName)),
+    addFunctionArgument: () => dispatch(signaturesActions.addFunctionArgument()),
+    addFunctionReturnValue: () => dispatch(signaturesActions.addFunctionReturnValue()),
+    removeFunctionReturnValue: (argName: string) => dispatch(signaturesActions.removeFunctionReturnValue(argName)),
+    removeFunctionArgument: (argName: string) => dispatch(signaturesActions.removeFunctionArgument(argName))
   }
 }
 
-const SignatureTablist = ({ editContext, editFunctionSignature, updateReturnValueType, updateReturnValueName, updateArgumentType, updateArgumentName } : Props) => {
+const SignatureTablist = ({ 
+  editContext, 
+  editFunctionSignature, 
+  updateReturnValueType, 
+  updateReturnValueName, 
+  updateArgumentType, 
+  updateArgumentName,
+  addFunctionArgument,
+  addFunctionReturnValue,
+  removeFunctionReturnValue,
+  removeFunctionArgument
+} : Props) => {
+
   if (!editContext)
     return null
 
   const { fn: { _id }, selectedSignatureIdx } = editContext
 
   return (
-    <Tabs
-      value={getTabId(_id, selectedSignatureIdx)}
-      onChange={editFunctionSignature}
-    >
-      {
-        editContext.fn.signatures
-          .map((s, i) => ({ signature: s, tabId: getTabId(_id, i)}))
-          .map(({ signature, tabId }, i) =>
-            <Tab
-              label={i}
-              value={tabId}
-              key={tabId}
-            >
-              <EditSignature
+    <div>
+      <Tabs
+        value={getTabId(_id, selectedSignatureIdx)}
+        onChange={editFunctionSignature}
+      >
+        {
+          editContext.fn.signatures
+            .map((s, i) => ({ signature: s, tabId: getTabId(_id, i)}))
+            .map(({ signature, tabId }, i) =>
+              <Tab
+                label={i}
+                value={tabId}
                 key={tabId}
-                signature={signature}
-                updateReturnValueType={updateReturnValueType}
-                updateReturnValueName={updateReturnValueName}
-                updateArgumentType={updateArgumentType}
-                updateArgumentName={updateArgumentName}
-              />
-            </Tab>
-          )
-      }
-    </Tabs>
+              >
+                <EditSignature
+                  key={tabId}
+                  signature={signature}
+                  updateReturnValueType={updateReturnValueType}
+                  updateReturnValueName={updateReturnValueName}
+                  updateArgumentType={updateArgumentType}
+                  updateArgumentName={updateArgumentName}
+                  addFunctionArgument={addFunctionArgument}
+                  addFunctionReturnValue={addFunctionReturnValue}
+                  removeReturnValue={removeFunctionReturnValue}
+                  removeArgument={removeFunctionArgument}
+                />
+              </Tab>
+            )
+        }
+        <Tab
+          value={'ADD_SIGNATURE_BUTTON'}
+          icon={<ContentAdd />}
+          label="Add Signature"
+          buttonStyle={{ flexDirection: 'row', height: 'inherit' }}
+        />
+      </Tabs>
+    </div>
   )
 }
 

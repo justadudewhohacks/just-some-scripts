@@ -1,17 +1,32 @@
 import * as React from 'react'
-import AutoComplete from './AutoComplete';
 import TextField from 'material-ui/TextField';
+import styled from 'styled-components'
+import AutoComplete from './AutoComplete';
+import { RemoveButton } from './RemoveButton'
 import { IFunction, ISignature, IArgument } from '../../../persistence/types/index';
+
+const Row = styled.div`
+  background: ${props => props.theme.colors.passive}
+  display: inline-flex;
+  align-items: baseline;
+  margin-bottom: 10px;
+  > * {
+    margin: 0 20px;
+  }
+`
 
 type Props = {
   arg: IArgument
+  index: number
   types: string[]
   updateType: (type: string, argName: string) => void
   updateName: (name: string, argName: string) => void
+  onRemove: (argName: string) => void
 }
 
-export const EditTypeAndValue = ({ arg, types, updateType, updateName } : Props) => (
-  <span>
+export const EditTypeAndValue = ({ arg, index, types, updateType, updateName, onRemove } : Props) => (
+  <Row>
+    <h3> { `${index}. ` } </h3>
     <AutoComplete
       floatingLabelText="Type"
       dataSource={types}
@@ -24,5 +39,10 @@ export const EditTypeAndValue = ({ arg, types, updateType, updateName } : Props)
       hintText="Name"
       onChange={(_, value) => updateName(value, arg.name)}
     />
-  </span>
+    <RemoveButton 
+      label={''} 
+      style={{ alignSelf: 'center'}}
+      onClick={() => onRemove(arg.name)}
+    />
+  </Row>
 )

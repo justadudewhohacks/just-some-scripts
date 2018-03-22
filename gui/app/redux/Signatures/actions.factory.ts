@@ -7,7 +7,13 @@ import {
   updateReturnValueTypeAction,
   updateReturnValueNameAction,
   updateArgumentNameAction,
-  updateArgumentTypeAction
+  updateArgumentTypeAction,
+  addFunctionSignatureAction, 
+  addFunctionReturnValueAction, 
+  addFunctionArgumentAction,
+  removeFunctionSignatureAction,
+  removeFunctionArgumentAction,
+  removeFunctionReturnValueAction
 } from './actionCreators';
 import { IAction } from '../reduxUtils';
 
@@ -87,6 +93,42 @@ export default function(service: ISignaturesService) {
     }
   }
 
+  function addFunctionArgument() {
+    return function(dispatch: Dispatch<IAction<any>>) {
+      dispatch(addFunctionArgumentAction({}))
+    }
+  }
+
+  function addFunctionReturnValue() {
+    return function(dispatch: Dispatch<IAction<any>>) {
+      dispatch(addFunctionReturnValueAction({}))
+    }
+  }
+
+  function addFunctionSignature() {
+    return function(dispatch: Dispatch<IAction<any>>) {
+      dispatch(addFunctionSignatureAction({}))
+    }
+  }
+
+  function removeFunctionArgument(argName: string) {
+    return function(dispatch: Dispatch<IAction<any>>) {
+      dispatch(removeFunctionArgumentAction({ argName }))
+    }
+  }
+
+  function removeFunctionReturnValue(argName: string) {
+    return function(dispatch: Dispatch<IAction<any>>) {
+      dispatch(removeFunctionReturnValueAction({ argName }))
+    }
+  }
+
+  function removeFunctionSignature(argName: string) {
+    return function(dispatch: Dispatch<IAction<any>>) {
+      dispatch(removeFunctionSignatureAction({ argName }))
+    }
+  }
+
   return {
     fetchFunction,
     editFunction,
@@ -94,7 +136,13 @@ export default function(service: ISignaturesService) {
     updateReturnValueType,
     updateReturnValueName,
     updateArgumentType,
-    updateArgumentName
+    updateArgumentName,
+    addFunctionArgument,
+    addFunctionReturnValue,
+    addFunctionSignature,
+    removeFunctionArgument,
+    removeFunctionReturnValue,
+    removeFunctionSignature
   }
 }
 
