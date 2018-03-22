@@ -32,11 +32,12 @@
     "indentSize": 2,
     "tabSize": 2
   },
+  "include": [
+    "main"
+  ],
   "exclude": [
-    "app",
+    "renderer",
     "node_modules",
-    "dist",
-    "generated",
-    "sample"
+    "dist"
   ]
 }

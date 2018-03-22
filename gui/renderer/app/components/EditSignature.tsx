@@ -1,7 +1,7 @@
 import * as React from 'react'
 import AutoComplete from './AutoComplete';
 import TextField from 'material-ui/TextField';
-import { IFunction, ISignature } from '../../../persistence/types/index';
+import { IFunction, ISignature } from '@opencv4nodejs-gen/persistence/types/index';
 import { EditTypeAndValue } from './EditTypeAndValue';
 import { AddButton } from './AddButton';
 
@@ -20,11 +20,11 @@ type Props = {
 const types = ['Mat', 'Vec', 'int', 'uint', 'string']
 
 
-export const EditSignature = ({ 
-  signature, 
-  updateReturnValueType, 
-  updateReturnValueName, 
-  updateArgumentType, 
+export const EditSignature = ({
+  signature,
+  updateReturnValueType,
+  updateReturnValueName,
+  updateArgumentType,
   updateArgumentName,
   addFunctionArgument,
   addFunctionReturnValue,

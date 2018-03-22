@@ -1,6 +1,6 @@
 import * as React from 'react'
 import TextField from 'material-ui/TextField';
-import { IFunction, ISignature } from '../../../persistence/types/index';
+import { IFunction, ISignature } from '@opencv4nodejs-gen/persistence/types/index';
 import MUIAutoComplete from 'material-ui/AutoComplete';
 
 /*

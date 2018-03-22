@@ -27,11 +27,11 @@ export interface ICppSignature extends ISignature {
 
 export interface IFunctionDocument {
   cvModule: string
-  category?: string
   owner: string
   fnName: string
   hasAsync: boolean
   signatures: ISignature[]
+  category?: string
 }
 
 export interface IFunction extends IFunctionDocument {

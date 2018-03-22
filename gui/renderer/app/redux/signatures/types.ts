@@ -1,9 +1,14 @@
-import { IFunction } from './../../../../persistence/types/index';
+import { IFunction } from '@opencv4nodejs-gen/persistence/types';
+
+export type CurrentlyEditing = {
+  _id?: string,
+  selectedSignatureIdx: number
+}
 
 export type State = {
   readonly functions: IFunction[]
   readonly editedFunctions: IFunction[]
-  readonly currentlyEditing: { _id?: string, selectedSignatureIdx: number }
+  readonly currentlyEditing: CurrentlyEditing
 }
 
 export type FetchFunctionSignatureArgs = {

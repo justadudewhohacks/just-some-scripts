@@ -1,4 +1,4 @@
-import { IFunction } from '../../../../persistence/index';
+import { IFunction } from '@opencv4nodejs-gen/persistence/index';
 import { actionCreator } from '../reduxUtils';
 
 export const editFunctionAction = actionCreator<{ _id: string }>('EDIT_FUNCTION')

@@ -1,6 +1,6 @@
-import { connection, FunctionDao, stringifyId } from '../persistence'
 import { ipcMain } from 'electron'
-import { FetchFunctionSignatureArgs } from './app/redux/Signatures/types'
+import { connection, FunctionDao, stringifyId } from '../../persistence'
+import { FetchFunctionSignatureArgs } from '../renderer/app/redux/Signatures/types'
 
 let connected = false
 

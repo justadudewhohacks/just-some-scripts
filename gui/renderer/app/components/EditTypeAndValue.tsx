@@ -3,7 +3,7 @@ import TextField from 'material-ui/TextField';
 import styled from 'styled-components'
 import AutoComplete from './AutoComplete';
 import { RemoveButton } from './RemoveButton'
-import { IFunction, ISignature, IArgument } from '../../../persistence/types/index';
+import { IFunction, ISignature, IArgument } from '@opencv4nodejs-gen/persistence/types/index';
 
 const Row = styled.div`
   background: ${props => props.theme.colors.passive}
@@ -39,8 +39,8 @@ export const EditTypeAndValue = ({ arg, index, types, updateType, updateName, on
       hintText="Name"
       onChange={(_, value) => updateName(value, arg.name)}
     />
-    <RemoveButton 
-      label={''} 
+    <RemoveButton
+      label={''}
       style={{ alignSelf: 'center'}}
       onClick={() => onRemove(arg.name)}
     />

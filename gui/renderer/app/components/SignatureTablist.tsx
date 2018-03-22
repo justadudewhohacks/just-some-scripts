@@ -2,7 +2,7 @@ import * as React from 'react'
 import { Tabs, Tab } from 'material-ui/Tabs'
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import { connect } from 'react-redux'
-import { IFunction } from '../../../persistence/types/index';
+import { IFunction } from '@opencv4nodejs-gen/persistence/types/index';
 import { EditSignature } from './EditSignature';
 import { RootState } from '../redux/rootReducer';
 import { actions as signaturesActions } from '../redux/Signatures'
@@ -59,12 +59,12 @@ function mapDispatchToProps(dispatch: any) {
   }
 }
 
-const SignatureTablist = ({ 
-  editContext, 
-  editFunctionSignature, 
-  updateReturnValueType, 
-  updateReturnValueName, 
-  updateArgumentType, 
+const SignatureTablist = ({
+  editContext,
+  editFunctionSignature,
+  updateReturnValueType,
+  updateReturnValueName,
+  updateArgumentType,
   updateArgumentName,
   addFunctionArgument,
   addFunctionReturnValue,

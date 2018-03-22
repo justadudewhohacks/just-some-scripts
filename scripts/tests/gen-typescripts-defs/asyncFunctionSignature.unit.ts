@@ -1,3 +1,4 @@
+import 'mocha'
 import { expect } from 'chai';
 import { asyncFunctionSignature } from '../../gen-typescripts-defs/createFunctionSignatures';
 

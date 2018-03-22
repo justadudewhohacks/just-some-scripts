@@ -1,3 +1,4 @@
+import 'mocha'
 import { expect } from 'chai';
 import { IFunction } from '@opencv4nodejs-gen/persistence';
 import { commonTests } from "./commons.unit";
