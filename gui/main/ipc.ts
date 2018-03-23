@@ -1,6 +1,6 @@
 import { ipcMain } from 'electron'
-import { connection, FunctionDao, stringifyId } from '../../persistence'
-import { FetchFunctionSignatureArgs } from '../renderer/app/redux/Signatures/types'
+import { connection, FunctionDao, stringifyId, ClassDao } from '../../persistence'
+import { FetchFunctionSignatureArgs } from '../types';
 
 let connected = false
 
@@ -40,5 +40,13 @@ ipcMain.on('fetchFunction', async (event: any, args: FetchFunctionSignatureArgs)
     event.sender.send('fetchFunction', { result: result ? stringifyId(result) : result })
   } catch (error) {
     event.sender.send('fetchFunction', { error })
+  }
+})
+
+ipcMain.on('fetchClassNames', async (event: any) => {
+  try {
+    event.sender.send('fetchClassNames', { result: await ClassDao.findAllClassNames() })
+  } catch (error) {
+    event.sender.send('fetchClassNames', { error })
   }
 })

@@ -2,7 +2,7 @@ import { State } from './types'
 import { connectToDatabaseSuccessAction } from './actionCreators';
 import { IAction, isType } from '../reduxUtils';
 
-const INITIAL_STATE : State = {
+const INITIAL_STATE: State = {
   isConnected: false
 }
 

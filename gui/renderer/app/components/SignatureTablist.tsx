@@ -5,10 +5,12 @@ import { connect } from 'react-redux'
 import { IFunction } from '@opencv4nodejs-gen/persistence/types/index';
 import { EditSignature } from './EditSignature';
 import { RootState } from '../redux/rootReducer';
-import { actions as signaturesActions } from '../redux/Signatures'
+import { actions as signaturesActions } from '../redux/signatures'
+import { selectors as cacheSelectors } from '../redux/cache'
 
 type Props = {
-  editContext: { fn: IFunction, selectedSignatureIdx?: number }
+  types: string[]
+  editContext: { fn: IFunction, currentSignatureIdx?: number }
   editFunctionSignature: (tabId: string) => void
   updateReturnValueType: (type: string, argName: string) => void
   updateReturnValueName: (name: string, argName: string) => void
@@ -29,13 +31,14 @@ function getIndexFromTabId(tabId: string): number {
 }
 
 function mapStateToProps(state: RootState) {
-  const { signatures } = state
+  const { signatures, cache } = state
   const editedFunction = signatures.editedFunctions.find(f => f._id === signatures.currentlyEditing._id)
   return {
     editContext: editedFunction && {
       fn: editedFunction,
-      selectedSignatureIdx: signatures.currentlyEditing.selectedSignatureIdx
-    }
+      currentSignatureIdx: signatures.currentlyEditing.currentSignatureIdx
+    },
+    types: cacheSelectors.selectTypes(cache)
   }
 }
 
@@ -60,6 +63,7 @@ function mapDispatchToProps(dispatch: any) {
 }
 
 const SignatureTablist = ({
+  types,
   editContext,
   editFunctionSignature,
   updateReturnValueType,
@@ -75,12 +79,12 @@ const SignatureTablist = ({
   if (!editContext)
     return null
 
-  const { fn: { _id }, selectedSignatureIdx } = editContext
+  const { fn: { _id }, currentSignatureIdx } = editContext
 
   return (
     <div>
       <Tabs
-        value={getTabId(_id, selectedSignatureIdx)}
+        value={getTabId(_id, currentSignatureIdx)}
         onChange={editFunctionSignature}
       >
         {
@@ -93,6 +97,7 @@ const SignatureTablist = ({
                 key={tabId}
               >
                 <EditSignature
+                  types={types}
                   key={tabId}
                   signature={signature}
                   updateReturnValueType={updateReturnValueType}

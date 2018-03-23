@@ -1,9 +1,8 @@
-import { IFunction } from '@opencv4nodejs-gen/persistence/index';
+import { IFunction } from '@opencv4nodejs-gen/persistence';
 import { actionCreator } from '../reduxUtils';
 
-export const editFunctionAction = actionCreator<{ _id: string }>('EDIT_FUNCTION')
+export const editFunctionAction = actionCreator<{ _id: string, cachedFunctions: IFunction[] }>('EDIT_FUNCTION')
 export const editFunctionSignatureAction = actionCreator<{ idx: number }>('EDIT_FUNCTION_SIGNATURE')
-export const fetchFunctionSuccessAction = actionCreator<{ fn: IFunction }>('FETCH_FUNCTION_SUCCESS')
 
 export const updateReturnValueTypeAction = actionCreator<{ type: string, argName: string }>('UPDATE_FUNCTION_RETURN_VALUE_TYPE')
 export const updateReturnValueNameAction = actionCreator<{ name: string, argName: string }>('UPDATE_FUNCTION_RETURN_VALUE_NAME')

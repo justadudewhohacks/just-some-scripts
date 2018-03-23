@@ -6,6 +6,7 @@ import { EditTypeAndValue } from './EditTypeAndValue';
 import { AddButton } from './AddButton';
 
 type Props = {
+  types: string[]
   signature: ISignature
   updateReturnValueType: (type: string, argName: string) => void
   updateReturnValueName: (name: string, argName: string) => void
@@ -17,10 +18,8 @@ type Props = {
   removeArgument: (argName: string) => void
 }
 
-const types = ['Mat', 'Vec', 'int', 'uint', 'string']
-
-
 export const EditSignature = ({
+  types,
   signature,
   updateReturnValueType,
   updateReturnValueName,

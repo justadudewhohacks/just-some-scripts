@@ -6,8 +6,9 @@ import { ThemeProvider } from 'styled-components'
 import { IFunction } from '@opencv4nodejs-gen/persistence'
 import { Editor } from './components/Editor'
 import { RootState } from './redux/rootReducer'
-import { actions as databaseConnectionActions } from './redux/DatabaseConnection'
-import { actions as signaturesActions } from './redux/Signatures'
+import { actions as databaseConnectionActions } from './redux/databaseConnection'
+import { actions as signaturesActions } from './redux/signatures'
+import { actions as cacheActions } from './redux/cache'
 
 const theme = {
   colors: {
@@ -18,22 +19,23 @@ const theme = {
 }
 
 function mapStateToProps(state: RootState) {
-  const { signatures } = state
+  const { signatures, cache } = state
   const editedFunction = signatures.editedFunctions.find(f => f._id === signatures.currentlyEditing._id)
   return {
     isConnectedToDatabase: state.databaseConnection.isConnected,
     editContext: editedFunction && {
       fn: editedFunction,
-      selectedSignatureIdx: signatures.currentlyEditing.selectedSignatureIdx
+      currentSignatureIdx: signatures.currentlyEditing.currentSignatureIdx
     },
-    functions: signatures.functions
+    functions: cache.functions
   }
 }
 
 function mapDispatchToProps(dispatch: any) {
   return {
     connectToDatabase: () => dispatch(databaseConnectionActions.connect()),
-    fetchFunction: (name: string) => dispatch(signaturesActions.fetchFunction(name)),
+    fetchClassNames: () => dispatch(cacheActions.fetchClassNames()),
+    fetchFunction: (name: string) => dispatch(cacheActions.fetchFunction(name)),
     editFunction: (_id: string) => dispatch(signaturesActions.editFunction(_id))
   }
 }
@@ -41,8 +43,9 @@ function mapDispatchToProps(dispatch: any) {
 type RootProps = {
   isConnectedToDatabase: boolean
   functions: IFunction[]
-  editContext: { fn: IFunction | undefined, selectedSignatureIdx: number }
-  connectToDatabase: () => void
+  editContext: { fn: IFunction | undefined, currentSignatureIdx: number }
+  connectToDatabase: () => Promise<void>
+  fetchClassNames: () => Promise<void>
   fetchFunction: (name: string) => void
   editFunction: (_id: string) => void
 }
@@ -50,7 +53,7 @@ type RootProps = {
 class Root extends React.Component<RootProps> {
   constructor(props: RootProps) {
     super(props)
-    props.connectToDatabase()
+    props.connectToDatabase().then(props.fetchClassNames)
   }
 
   render() {
