@@ -1,13 +1,15 @@
-import { IFunction } from '@opencv4nodejs-gen/persistence/types';
+import { IFunction, IFunctionMetaData } from '@opencv4nodejs-gen/persistence/types';
 import { FetchFunctionSignatureArgs } from '../../../../types';
 
 export type State = {
   readonly classNames: string[]
+  readonly functionMetaDataByOwner: Map<string, IFunctionMetaData[]>
   readonly functions: IFunction[]
 }
 
 export interface ISignaturesService {
   fetchFunction: (args: FetchFunctionSignatureArgs) => Promise<IFunction>
   fetchClassNames: () => Promise<string[]>
+  fetchFunctionMetaData: () => Promise<IFunctionMetaData[]>
 }
 

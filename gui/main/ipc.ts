@@ -50,3 +50,11 @@ ipcMain.on('fetchClassNames', async (event: any) => {
     event.sender.send('fetchClassNames', { error })
   }
 })
+
+ipcMain.on('fetchFunctionMetaData', async (event: any) => {
+  try {
+    event.sender.send('fetchFunctionMetaData', { result: await FunctionDao.findAllMetaData() })
+  } catch (error) {
+    event.sender.send('fetchFunctionMetaData', { error })
+  }
+})

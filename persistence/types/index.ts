@@ -25,13 +25,16 @@ export interface ICppSignature extends ISignature {
   allArgs: string
 }
 
-export interface IFunctionDocument {
+export interface IFunctionMetaData {
   cvModule: string
   owner: string
   fnName: string
   hasAsync: boolean
-  signatures: ISignature[]
   category?: string
+}
+
+export interface IFunctionDocument extends IFunctionMetaData {
+  signatures: ISignature[]
 }
 
 export interface IFunction extends IFunctionDocument {

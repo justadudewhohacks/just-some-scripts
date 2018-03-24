@@ -1,49 +1,68 @@
 import * as React from 'react'
+import { connect } from 'react-redux'
 import { Route, Switch, Link } from 'react-router-dom'
 import { FloatingActionButton, TextField } from 'material-ui'
 import ActionSearch from 'material-ui/svg-icons/action/search'
-import { IFunction } from '@opencv4nodejs-gen/persistence/types/index'
+import AutoComplete from 'material-ui/AutoComplete';
+import { IFunction, IFunctionMetaData } from '@opencv4nodejs-gen/persistence/types/index'
 import { EditorTablist } from './EditorTablist';
 import SignatureTablist from './SignatureTablist';
+import { RootState } from '../redux/rootReducer';
+import { actions as cacheActions } from '../redux/cache';
+import { actions as signaturesActions } from '../redux/signatures';
+import { actions as editorActions, selectors as editorSelectors } from '../redux/ui/editor';
 
 type EditorProps = {
   functions: IFunction[]
-  editContext?: { fn: IFunction, selectedSignatureIdx?: number }
-  onSearch: (value: string) => void
+  editContext: { fn: IFunction | null, currentSignatureIdx: number | null }
+  searchFunctionsInput: string
+  searchFunctionsSuggestions: string[]
   editFunction: (_id: string) => void
+  onSearchFunctionsInputChanged: (value: string) => void
+  search: (value: string) => void
 }
 
-type EditorState = {
-  inputValue: string
+function mapStateToProps(state: RootState) {
+  const { functions } = state.cache
+  const { editedFunctions, currentlyEditing } = state.signatures
+  const { searchFunctionsInput } = state.ui.editor
+
+  return {
+    editContext: {
+      // TODO selector
+      fn: editedFunctions.find(f => f._id === currentlyEditing._id),
+      currentSignatureIdx: currentlyEditing.currentSignatureIdx
+    },
+    functions,
+    searchFunctionsInput,
+    searchFunctionsSuggestions: editorSelectors.autoCompleteFunctionName(state, searchFunctionsInput)
+  }
 }
 
-export class Editor extends React.Component<EditorProps, EditorState> {
-  constructor(props: EditorProps) {
-    super(props)
-    this.state = {
-      inputValue: ''
-    }
+function mapDispatchToProps(dispatch: any) {
+  return {
+    editFunction: (_id: string) => dispatch(signaturesActions.editFunction(_id)),
+    onSearchFunctionsInputChanged: (value: string) => dispatch(editorActions.searchFunctionsInputChanged(value)),
+    search: (value: string) => dispatch(cacheActions.fetchFunction(value)),
+  }
+}
 
-    this.onInputChanged = this.onInputChanged.bind(this)
+class Editor extends React.Component<EditorProps> {
+
+  componentDidMount() {
     this.onKeyPress = this.onKeyPress.bind(this)
     this.onSearch = this.onSearch.bind(this)
     this.onEditorTabSelected = this.onEditorTabSelected.bind(this)
     this.onEditorTabClosed = this.onEditorTabClosed.bind(this)
   }
 
-  onInputChanged(_: any, inputValue: string) {
-    this.setState({
-      inputValue
-    })
-  }
-
   onKeyPress(e: React.KeyboardEvent<any>) {
     if (e.key === 'Enter')
-      this.props.onSearch(this.state.inputValue)
+      this.props.search(this.props.searchFunctionsInput)
   }
 
   onSearch() {
-    this.props.onSearch(this.state.inputValue)
+    this.props.search(this.props.searchFunctionsInput)
   }
 
   onEditorTabSelected(tabId: string) {
@@ -56,22 +75,23 @@ export class Editor extends React.Component<EditorProps, EditorState> {
   }
 
   render() {
-    const { editContext } = this.props
+    const { fn } = this.props.editContext
 
     return (
       <div>
         <EditorTablist
           tabs={this.props.functions.map(s =>({ tabName: s.fnName, tabId: s._id }))}
-          selectedTabId={editContext && editContext.fn._id}
+          selectedTabId={fn && fn._id}
           onSelect={this.onEditorTabSelected}
           onClose={this.onEditorTabClosed}
         />
-        <TextField
-          value={this.state.inputValue}
-          onChange={this.onInputChanged}
-          onKeyPress={this.onKeyPress}
-          hintText="Load Function Signature"
+        <AutoComplete
           floatingLabelText="Load Function Signature"
+          hintText="Load Function Signature"
+          dataSource={this.props.searchFunctionsSuggestions}
+          onUpdateInput={this.props.onSearchFunctionsInputChanged}
+          onNewRequest={this.props.search}
+          searchText={this.props.searchFunctionsInput}
         />
         <FloatingActionButton
           onClick={this.onSearch}
@@ -84,3 +104,5 @@ export class Editor extends React.Component<EditorProps, EditorState> {
     )
   }
 }
+
+export default connect(mapStateToProps, mapDispatchToProps)(Editor)

@@ -1,7 +1,9 @@
 import { Dispatch } from 'redux'
 import { ISignaturesService } from './types';
 import {
-  fetchFunctionSuccessAction, fetchClassNamesSuccessAction
+  fetchFunctionSuccessAction,
+  fetchClassNamesSuccessAction,
+  fetchFunctionMetaDataSuccessAction
 } from './actionCreators';
 import { IAction } from '../reduxUtils';
 
@@ -56,16 +58,35 @@ export default function(service: ISignaturesService) {
         dispatch(fetchClassNamesSuccessAction({ classNames }))
       } catch (error) {
         dispatch({
-          type: 'FETCHING_CLASS_NAMES_ERROR',
+          type: 'FETCH_CLASS_NAMES_ERROR',
           payload: { error }
         })
-      } 
+      }
+    }
+  }
+
+  function fetchFunctionMetaData() {
+    return async function(dispatch: Dispatch<IAction<any>>) {
+      dispatch({
+        type: 'FETCHING_FUNCTION_META_DATAS'
+      })
+
+      try {
+        const functionMetaDatas = await service.fetchFunctionMetaData()
+        dispatch(fetchFunctionMetaDataSuccessAction({ functionMetaDatas }))
+      } catch (error) {
+        dispatch({
+          type: 'FETCH_FUNCTION_META_DATAS_ERROR',
+          payload: { error }
+        })
+      }
     }
   }
 
   return {
     fetchFunction,
-    fetchClassNames
+    fetchClassNames,
+    fetchFunctionMetaData
   }
 }
 

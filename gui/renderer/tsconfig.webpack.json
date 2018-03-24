@@ -14,7 +14,7 @@
     "declaration": false,
     "moduleResolution": "node",
     "module": "commonjs",
-    "target": "es5",
+    "target": "es6",
     "outDir": "dist",
     "baseUrl": ".",
     "importHelpers": true,
@@ -27,7 +27,7 @@
     ],
     "lib": [
       "dom",
-      "es5",
+      "es6",
       "es2015.promise",
       "es2015.generator",
       "es2015.core"

@@ -29,7 +29,9 @@ export default class AutoComplete extends React.Component<Props, State> {
     this.state = {
       searchText: props.initialSearchText
     }
+  }
 
+  componentDidMount() {
     this.onUpdateInput = this.onUpdateInput.bind(this)
   }
 
