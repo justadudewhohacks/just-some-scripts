@@ -1,7 +1,7 @@
 import * as React from 'react'
 import TextField from 'material-ui/TextField';
 import styled from 'styled-components'
-import AutoComplete from './AutoComplete';
+import AutoComplete from 'material-ui/AutoComplete';
 import { RemoveButton } from './RemoveButton'
 import { IFunction, ISignature, IArgument } from '@opencv4nodejs-gen/persistence/types/index';
 
@@ -31,7 +31,8 @@ export const EditTypeAndValue = ({ arg, index, types, updateType, updateName, on
       floatingLabelText="Type"
       dataSource={types}
       onNewRequest={value => updateType(value, arg.name)}
-      initialSearchText={arg.type}
+      // TODO default value
+      //initialSearchText={arg.type}
     />
     <TextField
       value={arg.name}

@@ -1,18 +1,25 @@
 import * as React from 'react'
 import { connect } from 'react-redux'
 import { Route, Switch, Link } from 'react-router-dom'
-import { FloatingActionButton, TextField } from 'material-ui'
+import { AutoComplete, FloatingActionButton, TextField } from 'material-ui'
 import ActionSearch from 'material-ui/svg-icons/action/search'
-import AutoComplete from 'material-ui/AutoComplete';
+import styled from 'styled-components'
 import { IFunction, IFunctionMetaData } from '@opencv4nodejs-gen/persistence/types/index'
-import { EditorTablist } from './EditorTablist';
+import { EditorTabIcon } from './EditorTabIcon'
 import SignatureTablist from './SignatureTablist';
 import { RootState } from '../redux/rootReducer';
 import { actions as cacheActions } from '../redux/cache';
 import { actions as signaturesActions } from '../redux/signatures';
 import { actions as editorActions, selectors as editorSelectors } from '../redux/ui/editor';
 
-type EditorProps = {
+
+const Tablist = styled.div`
+  height: 40px;
+  display: flex;
+  overflow-x: auto;
+  overflow-y: hidden;
+`
+type Props = {
   functions: IFunction[]
   editContext: { fn: IFunction | null, currentSignatureIdx: number | null }
   searchFunctionsInput: string
@@ -47,9 +54,9 @@ function mapDispatchToProps(dispatch: any) {
   }
 }
 
-class Editor extends React.Component<EditorProps> {
-
-  componentDidMount() {
+class Editor extends React.Component<Props> {
+  constructor(props: Props) {
+    super(props)
     this.onKeyPress = this.onKeyPress.bind(this)
     this.onSearch = this.onSearch.bind(this)
     this.onEditorTabSelected = this.onEditorTabSelected.bind(this)
@@ -79,12 +86,21 @@ class Editor extends React.Component<EditorProps> {
 
     return (
       <div>
-        <EditorTablist
-          tabs={this.props.functions.map(s =>({ tabName: s.fnName, tabId: s._id }))}
-          selectedTabId={fn && fn._id}
-          onSelect={this.onEditorTabSelected}
-          onClose={this.onEditorTabClosed}
-        />
+        <Tablist>
+          {
+            this.props.functions
+              .map(s =>({ tabName: s.fnName, tabId: s._id }))
+              .map(({ tabName, tabId }) =>
+                <EditorTabIcon
+                  isSelected={tabId === (fn && fn._id)}
+                  key={tabId}
+                  tabName={tabName}
+                  onSelect={() => this.onEditorTabSelected(tabId)}
+                  onClose={() => this.onEditorTabClosed(tabId)}
+                />
+            )
+          }
+        </Tablist>
         <AutoComplete
           floatingLabelText="Load Function Signature"
           hintText="Load Function Signature"
