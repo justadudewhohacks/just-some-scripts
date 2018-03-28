@@ -39,8 +39,8 @@ export const EditSignature = ({
             index={i}
             arg={ret}
             types={types}
-            updateType={updateReturnValueType}
-            updateName={updateReturnValueName}
+            onTypeChanged={updateReturnValueType}
+            onNameChanged={updateReturnValueName}
             onRemove={removeReturnValue}
           />
         )
@@ -59,8 +59,8 @@ export const EditSignature = ({
             index={i}
             arg={arg}
             types={types}
-            updateType={updateArgumentType}
-            updateName={updateArgumentName}
+            onTypeChanged={updateArgumentType}
+            onNameChanged={updateArgumentName}
             onRemove={removeArgument}
           />
         )

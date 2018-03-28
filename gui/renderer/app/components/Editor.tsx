@@ -65,7 +65,7 @@ class Editor extends React.Component<Props> {
 
   onKeyPress(e: React.KeyboardEvent<any>) {
     if (e.key === 'Enter')
-      this.props.search(this.props.searchFunctionsInput)
+      this.onSearch()
   }
 
   onSearch() {

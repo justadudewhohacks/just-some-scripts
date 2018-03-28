@@ -19,26 +19,26 @@ type Props = {
   arg: IArgument
   index: number
   types: string[]
-  updateType: (type: string, argName: string) => void
-  updateName: (name: string, argName: string) => void
+  onTypeChanged: (type: string, argName: string) => void
+  onNameChanged: (name: string, argName: string) => void
   onRemove: (argName: string) => void
 }
 
-export const EditTypeAndValue = ({ arg, index, types, updateType, updateName, onRemove } : Props) => (
+export const EditTypeAndValue = ({ arg, index, types, onTypeChanged, onNameChanged, onRemove } : Props) => (
   <Row>
     <h3> { `${index}. ` } </h3>
     <AutoComplete
-      floatingLabelText="Type"
       dataSource={types}
-      onNewRequest={value => updateType(value, arg.name)}
-      // TODO default value
-      //initialSearchText={arg.type}
+      floatingLabelText="Type"
+      searchText={arg.type}
+      onUpdateInput={value => onTypeChanged(value, arg.name)}
+      onNewRequest={value => onTypeChanged(value, arg.name)}
     />
     <TextField
       value={arg.name}
       floatingLabelText="Name"
       hintText="Name"
-      onChange={(_, value) => updateName(value, arg.name)}
+      onChange={(_, value) => onNameChanged(value, arg.name)}
     />
     <RemoveButton
       label={''}
