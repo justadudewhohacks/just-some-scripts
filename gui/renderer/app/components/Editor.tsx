@@ -83,7 +83,6 @@ class Editor extends React.Component<Props> {
 
   render() {
     const { fn } = this.props.editContext
-
     return (
       <div>
         <Tablist>
@@ -105,6 +104,7 @@ class Editor extends React.Component<Props> {
           floatingLabelText="Load Function Signature"
           hintText="Load Function Signature"
           dataSource={this.props.searchFunctionsSuggestions}
+          filter={() => true}
           onUpdateInput={this.props.onSearchFunctionsInputChanged}
           onNewRequest={this.props.search}
           searchText={this.props.searchFunctionsInput}
