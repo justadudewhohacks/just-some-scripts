@@ -18,11 +18,11 @@ export function reduceFunctions(
 
   const updatedSignature = {
     ...currentSignature,
-    [argsArrayName]: reduceArgsArray(currentSignature[argsArrayName])
+    [argsArrayName]: reduceArgsArray(currentSignature[argsArrayName] || [])
   }
 
   const updatedSignatures = replaceItem<ISignature>(currentFn.signatures, updatedSignature, currentSignatureIdx)
   const updatedFunction = { ...currentFn, signatures: updatedSignatures }
-  
+
   return replaceItem<IFunction>(functions, updatedFunction, currentFnIdx)
 }
