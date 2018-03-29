@@ -4,10 +4,12 @@ import { Tabs, Tab } from 'material-ui/Tabs'
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import { IFunction } from '@opencv4nodejs-gen/persistence/types/index';
 import EditFunctionMetaData from './EditFunctionMetaData';
+import { SaveButton } from './SaveButton'
 import { EditSignature } from './EditSignature';
 import { RootState } from '../redux/rootReducer';
 import { actions as signaturesActions } from '../redux/signatures'
 import { selectors as cacheSelectors } from '../redux/cache'
+import { actions as editorActions } from '../redux/ui/editor';
 
 
 type Props = {
@@ -23,6 +25,7 @@ type Props = {
   removeFunctionReturnValue: (argName: string) => void
   removeFunctionArgument: (argName: string) => void,
   removeFunctionSignature: (idx: number) => void
+  openSaveFunctionDialog: () => void
 }
 
 function getTabId(fnId: string, idx: number) {
@@ -62,7 +65,8 @@ function mapDispatchToProps(dispatch: any) {
     addFunctionReturnValue: () => dispatch(signaturesActions.addFunctionReturnValue()),
     removeFunctionReturnValue: (argName: string) => dispatch(signaturesActions.removeFunctionReturnValue(argName)),
     removeFunctionArgument: (argName: string) => dispatch(signaturesActions.removeFunctionArgument(argName)),
-    removeFunctionSignature: (idx: number) => dispatch(signaturesActions.removeFunctionSignature(idx))
+    removeFunctionSignature: (idx: number) => dispatch(signaturesActions.removeFunctionSignature(idx)),
+    openSaveFunctionDialog: () => dispatch(editorActions.openSaveFunctionDialog())
   }
 }
 
@@ -78,7 +82,8 @@ const SignatureTablist = ({
   addFunctionReturnValue,
   removeFunctionReturnValue,
   removeFunctionArgument,
-  removeFunctionSignature
+  removeFunctionSignature,
+  openSaveFunctionDialog
 } : Props) => {
 
   if (!editContext)
@@ -88,8 +93,13 @@ const SignatureTablist = ({
 
   return (
     <div style={{ margin: 10 }}>
-      <EditFunctionMetaData 
-        editedFunctionMetaData={editContext.fn} 
+      <SaveButton
+        style={{ margin: 10, alignSelf: 'flex-end' }}
+        label="Show Result"
+        onClick={openSaveFunctionDialog}
+      />
+      <EditFunctionMetaData
+        editedFunctionMetaData={editContext.fn}
       />
       <Tabs
         value={getTabId(_id, currentSignatureIdx)}

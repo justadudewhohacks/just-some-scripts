@@ -12,6 +12,7 @@ import { RootState } from '../redux/rootReducer';
 import { actions as cacheActions } from '../redux/cache';
 import { actions as signaturesActions } from '../redux/signatures';
 import { actions as editorActions, selectors as editorSelectors } from '../redux/ui/editor';
+import SaveFunctionDialog from './SaveFunctionDialog';
 
 
 const Tablist = styled.div`
@@ -21,16 +22,20 @@ const Tablist = styled.div`
   overflow-y: hidden;
 `
 type Props = {
+  isSaveFunctionDialogOpen: boolean
   functions: IFunction[]
   editContext: { fn: IFunction | null, currentSignatureIdx: number | null }
+  closeSaveFunctionDialog: () => void
   editFunction: (_id: string) => void
   unloadFunction: (_id: string) => void
 }
 
 function mapStateToProps(state: RootState) {
   const { editedFunctions, currentlyEditing } = state.signatures
+  const { isSaveFunctionDialogOpen } = state.ui.editor
 
   return {
+    isSaveFunctionDialogOpen,
     editContext: {
       // TODO selector
       fn: editedFunctions.find(f => f._id === currentlyEditing._id),
@@ -43,7 +48,8 @@ function mapStateToProps(state: RootState) {
 function mapDispatchToProps(dispatch: any) {
   return {
     editFunction: (_id: string) => dispatch(signaturesActions.editFunction(_id)),
-    unloadFunction: (_id: string) => dispatch(cacheActions.unloadFunction(_id))
+    unloadFunction: (_id: string) => dispatch(cacheActions.unloadFunction(_id)),
+    closeSaveFunctionDialog: () => dispatch(editorActions.closeSaveFunctionDialog())
   }
 }
 
@@ -74,6 +80,12 @@ class Editor extends React.Component<Props> {
           }
         </Tablist>
         <SignatureTablist />
+        <SaveFunctionDialog
+          resultFunction={fn}
+          isOpen={this.props.isSaveFunctionDialogOpen}
+          onSave={() => console.log('SaveFunctionDialog onSave')}
+          onClose={this.props.closeSaveFunctionDialog}
+        />
       </div>
     )
   }
