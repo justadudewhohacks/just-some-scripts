@@ -6,15 +6,16 @@ import {
   updateReturnValueNameAction,
   updateArgumentNameAction,
   updateArgumentTypeAction,
-  addFunctionSignatureAction, 
-  addFunctionReturnValueAction, 
+  addFunctionSignatureAction,
+  addFunctionReturnValueAction,
   addFunctionArgumentAction,
   removeFunctionSignatureAction,
   removeFunctionArgumentAction,
-  removeFunctionReturnValueAction
+  removeFunctionReturnValueAction,
+  updateArgumentArrayDepthAction
 } from './actionCreators';
 import { IAction } from '../reduxUtils';
-import { createNewFunctionSignatureAction } from './actionCreators';
+import { createNewFunctionSignatureAction, makeFunctionArgumentOptionalAction, updateReturnValueArrayDepthAction, updateArgumentDefaultValueAction } from './actionCreators';
 
 export default function() {
 
@@ -96,20 +97,68 @@ export default function() {
     }
   }
 
+  function makeFunctionArgument(argName: string) {
+    return function(dispatch: Dispatch<IAction<any>>) {
+      dispatch(removeFunctionArgumentAction({ argName }))
+    }
+  }
+
+  function updateReturnValueArrayDepth(value: string, argName: string) {
+    return function(dispatch: Dispatch<IAction<any>>) {
+      const depth = parseInt(value || '0')
+      if (isNaN(depth)) {
+        dispatch({
+          type: 'ISNAN_FUNCTION_RETURN_VALUE_ARRAY_DEPTH'
+        })
+        return
+      }
+      dispatch(updateReturnValueArrayDepthAction({ depth, argName }))
+    }
+  }
+
+  function updateArgumentArrayDepth(value: string, argName: string) {
+    return function(dispatch: Dispatch<IAction<any>>) {
+      const depth = parseInt(value || '0')
+      if (isNaN(depth)) {
+        dispatch({
+          type: 'ISNAN_FUNCTION_ARGUMENT_ARRAY_DEPTH'
+        })
+        return
+      }
+      dispatch(updateArgumentArrayDepthAction({ depth, argName }))
+    }
+  }
+
+  function updateArgumentDefaultValue(value: string, argName: string) {
+    return function(dispatch: Dispatch<IAction<any>>) {
+      dispatch(updateArgumentDefaultValueAction({ value, argName }))
+    }
+  }
+
+  function makeFunctionArgumentOptional(argName: string) {
+    return function(dispatch: Dispatch<IAction<any>>) {
+      dispatch(makeFunctionArgumentOptionalAction({ argName }))
+    }
+  }
+
   return {
     editFunction,
     editFunctionSignature,
     updateReturnValueType,
     updateReturnValueName,
+    updateReturnValueArrayDepth,
     updateArgumentType,
     updateArgumentName,
+    updateArgumentArrayDepth,
+    updateArgumentDefaultValue,
     addFunctionArgument,
     addFunctionReturnValue,
     addFunctionSignature,
     removeFunctionArgument,
     removeFunctionReturnValue,
     removeFunctionSignature,
-    createNewFunctionSignature
+    createNewFunctionSignature,
+    makeFunctionArgumentOptional
   }
 }
 

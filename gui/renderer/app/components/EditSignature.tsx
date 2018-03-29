@@ -1,9 +1,11 @@
 import * as React from 'react'
+import { connect } from 'react-redux'
 import TextField from 'material-ui/TextField';
 import styled from 'styled-components'
 import { IFunction, ISignature } from '@opencv4nodejs-gen/persistence/types/index';
 import { EditArgument } from './EditArgument';
 import { AddButton, RemoveButton } from './Buttons';
+import { actions as signaturesActions } from '../redux/signatures'
 
 const Container = styled.div`
   display: flex;
@@ -14,36 +16,67 @@ const Container = styled.div`
 type Props = {
   types: string[]
   signature: ISignature
+  idx: number
   updateReturnValueType: (type: string, argName: string) => void
   updateReturnValueName: (name: string, argName: string) => void
+  updateReturnValueArrayDepth: (value: string, argName: string) => void
   updateArgumentType: (type: string, argName: string) => void
   updateArgumentName: (name: string, argName: string) => void
+  updateArgumentArrayDepth: (value: string, argName: string) => void
+  updateArgumentDefaultValue: (value: string, argName: string) => void
   addFunctionArgument: () => void
   addFunctionReturnValue: () => void
-  removeReturnValue: (argName: string) => void
-  removeArgument: (argName: string) => void
-  removeFunctionSignature: () => void
+  removeFunctionReturnValue: (argName: string) => void
+  removeFunctionArgument: (argName: string) => void
+  removeFunctionSignature: (idx: number) => void
+  makeFunctionArgumentOptional: (argName: string) => void
 }
 
-export const EditSignature = ({
+function mapStateToProps(state: any) {
+  return {}
+}
+
+function mapDispatchToProps(dispatch: any) {
+  return {
+    updateReturnValueType: (type: string, argName: string) => dispatch(signaturesActions.updateReturnValueType(type, argName)),
+    updateReturnValueName: (name: string, argName: string) => dispatch(signaturesActions.updateReturnValueName(name, argName)),
+    updateReturnValueArrayDepth: (value: string, argName: string) => dispatch(signaturesActions.updateReturnValueArrayDepth(value, argName)),
+    updateArgumentType: (name: string, argName: string) => dispatch(signaturesActions.updateArgumentType(name, argName)),
+    updateArgumentName: (name: string, argName: string) => dispatch(signaturesActions.updateArgumentName(name, argName)),
+    updateArgumentArrayDepth: (value: string, argName: string) => dispatch(signaturesActions.updateArgumentArrayDepth(value, argName)),
+    updateArgumentDefaultValue: (value: string, argName: string) => dispatch(signaturesActions.updateArgumentDefaultValue(value, argName)),
+    addFunctionArgument: () => dispatch(signaturesActions.addFunctionArgument()),
+    addFunctionReturnValue: () => dispatch(signaturesActions.addFunctionReturnValue()),
+    removeFunctionReturnValue: (argName: string) => dispatch(signaturesActions.removeFunctionReturnValue(argName)),
+    removeFunctionArgument: (argName: string) => dispatch(signaturesActions.removeFunctionArgument(argName)),
+    removeFunctionSignature: (idx: number) => dispatch(signaturesActions.removeFunctionSignature(idx)),
+    makeFunctionArgumentOptional: (argName: string) => dispatch(signaturesActions.makeFunctionArgumentOptional(argName))
+  }
+}
+
+const EditSignature = ({
   types,
   signature,
+  idx,
   updateReturnValueType,
   updateReturnValueName,
+  updateReturnValueArrayDepth,
   updateArgumentType,
   updateArgumentName,
+  updateArgumentArrayDepth,
+  updateArgumentDefaultValue,
   addFunctionArgument,
   addFunctionReturnValue,
-  removeReturnValue,
-  removeArgument,
-  removeFunctionSignature
-
+  removeFunctionReturnValue,
+  removeFunctionArgument,
+  removeFunctionSignature,
+  makeFunctionArgumentOptional
 } : Props) => (
   <Container>
     <RemoveButton
       style={{ margin: 10, alignSelf: 'flex-end' }}
       label="Remove Signature"
-      onClick={removeFunctionSignature}
+      onClick={() => removeFunctionSignature(idx)}
     />
     <h3> {'Return Values'} </h3>
     <div>
@@ -55,8 +88,8 @@ export const EditSignature = ({
             types={types}
             onTypeChanged={updateReturnValueType}
             onNameChanged={updateReturnValueName}
-            onRemove={removeReturnValue}
-            onArrayDepthChanged={() => console.log('onArrayDepthChanged')}
+            onRemove={removeFunctionReturnValue}
+            onArrayDepthChanged={updateReturnValueArrayDepth}
           />
         )
       }
@@ -81,10 +114,10 @@ export const EditSignature = ({
               types={types}
               onTypeChanged={updateArgumentType}
               onNameChanged={updateArgumentName}
-              onRemove={removeArgument}
-              onArrayDepthChanged={() => console.log('onArrayDepthChanged')}
-              onMakeOptional={!isOptional && (() => console.log('onMakeOptional'))}
-              onDefaultValueChanged={isOptional && (() => console.log('onDefaultValueChanged'))}
+              onRemove={removeFunctionArgument}
+              onArrayDepthChanged={updateArgumentArrayDepth}
+              onMakeOptional={isOptional ? null : makeFunctionArgumentOptional}
+              onDefaultValueChanged={isOptional ? updateArgumentDefaultValue : null}
             />
           )
       }
@@ -96,3 +129,5 @@ export const EditSignature = ({
     />
   </Container>
 )
+
+export default connect(mapStateToProps, mapDispatchToProps)(EditSignature)

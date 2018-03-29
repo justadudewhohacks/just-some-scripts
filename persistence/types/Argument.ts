@@ -3,13 +3,31 @@ export interface IType {
   type: string
 }
 
-export interface IDeclaration extends IType {
+export class Declaration implements IType {
+  type: string
   name: string
-  defaultValue?: any
+  arrayDepth?: number
+  defaultValue?: string
+
+  constructor() {
+    this.type = ''
+    this.name = ''
+  }
 }
 
-export interface IArgument extends IDeclaration {}
+export class Argument extends Declaration {}
 
-export interface IOptionalArgument extends IArgument {
-  defaultValue: any
+export class OptionalArgument extends Argument {
+  defaultValue: string
+  constructor(arg: Argument) {
+    super()
+    this.type = arg.type
+    this.name = arg.name
+    this.arrayDepth = arg.arrayDepth
+    this.defaultValue = ''
+  }
 }
+
+export interface IDeclaration extends Declaration {}
+export interface IArgument extends Argument {}
+export interface IOptionalArgument extends OptionalArgument {}

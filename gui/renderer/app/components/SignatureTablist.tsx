@@ -4,8 +4,8 @@ import { Tabs, Tab } from 'material-ui/Tabs'
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import { IFunction } from '@opencv4nodejs-gen/persistence/types/index';
 import EditFunctionMetaData from './EditFunctionMetaData';
+import EditSignature from './EditSignature';
 import { SaveButton } from './Buttons'
-import { EditSignature } from './EditSignature';
 import { RootState } from '../redux/rootReducer';
 import { actions as signaturesActions } from '../redux/signatures'
 import { selectors as cacheSelectors } from '../redux/cache'
@@ -16,15 +16,6 @@ type Props = {
   types: string[]
   editContext: { fn: IFunction, currentSignatureIdx?: number }
   editFunctionSignature: (tabId: string) => void
-  updateReturnValueType: (type: string, argName: string) => void
-  updateReturnValueName: (name: string, argName: string) => void
-  updateArgumentType: (type: string, argName: string) => void
-  updateArgumentName: (name: string, argName: string) => void
-  addFunctionArgument: () => void
-  addFunctionReturnValue: () => void
-  removeFunctionReturnValue: (argName: string) => void
-  removeFunctionArgument: (argName: string) => void,
-  removeFunctionSignature: (idx: number) => void
   openSaveFunctionDialog: () => void
 }
 
@@ -57,15 +48,6 @@ function mapDispatchToProps(dispatch: any) {
 
   return {
     editFunctionSignature,
-    updateReturnValueType: (type: string, argName: string) => dispatch(signaturesActions.updateReturnValueType(type, argName)),
-    updateReturnValueName: (name: string, argName: string) => dispatch(signaturesActions.updateReturnValueName(name, argName)),
-    updateArgumentType: (name: string, argName: string) => dispatch(signaturesActions.updateArgumentType(name, argName)),
-    updateArgumentName: (name: string, argName: string) => dispatch(signaturesActions.updateArgumentName(name, argName)),
-    addFunctionArgument: () => dispatch(signaturesActions.addFunctionArgument()),
-    addFunctionReturnValue: () => dispatch(signaturesActions.addFunctionReturnValue()),
-    removeFunctionReturnValue: (argName: string) => dispatch(signaturesActions.removeFunctionReturnValue(argName)),
-    removeFunctionArgument: (argName: string) => dispatch(signaturesActions.removeFunctionArgument(argName)),
-    removeFunctionSignature: (idx: number) => dispatch(signaturesActions.removeFunctionSignature(idx)),
     openSaveFunctionDialog: () => dispatch(editorActions.openSaveFunctionDialog())
   }
 }
@@ -74,15 +56,6 @@ const SignatureTablist = ({
   types,
   editContext,
   editFunctionSignature,
-  updateReturnValueType,
-  updateReturnValueName,
-  updateArgumentType,
-  updateArgumentName,
-  addFunctionArgument,
-  addFunctionReturnValue,
-  removeFunctionReturnValue,
-  removeFunctionArgument,
-  removeFunctionSignature,
   openSaveFunctionDialog
 } : Props) => {
 
@@ -116,17 +89,9 @@ const SignatureTablist = ({
               >
                 <EditSignature
                   types={types}
-                  key={tabId}
                   signature={signature}
-                  updateReturnValueType={updateReturnValueType}
-                  updateReturnValueName={updateReturnValueName}
-                  updateArgumentType={updateArgumentType}
-                  updateArgumentName={updateArgumentName}
-                  addFunctionArgument={addFunctionArgument}
-                  addFunctionReturnValue={addFunctionReturnValue}
-                  removeReturnValue={removeFunctionReturnValue}
-                  removeArgument={removeFunctionArgument}
-                  removeFunctionSignature={() => removeFunctionSignature(i)}
+                  idx={i}
+                  key={tabId}
                 />
               </Tab>
             )

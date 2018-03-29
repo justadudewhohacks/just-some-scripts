@@ -53,21 +53,22 @@ export const EditArgument = ({ arg, index, types, onTypeChanged, onNameChanged, 
       style={{ width: 120 }}
     />
     {
-      onDefaultValueChanged
-        ?
-          <TextField
-            value={arg.defaultValue || ''}
-            floatingLabelText="Name"
-            hintText="Name"
-            onChange={(_, value) => onDefaultValueChanged(value, arg.name)}
-            style={{ width: 180 }}
-          />
-        :
-          <AddButton
-            label="Optional"
-            onClick={() => onMakeOptional(arg.name)}
-            style={{ width: 180 }}
-          />
+      onDefaultValueChanged &&
+        <TextField
+          value={arg.defaultValue || ''}
+          floatingLabelText="Name"
+          hintText="Name"
+          onChange={(_, value) => onDefaultValueChanged(value, arg.name)}
+          style={{ width: 180 }}
+        />
+    }
+    {
+      onMakeOptional &&
+      <AddButton
+        label="Optional"
+        onClick={() => onMakeOptional(arg.name)}
+        style={{ width: 180 }}
+      />
     }
     <RemoveButton
       label={''}

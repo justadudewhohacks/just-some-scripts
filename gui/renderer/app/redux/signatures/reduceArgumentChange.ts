@@ -5,14 +5,14 @@ import { reduceFunctions } from './reduceFunctions';
 
 
 export function reduceArgumentChange(
-  state: State, 
-  argsArrayNames: ArgsArrayName[], 
+  state: State,
+  argsArrayNames: ArgsArrayName[],
   argName: string,
   reduceArgsArray: (argsArray: IArgument[], argsArrayIdx: number, arg: IArgument) => IArgument[]
 ): State {
   const currentlyEdited = getCurrentlyEditedFunctionSignatureContext(state)
   if (!currentlyEdited)
-    return state 
+    return state
 
   const { currentSignature } = currentlyEdited
 
