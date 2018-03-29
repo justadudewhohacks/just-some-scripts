@@ -32,7 +32,7 @@ module.exports = {
     rules: [
       {
         test: /\.tsx?$/,
-        include: path.join(__dirname, 'app'),
+        include: [path.join(__dirname, 'app'), path.join(__dirname, '../../persistence/types')],
         loader: ['react-hot-loader/webpack', 'ts-loader?configFile=tsconfig.webpack.json']
       }
     ]

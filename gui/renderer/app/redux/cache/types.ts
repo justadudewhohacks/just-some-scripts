@@ -1,4 +1,4 @@
-import { IFunction, IFunctionMetaData } from '@opencv4nodejs-gen/persistence/types';
+import { IFunction, IFunctionMetaData } from '../../../../../persistence/types';
 import { FetchFunctionSignatureArgs } from '../../../../types';
 
 export type State = {

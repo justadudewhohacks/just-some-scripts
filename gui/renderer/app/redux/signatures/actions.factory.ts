@@ -14,13 +14,13 @@ import {
   removeFunctionReturnValueAction
 } from './actionCreators';
 import { IAction } from '../reduxUtils';
-import { RootState } from '../rootReducer';
+import { createNewFunctionSignatureAction } from './actionCreators';
 
 export default function() {
 
   function editFunction(_id: string) {
-    return function(dispatch: Dispatch<IAction<any>>, getState: () => RootState) {
-      dispatch(editFunctionAction({ _id, cachedFunctions: getState().cache.functions.slice() }))
+    return function(dispatch: Dispatch<IAction<any>>) {
+      dispatch(editFunctionAction({ _id }))
     }
   }
 
@@ -84,9 +84,15 @@ export default function() {
     }
   }
 
-  function removeFunctionSignature(argName: string) {
+  function removeFunctionSignature(idx: number) {
     return function(dispatch: Dispatch<IAction<any>>) {
-      dispatch(removeFunctionSignatureAction({ argName }))
+      dispatch(removeFunctionSignatureAction({ idx }))
+    }
+  }
+
+  function createNewFunctionSignature(value: string) {
+    return function(dispatch: Dispatch<IAction<any>>) {
+      dispatch(createNewFunctionSignatureAction({ value }))
     }
   }
 
@@ -102,7 +108,8 @@ export default function() {
     addFunctionSignature,
     removeFunctionArgument,
     removeFunctionReturnValue,
-    removeFunctionSignature
+    removeFunctionSignature,
+    createNewFunctionSignature
   }
 }
 

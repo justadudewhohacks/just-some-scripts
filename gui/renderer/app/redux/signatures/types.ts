@@ -1,8 +1,11 @@
-import { IFunction, ISignature } from '@opencv4nodejs-gen/persistence/types';
+import { IFunction, ISignature } from '../../../../../persistence/types';
 
-export type EditContext = {
+export interface IEditFunctionContext {
   currentFn: IFunction
   currentFnIdx: number
+}
+
+export interface IEditFunctionSignatureContext extends IEditFunctionContext {
   currentSignature: ISignature
   currentSignatureIdx: number
 }

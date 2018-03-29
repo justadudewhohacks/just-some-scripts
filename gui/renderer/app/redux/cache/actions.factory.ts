@@ -3,7 +3,8 @@ import { ISignaturesService } from './types';
 import {
   fetchFunctionSuccessAction,
   fetchClassNamesSuccessAction,
-  fetchFunctionMetaDataSuccessAction
+  fetchFunctionMetaDataSuccessAction,
+  unloadFunctionAction
 } from './actionCreators';
 import { IAction } from '../reduxUtils';
 
@@ -83,10 +84,17 @@ export default function(service: ISignaturesService) {
     }
   }
 
+  function unloadFunction(_id: string) {
+    return function(dispatch: Dispatch<IAction<any>>) {
+      return dispatch(unloadFunctionAction({ _id }))
+    }
+  }
+
   return {
     fetchFunction,
     fetchClassNames,
-    fetchFunctionMetaData
+    fetchFunctionMetaData,
+    unloadFunction
   }
 }
 

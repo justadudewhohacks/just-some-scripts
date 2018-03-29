@@ -1,4 +1,4 @@
-import { IFunction, IFunctionMetaData } from '@opencv4nodejs-gen/persistence/types';
+import { IFunction, IFunctionMetaData } from '../../../../../persistence/types';
 import { ipcRenderer } from 'electron'
 import { ipcHandlerFactory } from '../../commons/ipcHandler.factory';
 import { FetchFunctionSignatureArgs } from '../../../../types';

@@ -1,4 +1,4 @@
-import { IFunctionMetaData } from '@opencv4nodejs-gen/persistence';
+import { IFunctionMetaData } from '../../../../../persistence';
 import { State } from "./types";
 
 const types = ['string', 'boolean', 'number', 'int', 'uint', 'char', 'uchar']

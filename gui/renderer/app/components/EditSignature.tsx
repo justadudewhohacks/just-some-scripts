@@ -1,8 +1,16 @@
 import * as React from 'react'
 import TextField from 'material-ui/TextField';
+import styled from 'styled-components'
 import { IFunction, ISignature } from '@opencv4nodejs-gen/persistence/types/index';
 import { EditTypeAndValue } from './EditTypeAndValue';
 import { AddButton } from './AddButton';
+import { RemoveButton } from './RemoveButton';
+
+const Container = styled.div`
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+`
 
 type Props = {
   types: string[]
@@ -15,6 +23,7 @@ type Props = {
   addFunctionReturnValue: () => void
   removeReturnValue: (argName: string) => void
   removeArgument: (argName: string) => void
+  removeFunctionSignature: () => void
 }
 
 export const EditSignature = ({
@@ -27,10 +36,16 @@ export const EditSignature = ({
   addFunctionArgument,
   addFunctionReturnValue,
   removeReturnValue,
-  removeArgument
+  removeArgument,
+  removeFunctionSignature
 
 } : Props) => (
-  <div>
+  <Container>
+    <RemoveButton 
+      style={{ margin: 10, alignSelf: 'flex-end' }}
+      label="Remove Signature"
+      onClick={removeFunctionSignature}
+    />
     <h3> {'Return Values'} </h3>
     <div>
       {
@@ -71,5 +86,5 @@ export const EditSignature = ({
       style={{ margin: '10px' }}
       onClick={addFunctionArgument}
     />
-  </div>
+  </Container>
 )

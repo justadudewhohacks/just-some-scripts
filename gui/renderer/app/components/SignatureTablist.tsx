@@ -1,12 +1,14 @@
 import * as React from 'react'
+import { connect } from 'react-redux'
 import { Tabs, Tab } from 'material-ui/Tabs'
 import ContentAdd from 'material-ui/svg-icons/content/add';
-import { connect } from 'react-redux'
 import { IFunction } from '@opencv4nodejs-gen/persistence/types/index';
+import EditFunctionMetaData from './EditFunctionMetaData';
 import { EditSignature } from './EditSignature';
 import { RootState } from '../redux/rootReducer';
 import { actions as signaturesActions } from '../redux/signatures'
 import { selectors as cacheSelectors } from '../redux/cache'
+
 
 type Props = {
   types: string[]
@@ -19,7 +21,8 @@ type Props = {
   addFunctionArgument: () => void
   addFunctionReturnValue: () => void
   removeFunctionReturnValue: (argName: string) => void
-  removeFunctionArgument: (argName: string) => void
+  removeFunctionArgument: (argName: string) => void,
+  removeFunctionSignature: (idx: number) => void
 }
 
 function getTabId(fnId: string, idx: number) {
@@ -58,7 +61,8 @@ function mapDispatchToProps(dispatch: any) {
     addFunctionArgument: () => dispatch(signaturesActions.addFunctionArgument()),
     addFunctionReturnValue: () => dispatch(signaturesActions.addFunctionReturnValue()),
     removeFunctionReturnValue: (argName: string) => dispatch(signaturesActions.removeFunctionReturnValue(argName)),
-    removeFunctionArgument: (argName: string) => dispatch(signaturesActions.removeFunctionArgument(argName))
+    removeFunctionArgument: (argName: string) => dispatch(signaturesActions.removeFunctionArgument(argName)),
+    removeFunctionSignature: (idx: number) => dispatch(signaturesActions.removeFunctionSignature(idx))
   }
 }
 
@@ -73,7 +77,8 @@ const SignatureTablist = ({
   addFunctionArgument,
   addFunctionReturnValue,
   removeFunctionReturnValue,
-  removeFunctionArgument
+  removeFunctionArgument,
+  removeFunctionSignature
 } : Props) => {
 
   if (!editContext)
@@ -82,7 +87,10 @@ const SignatureTablist = ({
   const { fn: { _id }, currentSignatureIdx } = editContext
 
   return (
-    <div>
+    <div style={{ margin: 10 }}>
+      <EditFunctionMetaData 
+        editedFunctionMetaData={editContext.fn} 
+      />
       <Tabs
         value={getTabId(_id, currentSignatureIdx)}
         onChange={editFunctionSignature}
@@ -108,6 +116,7 @@ const SignatureTablist = ({
                   addFunctionReturnValue={addFunctionReturnValue}
                   removeReturnValue={removeFunctionReturnValue}
                   removeArgument={removeFunctionArgument}
+                  removeFunctionSignature={() => removeFunctionSignature(i)}
                 />
               </Tab>
             )

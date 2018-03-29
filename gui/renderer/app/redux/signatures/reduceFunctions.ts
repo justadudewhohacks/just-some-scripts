@@ -1,11 +1,10 @@
-import { ISignature, IFunction, IArgument } from '@opencv4nodejs-gen/persistence';
-import { State, ArgsArrayName, EditContext } from './types';
-import { getCurrentlyEdited } from './commons';
+import { ISignature, IFunction, IArgument } from '../../../../../persistence';
+import { State, ArgsArrayName, IEditFunctionSignatureContext } from './types';
 import { replaceItem } from '../immutibilityUtils';
 
 export function reduceFunctions(
   functions: IFunction[],
-  editContext: EditContext,
+  editContext: IEditFunctionSignatureContext,
   argsArrayName: ArgsArrayName,
   reduceArgsArray: (targetArray: IArgument[]) => IArgument[]
 ) : IFunction[] {

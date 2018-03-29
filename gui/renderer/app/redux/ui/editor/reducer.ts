@@ -1,4 +1,4 @@
-import { IFunction, IFunctionMetaData } from '@opencv4nodejs-gen/persistence';
+import { IFunction, IFunctionMetaData } from '../../../../../../persistence';
 import { State } from './types';
 import { IAction, isType } from '../../reduxUtils';
 import { searchFunctionsInputChangedAction } from './actionCreators';

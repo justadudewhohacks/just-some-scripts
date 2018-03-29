@@ -5,7 +5,7 @@ export interface IAction<T> {
 
 export interface IActionCreator<T> {
   type: string
-  (payload: T): IAction<T>
+  (payload?: T): IAction<T>
 }
 
 export function actionCreator<T>(type: string): IActionCreator<T> {

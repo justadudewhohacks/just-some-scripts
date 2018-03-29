@@ -1,11 +1,13 @@
-import { IArgument, IFunction, ISignature, IDeclaration, IType } from '@opencv4nodejs-gen/persistence';
+import { IArgument, IFunction, ISignature, IDeclaration, Function, Signature } from '../../../../../persistence/types';
 import { State, ArgsArrayName } from './types';
-import { editFunctionAction, updateReturnValueNameAction, updateReturnValueTypeAction, editFunctionSignatureAction, updateArgumentTypeAction, updateArgumentNameAction, removeFunctionReturnValueAction, removeFunctionArgumentAction, addFunctionReturnValueAction, addFunctionArgumentAction } from './actionCreators';
+import { editFunctionAction, updateReturnValueNameAction, updateReturnValueTypeAction, editFunctionSignatureAction, updateArgumentTypeAction, updateArgumentNameAction, removeFunctionReturnValueAction, removeFunctionArgumentAction, addFunctionReturnValueAction, addFunctionArgumentAction, createNewFunctionSignatureAction, addFunctionSignatureAction, removeFunctionSignatureAction } from './actionCreators';
 import { replaceItem, removeItem, insertItem } from '../immutibilityUtils';
 import { IAction, isType } from '../reduxUtils';
 import { reduceArgumentChange } from './reduceArgumentChange';
 import { reduceArgumentAdd } from './reduceArgumentAdd';
 import { hasFnIdPredicate } from '../../commons/hasFnIdPredicate';
+import { fetchFunctionSuccessAction, unloadFunctionAction } from '../cache/actionCreators';
+import { getCurrentlyEditedFunctionContext, getCurrentlyEditedFunctionSignatureContext } from './commons';
 
 const INITIAL_STATE: State = {
   editedFunctions: [],
@@ -14,17 +16,27 @@ const INITIAL_STATE: State = {
 
 export default function(state = INITIAL_STATE, action: IAction<any>) : State {
 
-  if (isType(action, editFunctionAction)) {
+  if (isType(action, fetchFunctionSuccessAction)) {
 
-    const { _id, cachedFunctions } = action.payload
-    const hasId = hasFnIdPredicate(_id)
-    if (!state.editedFunctions.some(hasId)) {
-      const fn = cachedFunctions.find(hasId)
+    const { fn } = action.payload
+    const idx = state.editedFunctions.findIndex(hasFnIdPredicate(fn._id))
 
+    if (idx !== -1) {
+      return { ...state, editedFunctions: replaceItem<IFunction>(state.editedFunctions, fn, idx) }
+    }
+    return { 
+      ...state, 
+      editedFunctions: state.editedFunctions.concat(fn) 
+    }
+
+  } else if (isType(action, editFunctionAction)) {
+
+    const { _id } = action.payload
+
+    if (!state.editedFunctions.some(hasFnIdPredicate(_id))) {
       return {
         ...state,
-        currentlyEditing: { _id, currentSignatureIdx: 0 },
-        editedFunctions: state.editedFunctions.concat(fn || [])
+        currentlyEditing: { _id, currentSignatureIdx: 0 }
       }
     }
     return { ...state, currentlyEditing: { ...state.currentlyEditing, _id } }
@@ -114,7 +126,61 @@ export default function(state = INITIAL_STATE, action: IAction<any>) : State {
       argsArray => insertItem<IArgument>(argsArray, { name: '', type: '' }, argsArray.length)
     )
 
-  }
+  } else if (isType(action, createNewFunctionSignatureAction)) {
+
+    const id = Date.now().toString()
+
+    return {
+      ...state, 
+      editedFunctions: state.editedFunctions.concat(new Function(id, id))
+    }
+
+  } else if (isType(action, unloadFunctionAction)) {
+
+    const { _id } = action.payload
+    
+    const idx = state.editedFunctions.findIndex(hasFnIdPredicate(_id))
+    if (idx !== -1) {
+      return { ...state, editedFunctions: removeItem<IFunction>(state.editedFunctions, idx) }
+    }
+
+    return state
+
+  } else if (isType(action, addFunctionSignatureAction)) {
+
+    const editContext = getCurrentlyEditedFunctionContext(state)
+    if (!editContext)
+      return state 
+      
+    return { 
+      ...state, 
+      editedFunctions: replaceItem<IFunction>(
+        state.editedFunctions, {
+          ...editContext.currentFn,
+          signatures: editContext.currentFn.signatures.concat(new Signature())
+        }, 
+        editContext.currentFnIdx
+      ) 
+    }
+
+  } else if (isType(action, removeFunctionSignatureAction)) {
+
+    const editContext = getCurrentlyEditedFunctionSignatureContext(state)
+    if (!editContext)
+      return state 
+      
+    return { 
+      ...state, 
+      editedFunctions: replaceItem<IFunction>(
+        state.editedFunctions, {
+          ...editContext.currentFn,
+          signatures: removeItem<ISignature>(editContext.currentFn.signatures, editContext.currentSignatureIdx)
+        }, 
+        editContext.currentFnIdx
+      ) 
+    }
+
+  } 
 
   return state
 }

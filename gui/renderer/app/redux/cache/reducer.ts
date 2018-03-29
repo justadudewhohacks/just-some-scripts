@@ -1,7 +1,7 @@
-import { IFunction, IFunctionMetaData } from '@opencv4nodejs-gen/persistence';
+import { IFunction, IFunctionMetaData } from '../../../../../persistence';
 import { State } from './types';
-import { fetchFunctionSuccessAction, fetchClassNamesSuccessAction, fetchFunctionMetaDataSuccessAction } from './actionCreators';
-import { replaceItem } from '../immutibilityUtils';
+import { fetchFunctionSuccessAction, fetchClassNamesSuccessAction, fetchFunctionMetaDataSuccessAction, unloadFunctionAction } from './actionCreators';
+import { replaceItem, removeItem } from '../immutibilityUtils';
 import { IAction, isType } from '../reduxUtils';
 import { hasFnIdPredicate } from '../../commons/hasFnIdPredicate';
 
@@ -37,7 +37,18 @@ export default function(state = INITIAL_STATE, action: IAction<any>) : State {
     )
     return { ...state, functionMetaDataByOwner }
 
-  }
+  } else if (isType(action, unloadFunctionAction)) {
+
+    const { _id } = action.payload
+    
+    const idx = state.functions.findIndex(hasFnIdPredicate(_id))
+    if (idx !== -1) {
+      return { ...state, functions: removeItem<IFunction>(state.functions, idx) }
+    }
+
+    return state
+
+  } 
 
   return state
 }

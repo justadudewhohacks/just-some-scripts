@@ -1,6 +1,5 @@
-import { State, EditContext, ArgsArrayName } from './types';
-import { IArgument, IFunction } from '@opencv4nodejs-gen/persistence';
-import { ISignature } from '@opencv4nodejs-gen/persistence/types/index';
+import { State, IEditFunctionContext, IEditFunctionSignatureContext, ArgsArrayName } from './types';
+import { IArgument, IFunction, ISignature } from '../../../../../persistence';
 import { hasFnIdPredicate } from '../../commons/hasFnIdPredicate';
 
 function hasArgumentWithName(
@@ -23,7 +22,7 @@ export function findArgsArrayNameByArgName(
   return argsArrayNames.find(argsArrayName => hasArgumentWithName(signature[argsArrayName] || [], argName))
 }
 
-export function getCurrentlyEdited(state: State) : EditContext | null {
+export function getCurrentlyEditedFunctionContext(state: State) : IEditFunctionContext | null {
   const { _id } = state.currentlyEditing
   if (!_id)
     return null
@@ -34,12 +33,19 @@ export function getCurrentlyEdited(state: State) : EditContext | null {
 
   const currentFn = state.editedFunctions[currentFnIdx]
 
+  return { currentFn, currentFnIdx }
+}
+
+export function getCurrentlyEditedFunctionSignatureContext(state: State) : IEditFunctionSignatureContext | null {
+  const currentFnCtx = getCurrentlyEditedFunctionContext(state)
+  if (!currentFnCtx)
+    return null
+
   const { currentSignatureIdx } = state.currentlyEditing
 
-  const currentSignature = currentFn.signatures[currentSignatureIdx]
+  const currentSignature = currentFnCtx.currentFn.signatures[currentSignatureIdx]
   if (!currentSignature)
     return null
-    console.log('asd')
 
-  return { currentFn, currentFnIdx, currentSignature, currentSignatureIdx }
+  return { ...currentFnCtx, currentSignature, currentSignatureIdx }
 }

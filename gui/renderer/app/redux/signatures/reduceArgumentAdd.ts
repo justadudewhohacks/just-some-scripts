@@ -1,6 +1,6 @@
 import { State, ArgsArrayName } from './types';
-import { IArgument } from '@opencv4nodejs-gen/persistence/index';
-import { getCurrentlyEdited } from './commons';
+import { IArgument } from '../../../../../persistence/index';
+import { getCurrentlyEditedFunctionSignatureContext } from './commons';
 import { reduceFunctions } from './reduceFunctions';
 
 export function reduceArgumentAdd(
@@ -8,7 +8,7 @@ export function reduceArgumentAdd(
   argsArrayName: ArgsArrayName,
   reduceArgsArray: (argsArray: IArgument[]) => IArgument[]
 ): State {
-  const currentlyEdited = getCurrentlyEdited(state)
+  const currentlyEdited = getCurrentlyEditedFunctionSignatureContext(state)
   if (!currentlyEdited)
     return state 
 

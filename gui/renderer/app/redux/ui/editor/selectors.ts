@@ -1,4 +1,4 @@
-import { IFunctionMetaData } from '@opencv4nodejs-gen/persistence';
+import { IFunctionMetaData } from '../../../../../../persistence';
 import { RootState } from "../../rootReducer";
 
 function flatMap<T>(arr: T[][]): T[] {
