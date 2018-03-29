@@ -4,7 +4,7 @@ import { Tabs, Tab } from 'material-ui/Tabs'
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import { IFunction } from '@opencv4nodejs-gen/persistence/types/index';
 import EditFunctionMetaData from './EditFunctionMetaData';
-import { SaveButton } from './SaveButton'
+import { SaveButton } from './Buttons'
 import { EditSignature } from './EditSignature';
 import { RootState } from '../redux/rootReducer';
 import { actions as signaturesActions } from '../redux/signatures'

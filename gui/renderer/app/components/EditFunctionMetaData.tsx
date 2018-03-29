@@ -2,7 +2,7 @@ import * as React from 'react'
 import { connect } from 'react-redux'
 import { AutoComplete, FloatingActionButton, Checkbox, TextField } from 'material-ui'
 import ActionSearch from 'material-ui/svg-icons/action/search'
-import { AddButton } from './AddButton';
+import { AddButton } from './Buttons';
 import { RootState } from '../redux/rootReducer';
 import { IFunction, IFunctionMetaData } from '../../../../persistence/types/Function';
 import styled from 'styled-components'
@@ -33,28 +33,28 @@ class EditFunctionMetaData extends React.Component<Props> {
   render() {
     return (
       <Container>
-        <TextField 
+        <TextField
           floatingLabelText="Function Name"
           hintText="Function Name"
           value={this.props.editedFunctionMetaData.fnName}
           onChange={() => console.log('onChange fnName')}
           style={{ width: 150 }}
         />
-        <TextField 
+        <TextField
           floatingLabelText="Owner"
           hintText="Owner"
           value={this.props.editedFunctionMetaData.owner}
           onChange={() => console.log('onChange owner')}
           style={{ width: 150 }}
         />
-        <TextField 
+        <TextField
           floatingLabelText="Cv Module"
           hintText="Cv Module"
           value={this.props.editedFunctionMetaData.cvModule}
           onChange={() => console.log('onChange cvModule')}
           style={{ width: 150 }}
         />
-        <TextField 
+        <TextField
           floatingLabelText="Category"
           hintText="Category"
           value={this.props.editedFunctionMetaData.category}

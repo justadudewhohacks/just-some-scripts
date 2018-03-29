@@ -28,8 +28,8 @@ export const EditorTabIcon = ({ isSelected, tabName, onSelect, onClose } : Props
   <Tab isSelected={isSelected}>
     <FlatButton
       label={ tabName }
-      style={{ height: '100%' }}
       onClick={onSelect}
+      style={{ height: '100%' }}
     />
     <IconButton
       style={{ padding: 0, width: 30, }}

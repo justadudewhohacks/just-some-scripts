@@ -2,7 +2,7 @@ import * as React from 'react'
 import { connect } from 'react-redux'
 import { AutoComplete, FloatingActionButton } from 'material-ui'
 import ActionSearch from 'material-ui/svg-icons/action/search'
-import { AddButton } from './AddButton';
+import { AddButton } from './Buttons';
 import { RootState } from '../redux/rootReducer';
 import { actions as signatureActions } from '../redux/signatures';
 import { actions as cacheActions } from '../redux/cache';
