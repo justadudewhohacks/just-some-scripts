@@ -1,10 +1,11 @@
-import { IArgument } from '@opencv4nodejs-gen/entities';
+import { Argument, OptionalArgument } from '@opencv4nodejs-gen/entities';
 import AutoComplete from 'material-ui/AutoComplete';
 import TextField from 'material-ui/TextField';
 import * as React from 'react';
 import styled from 'styled-components';
 
 import { AddButton, RemoveButton } from './Buttons';
+import { ReturnValue } from '../../../../entities/classes/Argument';
 
 const Row = styled.div`
   background: ${props => props.theme.colors.passive};
@@ -17,15 +18,15 @@ const Row = styled.div`
 `
 
 type Props = {
-  arg: IArgument
+  arg: Argument | OptionalArgument
   index: number
   types: string[]
-  onTypeChanged: (type: string, argName: string) => void
-  onNameChanged: (name: string, argName: string) => void
-  onArrayDepthChanged: (value: string, argName: string) => void
-  onRemove: (argName: string) => void
-  onMakeOptional?: (argName: string) => void
-  onDefaultValueChanged?: (value: string, argName: string) => void
+  onTypeChanged: (type: string, argUuid: string) => void
+  onNameChanged: (name: string, argUuid: string) => void
+  onArrayDepthChanged: (value: string, argUuid: string) => void
+  onRemove: (argUuid: string) => void
+  onMakeOptional?: (argUuid: string) => void
+  onDefaultValueChanged?: (value: string, argUuid: string) => void
 }
 
 export const EditArgument = ({ arg, index, types, onTypeChanged, onNameChanged, onRemove, onDefaultValueChanged, onArrayDepthChanged, onMakeOptional } : Props) => (
@@ -35,46 +36,46 @@ export const EditArgument = ({ arg, index, types, onTypeChanged, onNameChanged, 
       dataSource={types}
       floatingLabelText="Type"
       searchText={arg.type}
-      onUpdateInput={value => onTypeChanged(value, arg.name)}
-      onNewRequest={value => onTypeChanged(value, arg.name)}
+      onUpdateInput={value => onTypeChanged(value, arg.uuid)}
+      onNewRequest={value => onTypeChanged(value, arg.uuid)}
       style={{ width: 120 }}
     />
     <TextField
       value={arg.name}
       floatingLabelText="Name"
       hintText="Name"
-      onChange={(_, value) => onNameChanged(value, arg.name)}
+      onChange={(_, value) => onNameChanged(value, arg.uuid)}
       style={{ width: 120 }}
     />
     <TextField
       value={arg.arrayDepth || 0}
       floatingLabelText="Array Depth"
       hintText="Name"
-      onChange={(_, value) => onArrayDepthChanged(value, arg.name)}
+      onChange={(_, value) => onArrayDepthChanged(value, arg.uuid)}
       style={{ width: 120 }}
     />
     {
-      onDefaultValueChanged &&
+      (arg instanceof OptionalArgument) &&
         <TextField
           value={arg.defaultValue || ''}
           floatingLabelText="Name"
           hintText="Name"
-          onChange={(_, value) => onDefaultValueChanged(value, arg.name)}
+          onChange={(_, value) => onDefaultValueChanged(value, arg.uuid)}
           style={{ width: 180 }}
         />
     }
     {
-      onMakeOptional &&
+      !(arg instanceof OptionalArgument) && !(arg instanceof ReturnValue) &&
       <AddButton
         label="Optional"
-        onClick={() => onMakeOptional(arg.name)}
+        onClick={() => onMakeOptional(arg.uuid)}
         style={{ width: 180 }}
       />
     }
     <RemoveButton
       label={''}
       style={{ alignSelf: 'center'}}
-      onClick={() => onRemove(arg.name)}
+      onClick={() => onRemove(arg.uuid)}
     />
   </Row>
 )

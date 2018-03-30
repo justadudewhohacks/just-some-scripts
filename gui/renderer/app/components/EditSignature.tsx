@@ -3,6 +3,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 
+import { OptionalArgument } from '../../../../entities/classes/Argument';
 import { actions as signaturesActions } from '../redux/signatures';
 import { AddButton, RemoveButton } from './Buttons';
 import { EditArgument } from './EditArgument';
@@ -16,20 +17,19 @@ const Container = styled.div`
 type Props = {
   types: string[]
   signature: Signature
-  idx: number
-  updateReturnValueType: (type: string, argName: string) => void
-  updateReturnValueName: (name: string, argName: string) => void
-  updateReturnValueArrayDepth: (value: string, argName: string) => void
-  updateArgumentType: (type: string, argName: string) => void
-  updateArgumentName: (name: string, argName: string) => void
-  updateArgumentArrayDepth: (value: string, argName: string) => void
-  updateArgumentDefaultValue: (value: string, argName: string) => void
+  updateReturnValueType: (type: string, argUuid: string) => void
+  updateReturnValueName: (name: string, argUuid: string) => void
+  updateReturnValueArrayDepth: (value: string, argUuid: string) => void
+  updateArgumentType: (type: string, argUuid: string) => void
+  updateArgumentName: (name: string, argUuid: string) => void
+  updateArgumentArrayDepth: (value: string, argUuid: string) => void
+  updateArgumentDefaultValue: (value: string, argUuid: string) => void
   addFunctionArgument: () => void
   addFunctionReturnValue: () => void
-  removeFunctionReturnValue: (argName: string) => void
-  removeFunctionArgument: (argName: string) => void
-  removeFunctionSignature: (idx: number) => void
-  makeFunctionArgumentOptional: (argName: string) => void
+  removeFunctionReturnValue: (argUuid: string) => void
+  removeFunctionArgument: (argUuid: string) => void
+  removeFunctionSignature: (sigUuid: string) => void
+  makeFunctionArgumentOptional: (argUuid: string) => void
 }
 
 function mapStateToProps(_: any) {
@@ -38,26 +38,25 @@ function mapStateToProps(_: any) {
 
 function mapDispatchToProps(dispatch: any) {
   return {
-    updateReturnValueType: (type: string, argName: string) => dispatch(signaturesActions.updateReturnValueType(type, argName)),
-    updateReturnValueName: (name: string, argName: string) => dispatch(signaturesActions.updateReturnValueName(name, argName)),
-    updateReturnValueArrayDepth: (value: string, argName: string) => dispatch(signaturesActions.updateReturnValueArrayDepth(value, argName)),
-    updateArgumentType: (name: string, argName: string) => dispatch(signaturesActions.updateArgumentType(name, argName)),
-    updateArgumentName: (name: string, argName: string) => dispatch(signaturesActions.updateArgumentName(name, argName)),
-    updateArgumentArrayDepth: (value: string, argName: string) => dispatch(signaturesActions.updateArgumentArrayDepth(value, argName)),
-    updateArgumentDefaultValue: (value: string, argName: string) => dispatch(signaturesActions.updateArgumentDefaultValue(value, argName)),
+    updateReturnValueType: (type: string, argUuid: string) => dispatch(signaturesActions.updateReturnValueType(type, argUuid)),
+    updateReturnValueName: (name: string, argUuid: string) => dispatch(signaturesActions.updateReturnValueName(name, argUuid)),
+    updateReturnValueArrayDepth: (value: string, argUuid: string) => dispatch(signaturesActions.updateReturnValueArrayDepth(value, argUuid)),
+    updateArgumentType: (name: string, argUuid: string) => dispatch(signaturesActions.updateArgumentType(name, argUuid)),
+    updateArgumentName: (name: string, argUuid: string) => dispatch(signaturesActions.updateArgumentName(name, argUuid)),
+    updateArgumentArrayDepth: (value: string, argUuid: string) => dispatch(signaturesActions.updateArgumentArrayDepth(value, argUuid)),
+    updateArgumentDefaultValue: (value: string, argUuid: string) => dispatch(signaturesActions.updateArgumentDefaultValue(value, argUuid)),
     addFunctionArgument: () => dispatch(signaturesActions.addFunctionArgument()),
     addFunctionReturnValue: () => dispatch(signaturesActions.addFunctionReturnValue()),
-    removeFunctionReturnValue: (argName: string) => dispatch(signaturesActions.removeFunctionReturnValue(argName)),
-    removeFunctionArgument: (argName: string) => dispatch(signaturesActions.removeFunctionArgument(argName)),
-    removeFunctionSignature: (idx: number) => dispatch(signaturesActions.removeFunctionSignature(idx)),
-    makeFunctionArgumentOptional: (argName: string) => dispatch(signaturesActions.makeFunctionArgumentOptional(argName))
+    removeFunctionReturnValue: (argUuid: string) => dispatch(signaturesActions.removeFunctionReturnValue(argUuid)),
+    removeFunctionArgument: (argUuid: string) => dispatch(signaturesActions.removeFunctionArgument(argUuid)),
+    removeFunctionSignature: (sigUuid: string) => dispatch(signaturesActions.removeFunctionSignature(sigUuid)),
+    makeFunctionArgumentOptional: (argUuid: string) => dispatch(signaturesActions.makeFunctionArgumentOptional(argUuid))
   }
 }
 
 const EditSignature = ({
   types,
   signature,
-  idx,
   updateReturnValueType,
   updateReturnValueName,
   updateReturnValueArrayDepth,
@@ -76,7 +75,7 @@ const EditSignature = ({
     <RemoveButton
       style={{ margin: 10, alignSelf: 'flex-end' }}
       label="Remove Signature"
-      onClick={() => removeFunctionSignature(idx)}
+      onClick={() => removeFunctionSignature(signature.uuid)}
     />
     <h3> {'Return Values'} </h3>
     <div>
@@ -102,12 +101,8 @@ const EditSignature = ({
     <h3> {'Arguments'} </h3>
     <div>
       {
-        signature.requiredArgs
-          .map(arg => ({ arg, isOptional: false }))
-          .concat(
-            signature.optionalArgs.map(arg => ({ arg, isOptional: true }))
-          )
-          .map(({ arg, isOptional }, i) =>
+        signature.requiredArgs.concat(signature.optionalArgs)
+          .map((arg, i) =>
             <EditArgument
               index={i}
               arg={arg}
@@ -116,8 +111,8 @@ const EditSignature = ({
               onNameChanged={updateArgumentName}
               onRemove={removeFunctionArgument}
               onArrayDepthChanged={updateArgumentArrayDepth}
-              onMakeOptional={isOptional ? null : makeFunctionArgumentOptional}
-              onDefaultValueChanged={isOptional ? updateArgumentDefaultValue : null}
+              onMakeOptional={(arg instanceof OptionalArgument) ? null : makeFunctionArgumentOptional}
+              onDefaultValueChanged={(arg instanceof OptionalArgument) ? updateArgumentDefaultValue : null}
             />
           )
       }

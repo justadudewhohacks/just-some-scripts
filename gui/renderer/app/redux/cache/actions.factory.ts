@@ -1,5 +1,6 @@
 import { Dispatch } from 'redux';
 
+import { Function } from '../../../../../entities/classes/Function';
 import { IAction } from '../reduxUtils';
 import {
   fetchClassNamesSuccessAction,
@@ -39,7 +40,7 @@ export default function(service: ISignaturesService) {
           return
         }
 
-        dispatch(fetchFunctionSuccessAction({ fn }))
+        dispatch(fetchFunctionSuccessAction({ fn: new Function(fn) }))
       } catch (error) {
         dispatch({
           type: 'FETCH_FUNCTION_ERROR',

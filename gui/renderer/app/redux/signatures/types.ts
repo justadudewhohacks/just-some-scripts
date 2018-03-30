@@ -1,13 +1,13 @@
 import { Function, Signature } from '@opencv4nodejs-gen/entities';
 
-export interface IEditFunctionContext {
-  currentFn: Function
-  currentFnIdx: number
+export interface IFunctionSelection {
+  fn: Function
+  fnIdx: number
 }
 
-export interface IEditFunctionSignatureContext extends IEditFunctionContext {
-  currentSignature: Signature
-  currentSignatureIdx: number
+export interface IFunctionSignatureSelection extends IFunctionSelection {
+  sig: Signature
+  sigIdx: number
 }
 
 export enum ArgsArrayName {
@@ -17,12 +17,12 @@ export enum ArgsArrayName {
 }
 
 export type CurrentlyEditing = {
-  uuid?: string,
-  currentSignatureIdx: number
+  fnUuid?: string,
+  sigUuid?: string
 }
 
 export type State = {
-  readonly editedFunctions: Function[]
+  readonly functions: Function[]
   readonly currentlyEditing: CurrentlyEditing
 }
 

@@ -1,11 +1,11 @@
-import { IFunction } from '@opencv4nodejs-gen/entities';
+import { Function } from '@opencv4nodejs-gen/entities';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import * as React from 'react';
 import styled from 'styled-components';
 
 type Props = {
-  resultFunction: IFunction
+  resultFunction: Function
   isOpen: boolean
   onClose: () => void
   onSave: () => void

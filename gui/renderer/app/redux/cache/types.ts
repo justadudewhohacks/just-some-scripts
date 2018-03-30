@@ -1,4 +1,4 @@
-import { Function, IFunctionMetaData } from '@opencv4nodejs-gen/entities';
+import { Function, IFunction, IFunctionMetaData } from '@opencv4nodejs-gen/entities';
 
 import { FetchFunctionSignatureArgs } from '../../../../types';
 
@@ -9,7 +9,7 @@ export type State = {
 }
 
 export interface ISignaturesService {
-  fetchFunction: (args: FetchFunctionSignatureArgs) => Promise<Function>
+  fetchFunction: (args: FetchFunctionSignatureArgs) => Promise<IFunction>
   fetchClassNames: () => Promise<string[]>
   fetchFunctionMetaData: () => Promise<IFunctionMetaData[]>
 }

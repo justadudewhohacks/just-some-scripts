@@ -11,40 +11,30 @@ import { actions as editorActions } from '../redux/ui/editor';
 import { SaveButton } from './Buttons';
 import EditFunctionMetaData from './EditFunctionMetaData';
 import EditSignature from './EditSignature';
+import { selectCurrentlyEditedFunctionSignature } from '../redux/signatures/selectors';
 
 
 type Props = {
   types: string[]
-  editContext: { fn: Function, currentSignatureIdx?: number }
-  editFunctionSignature: (tabId: string) => void
+  editedFunction: Function | null,
+  editedSignatureUuid: string | null,
+  editFunctionSignature: (uuid: string) => void
   openSaveFunctionDialog: () => void
 }
 
-function getTabId(fnId: string, idx: number) {
-  return `${fnId}_${idx}`
-}
-
-function getIndexFromTabId(tabId: string): number {
-  return parseInt(tabId.split('_')[1])
-}
-
 function mapStateToProps(state: RootState) {
-  const { signatures, cache } = state
-  const editedFunction = signatures.editedFunctions.find(f => f.uuid === signatures.currentlyEditing.uuid)
+  const sel = selectCurrentlyEditedFunctionSignature(state.signatures)
   return {
-    editContext: editedFunction && {
-      fn: editedFunction,
-      currentSignatureIdx: signatures.currentlyEditing.currentSignatureIdx
-    },
-    types: cacheSelectors.selectTypes(cache)
+    editedSignatureUuid: sel ? sel.sig.uuid : null,
+    types: cacheSelectors.selectTypes(state.cache)
   }
 }
 
 function mapDispatchToProps(dispatch: any) {
-  function editFunctionSignature(tabId: string) {
-    return tabId === 'ADD_SIGNATURE_BUTTON'
+  function editFunctionSignature(uuid: string) {
+    return uuid === 'ADD_SIGNATURE_BUTTON'
       ? dispatch(signaturesActions.addFunctionSignature())
-      : dispatch(signaturesActions.editFunctionSignature(getIndexFromTabId(tabId)))
+      : dispatch(signaturesActions.editFunctionSignature(uuid))
   }
 
   return {
@@ -55,15 +45,14 @@ function mapDispatchToProps(dispatch: any) {
 
 const SignatureTablist = ({
   types,
-  editContext,
+  editedFunction,
+  editedSignatureUuid,
   editFunctionSignature,
   openSaveFunctionDialog
 } : Props) => {
 
-  if (!editContext)
+  if (!editedFunction)
     return null
-
-  const { fn: { uuid }, currentSignatureIdx } = editContext
 
   return (
     <div style={{ margin: 10 }}>
@@ -73,26 +62,24 @@ const SignatureTablist = ({
         onClick={openSaveFunctionDialog}
       />
       <EditFunctionMetaData
-        editedFunctionMetaData={editContext.fn}
+        editedFunctionMetaData={editedFunction}
       />
       <Tabs
-        value={getTabId(uuid, currentSignatureIdx)}
+        value={editedSignatureUuid}
         onChange={editFunctionSignature}
       >
         {
-          editContext.fn.signatures
-            .map((s, i) => ({ signature: s, tabId: getTabId(uuid, i)}))
-            .map(({ signature, tabId }, i) =>
+          editedFunction.signatures
+            .map((sig, idx) =>
               <Tab
-                label={i}
-                value={tabId}
-                key={tabId}
+                label={idx}
+                value={sig.uuid}
+                key={sig.uuid}
               >
                 <EditSignature
                   types={types}
-                  signature={signature}
-                  idx={i}
-                  key={tabId}
+                  signature={sig}
+                  key={sig.uuid}
                 />
               </Tab>
             )

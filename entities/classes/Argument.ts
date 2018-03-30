@@ -15,6 +15,8 @@ export class Argument implements IArgument {
   }
 }
 
+export class ReturnValue extends Argument {}
+
 export class OptionalArgument extends Argument implements IOptionalArgument {
   defaultValue: string
 

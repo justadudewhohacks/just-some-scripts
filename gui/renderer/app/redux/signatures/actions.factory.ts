@@ -23,39 +23,39 @@ import {
 
 export default function() {
 
-  function editFunction(uuid: string) {
+  function editFunction(fnUuid: string) {
     return function(dispatch: Dispatch<IAction<any>>) {
-      dispatch(editFunctionAction({ uuid }))
+      dispatch(editFunctionAction({ fnUuid }))
     }
   }
 
-  function editFunctionSignature(idx: number) {
+  function editFunctionSignature(sigUuid: string) {
     return function(dispatch: Dispatch<IAction<any>>) {
-      dispatch(editFunctionSignatureAction({ idx }))
+      dispatch(editFunctionSignatureAction({ sigUuid }))
     }
   }
 
-  function updateReturnValueType(type: string, argName: string) {
+  function updateReturnValueType(type: string, argUuid: string) {
     return function(dispatch: Dispatch<IAction<any>>) {
-      dispatch(updateReturnValueTypeAction({ type, argName }))
+      dispatch(updateReturnValueTypeAction({ type, argUuid }))
     }
   }
 
-  function updateReturnValueName(name: string, argName: string) {
+  function updateReturnValueName(name: string, argUuid: string) {
     return function(dispatch: Dispatch<IAction<any>>) {
-      dispatch(updateReturnValueNameAction({ name, argName }))
+      dispatch(updateReturnValueNameAction({ name, argUuid }))
     }
   }
 
-  function updateArgumentType(type: string, argName: string) {
+  function updateArgumentType(type: string, argUuid: string) {
     return function(dispatch: Dispatch<IAction<any>>) {
-      dispatch(updateArgumentTypeAction({ type, argName }))
+      dispatch(updateArgumentTypeAction({ type, argUuid }))
     }
   }
 
-  function updateArgumentName(name: string, argName: string) {
+  function updateArgumentName(name: string, argUuid: string) {
     return function(dispatch: Dispatch<IAction<any>>) {
-      dispatch(updateArgumentNameAction({ name, argName }))
+      dispatch(updateArgumentNameAction({ name, argUuid }))
     }
   }
 
@@ -77,21 +77,21 @@ export default function() {
     }
   }
 
-  function removeFunctionArgument(argName: string) {
+  function removeFunctionArgument(argUuid: string) {
     return function(dispatch: Dispatch<IAction<any>>) {
-      dispatch(removeFunctionArgumentAction({ argName }))
+      dispatch(removeFunctionArgumentAction({ argUuid }))
     }
   }
 
-  function removeFunctionReturnValue(argName: string) {
+  function removeFunctionReturnValue(argUuid: string) {
     return function(dispatch: Dispatch<IAction<any>>) {
-      dispatch(removeFunctionReturnValueAction({ argName }))
+      dispatch(removeFunctionReturnValueAction({ argUuid }))
     }
   }
 
-  function removeFunctionSignature(idx: number) {
+  function removeFunctionSignature(sigUuid: string) {
     return function(dispatch: Dispatch<IAction<any>>) {
-      dispatch(removeFunctionSignatureAction({ idx }))
+      dispatch(removeFunctionSignatureAction({ sigUuid }))
     }
   }
 
@@ -101,7 +101,7 @@ export default function() {
     }
   }
 
-  function updateReturnValueArrayDepth(value: string, argName: string) {
+  function updateReturnValueArrayDepth(value: string, argUuid: string) {
     return function(dispatch: Dispatch<IAction<any>>) {
       const depth = parseInt(value || '0')
       if (isNaN(depth)) {
@@ -110,11 +110,11 @@ export default function() {
         })
         return
       }
-      dispatch(updateReturnValueArrayDepthAction({ depth, argName }))
+      dispatch(updateReturnValueArrayDepthAction({ depth, argUuid }))
     }
   }
 
-  function updateArgumentArrayDepth(value: string, argName: string) {
+  function updateArgumentArrayDepth(value: string, argUuid: string) {
     return function(dispatch: Dispatch<IAction<any>>) {
       const depth = parseInt(value || '0')
       if (isNaN(depth)) {
@@ -123,19 +123,19 @@ export default function() {
         })
         return
       }
-      dispatch(updateArgumentArrayDepthAction({ depth, argName }))
+      dispatch(updateArgumentArrayDepthAction({ depth, argUuid }))
     }
   }
 
-  function updateArgumentDefaultValue(value: string, argName: string) {
+  function updateArgumentDefaultValue(value: string, argUuid: string) {
     return function(dispatch: Dispatch<IAction<any>>) {
-      dispatch(updateArgumentDefaultValueAction({ value, argName }))
+      dispatch(updateArgumentDefaultValueAction({ value, argUuid }))
     }
   }
 
-  function makeFunctionArgumentOptional(argName: string) {
+  function makeFunctionArgumentOptional(argUuid: string) {
     return function(dispatch: Dispatch<IAction<any>>) {
-      dispatch(makeFunctionArgumentOptionalAction({ argName }))
+      dispatch(makeFunctionArgumentOptionalAction({ argUuid }))
     }
   }
 

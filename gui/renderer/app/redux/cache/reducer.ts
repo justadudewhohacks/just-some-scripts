@@ -1,6 +1,5 @@
 import { Function, IFunctionMetaData } from '@opencv4nodejs-gen/entities';
 
-import { hasFnIdPredicate } from '../../commons/hasFnIdPredicate';
 import { removeItem, replaceItem } from '../immutibilityUtils';
 import { IAction, isType } from '../reduxUtils';
 import {
@@ -22,7 +21,7 @@ export default function(state = INITIAL_STATE, action: IAction<any>) : State {
   if (isType(action, fetchFunctionSuccessAction)) {
 
     const { fn } = action.payload
-    const idx = state.functions.findIndex(hasFnIdPredicate(fn.uuid))
+    const idx = state.functions.findIndex(f => f.uuid === fn.uuid)
 
     if (idx !== -1) {
       return { ...state, functions: replaceItem<Function>(state.functions, fn, idx) }
@@ -47,7 +46,7 @@ export default function(state = INITIAL_STATE, action: IAction<any>) : State {
 
     const { uuid } = action.payload
 
-    const idx = state.functions.findIndex(hasFnIdPredicate(uuid))
+    const idx = state.functions.findIndex(f => f.uuid === uuid)
     if (idx !== -1) {
       return { ...state, functions: removeItem<Function>(state.functions, idx) }
     }

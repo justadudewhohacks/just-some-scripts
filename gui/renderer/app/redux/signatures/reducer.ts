@@ -1,6 +1,5 @@
 import { Argument, Function, OptionalArgument, Signature } from '@opencv4nodejs-gen/entities';
 
-import { hasFnIdPredicate } from '../../commons/hasFnIdPredicate';
 import { fetchFunctionSuccessAction, unloadFunctionAction } from '../cache/actionCreators';
 import { insertItem, removeItem, replaceItem } from '../immutibilityUtils';
 import { IAction, isType } from '../reduxUtils';
@@ -22,18 +21,21 @@ import {
   updateReturnValueNameAction,
   updateReturnValueTypeAction,
 } from './actionCreators';
-import {
-  findArgumentByName,
-  getCurrentlyEditedFunctionContext,
-  getCurrentlyEditedFunctionSignatureContext,
-} from './commons';
+import { findArgument } from './commons';
 import { reduceArgumentAdd } from './reduceArgumentAdd';
 import { reduceArgumentChange } from './reduceArgumentChange';
+import {
+  selectCurrentlyEditedFunction,
+  selectCurrentlyEditedFunctionSignature,
+  selectFunction,
+  selectFunctionSignature,
+} from './selectors';
 import { ArgsArrayName, State } from './types';
+import { ReturnValue } from '../../../../../entities/classes/Argument';
 
 const INITIAL_STATE: State = {
-  editedFunctions: [],
-  currentlyEditing: { uuid: null, currentSignatureIdx: 0 }
+  functions: [],
+  currentlyEditing: {}
 }
 
 export default function(state = INITIAL_STATE, action: IAction<any>) : State {
@@ -41,99 +43,130 @@ export default function(state = INITIAL_STATE, action: IAction<any>) : State {
   if (isType(action, fetchFunctionSuccessAction)) {
 
     const { fn } = action.payload
-    const idx = state.editedFunctions.findIndex(hasFnIdPredicate(fn.uuid))
+    const sel = selectFunction(state, fn.uuid)
 
-    if (idx !== -1) {
-      return { ...state, editedFunctions: replaceItem<Function>(state.editedFunctions, fn, idx) }
+    if (sel) {
+      return {
+        ...state,
+        functions: replaceItem<Function>(
+          state.functions,
+          fn,
+          sel.fnIdx
+        )
+      }
     }
     return {
       ...state,
-      editedFunctions: state.editedFunctions.concat(fn)
+      functions: state.functions.concat(fn)
     }
 
   } else if (isType(action, editFunctionAction)) {
 
-    const { uuid } = action.payload
+    const { fnUuid } = action.payload
 
-    if (!state.editedFunctions.some(hasFnIdPredicate(uuid))) {
+    if (!selectFunction(state, fnUuid)) {
       return {
         ...state,
-        currentlyEditing: { uuid, currentSignatureIdx: 0 }
+        currentlyEditing: { fnUuid }
       }
     }
-    return { ...state, currentlyEditing: { ...state.currentlyEditing, uuid } }
+    return {
+      ...state,
+      currentlyEditing: {
+        ...state.currentlyEditing,
+        fnUuid
+      }
+    }
 
   } else if (isType(action, editFunctionSignatureAction)) {
+    const sel = selectFunctionSignature(state, action.payload.sigUuid)
+    if (!sel)
+      return state
 
     return {
       ...state,
-      currentlyEditing: { ...state.currentlyEditing, currentSignatureIdx: action.payload.idx }
+      currentlyEditing: {
+        ...state.currentlyEditing,
+        sigUuid: sel.sig.uuid
+      }
     }
 
   } else if (isType(action, updateReturnValueTypeAction)) {
 
-    const { type, argName } = action.payload
-
     return reduceArgumentChange(
       state,
       [ArgsArrayName.returnValues],
-      argName,
-      (argsArray, argsArrayIdx, arg) => replaceItem<Argument>(argsArray, { ...arg, type }, argsArrayIdx)
+      action.payload.argUuid,
+      (argsArray, argsArrayIdx, arg) => replaceItem<Argument>(
+        argsArray,
+        { ...arg, type: action.payload.type },
+        argsArrayIdx
+      )
     )
 
   } else if (isType(action, updateReturnValueNameAction)) {
 
-    const { name, argName } = action.payload
-
     return reduceArgumentChange(
       state,
       [ArgsArrayName.returnValues],
-      argName,
-      (argsArray, argsArrayIdx, arg) => replaceItem<Argument>(argsArray, { ...arg, name }, argsArrayIdx)
+      action.payload.argUuid,
+      (argsArray, argsArrayIdx, arg) => replaceItem<Argument>(
+        argsArray,
+        { ...arg, name: action.payload.name },
+        argsArrayIdx
+      )
     )
 
   } else if (isType(action, updateArgumentTypeAction)) {
 
-    const { type, argName } = action.payload
-
     return reduceArgumentChange(
       state,
       [ArgsArrayName.requiredArgs, ArgsArrayName.optionalArgs],
-      argName,
-      (argsArray, argsArrayIdx, arg) => replaceItem<Argument>(argsArray, { ...arg, type }, argsArrayIdx)
+      action.payload.argUuid,
+      (argsArray, argsArrayIdx, arg) => replaceItem<Argument>(
+        argsArray,
+        { ...arg, type: action.payload.type },
+        argsArrayIdx
+      )
     )
 
   } else if (isType(action, updateArgumentNameAction)) {
 
-    const { name, argName } = action.payload
-
     return reduceArgumentChange(
       state,
       [ArgsArrayName.requiredArgs, ArgsArrayName.optionalArgs],
-      argName,
-      (argsArray, argsArrayIdx, arg) => replaceItem<Argument>(argsArray, { ...arg, name }, argsArrayIdx)
+      action.payload.argUuid,
+      (argsArray, argsArrayIdx, arg) => replaceItem<Argument>(
+        argsArray,
+        { ...arg, name: action.payload.name },
+        argsArrayIdx
+      )
     )
 
   } else if (isType(action, updateReturnValueArrayDepthAction)) {
 
-    const { depth, argName } = action.payload
-
     return reduceArgumentChange(
       state,
       [ArgsArrayName.returnValues],
-      argName,
-      (argsArray, argsArrayIdx, arg) => replaceItem<OptionalArgument>(argsArray as any, { ...(arg as any), arrayDepth: depth }, argsArrayIdx)
+      action.payload.argUuid,
+      (argsArray, argsArrayIdx, arg) => replaceItem<OptionalArgument>(
+        argsArray as any,
+        { ...(arg as any), arrayDepth: action.payload.depth },
+        argsArrayIdx
+      )
     )
 
   } else if (isType(action, updateArgumentArrayDepthAction)) {
 
-    const { depth, argName } = action.payload
-
     return reduceArgumentChange(
       state,
       [ArgsArrayName.requiredArgs, ArgsArrayName.optionalArgs],
-      argName,
-      (argsArray, argsArrayIdx, arg) => replaceItem<OptionalArgument>(argsArray as any, { ...(arg as any), arrayDepth: depth }, argsArrayIdx)
+      action.payload.argUuid,
+      (argsArray, argsArrayIdx, arg) => replaceItem<OptionalArgument>(
+        argsArray as any,
+        { ...(arg as any), arrayDepth: action.payload.depth },
+        argsArrayIdx
+      )
     )
 
   } else if (isType(action, removeFunctionReturnValueAction)) {
@@ -141,7 +174,7 @@ export default function(state = INITIAL_STATE, action: IAction<any>) : State {
     return reduceArgumentChange(
       state,
       [ArgsArrayName.returnValues],
-      action.payload.argName,
+      action.payload.argUuid,
       (argsArray, argsArrayIdx) => removeItem<Argument>(argsArray, argsArrayIdx)
     )
 
@@ -150,7 +183,7 @@ export default function(state = INITIAL_STATE, action: IAction<any>) : State {
     return reduceArgumentChange(
       state,
       [ArgsArrayName.requiredArgs, ArgsArrayName.optionalArgs],
-      action.payload.argName,
+      action.payload.argUuid,
       (argsArray, argsArrayIdx) => removeItem<Argument>(argsArray, argsArrayIdx)
     )
 
@@ -159,7 +192,7 @@ export default function(state = INITIAL_STATE, action: IAction<any>) : State {
     return reduceArgumentAdd(
       state,
       ArgsArrayName.returnValues,
-      argsArray => insertItem<Argument>(argsArray, new Argument(), argsArray.length)
+      argsArray => insertItem<Argument>(argsArray, new ReturnValue(), argsArray.length)
     )
 
   } else if (isType(action, addFunctionArgumentAction)) {
@@ -174,78 +207,94 @@ export default function(state = INITIAL_STATE, action: IAction<any>) : State {
 
     return {
       ...state,
-      editedFunctions: state.editedFunctions.concat(new Function())
+      functions: state.functions.concat(new Function())
     }
 
   } else if (isType(action, unloadFunctionAction)) {
 
     const { uuid } = action.payload
 
-    const idx = state.editedFunctions.findIndex(hasFnIdPredicate(uuid))
-    if (idx !== -1) {
-      return { ...state, editedFunctions: removeItem<Function>(state.editedFunctions, idx) }
+    const sel = selectFunction(state, uuid)
+    if (sel) {
+      return {
+        ...state,
+        functions: removeItem<Function>(state.functions, sel.fnIdx)
+      }
     }
 
     return state
 
   } else if (isType(action, addFunctionSignatureAction)) {
 
-    const editContext = getCurrentlyEditedFunctionContext(state)
-    if (!editContext)
+    const sel = selectCurrentlyEditedFunction(state)
+    if (!sel)
       return state
 
     return {
       ...state,
-      editedFunctions: replaceItem<Function>(
-        state.editedFunctions, {
-          ...editContext.currentFn,
-          signatures: editContext.currentFn.signatures.concat(new Signature())
+      functions: replaceItem<Function>(
+        state.functions, {
+          ...sel.fn,
+          signatures: sel.fn.signatures.concat(new Signature())
         },
-        editContext.currentFnIdx
+        sel.fnIdx
       )
     }
 
   } else if (isType(action, removeFunctionSignatureAction)) {
 
-    const editContext = getCurrentlyEditedFunctionSignatureContext(state)
-    if (!editContext)
+    const sel = selectCurrentlyEditedFunctionSignature(state)
+    if (!sel)
       return state
 
     return {
       ...state,
-      editedFunctions: replaceItem<Function>(
-        state.editedFunctions, {
-          ...editContext.currentFn,
-          signatures: removeItem<Signature>(editContext.currentFn.signatures, editContext.currentSignatureIdx)
+      functions: replaceItem<Function>(
+        state.functions, {
+          ...sel.fn,
+          signatures: removeItem<Signature>(
+            sel.fn.signatures,
+            sel.sigIdx
+          )
         },
-        editContext.currentFnIdx
+        sel.fnIdx
       )
     }
 
   } else if (isType(action, makeFunctionArgumentOptionalAction)) {
 
-    const editContext = getCurrentlyEditedFunctionSignatureContext(state)
-    if (!editContext)
+    const sel = selectCurrentlyEditedFunctionSignature(state)
+    if (!sel)
       return state
 
-    const [idx, arg] = findArgumentByName(editContext.currentSignature.requiredArgs,action.payload.argName)
-    if (idx === -1)
+    const [argIdx, arg] = findArgument(
+      sel.sig.requiredArgs,
+      action.payload.argUuid
+    )
+    if (argIdx === -1)
       return state
 
     const updatedSignature = {
-      ...editContext.currentSignature,
-      requiredArgs: removeItem<Argument>(editContext.currentSignature.requiredArgs, idx),
-      optionalArgs: editContext.currentSignature.optionalArgs.concat(new OptionalArgument(arg))
+      ...sel.sig,
+      requiredArgs: removeItem<Argument>(
+        sel.sig.requiredArgs,
+        argIdx
+      ),
+      optionalArgs: sel.sig.optionalArgs.concat(new OptionalArgument(arg))
     }
 
     return {
       ...state,
-      editedFunctions: replaceItem<Function>(
-        state.editedFunctions, {
-          ...editContext.currentFn,
-          signatures: replaceItem<Signature>(editContext.currentFn.signatures, updatedSignature, editContext.currentSignatureIdx)
+      functions: replaceItem<Function>(
+        state.functions, {
+          ...sel.fn,
+          signatures: replaceItem<Signature>(
+            sel.fn.signatures,
+            updatedSignature,
+            sel.sigIdx
+          )
         },
-        editContext.currentFnIdx
+        sel.fnIdx
       )
     }
 

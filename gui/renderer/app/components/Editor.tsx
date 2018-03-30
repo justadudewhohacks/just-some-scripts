@@ -11,6 +11,7 @@ import EditorMenu from './EditorMenu';
 import { EditorTabIcon } from './EditorTabIcon';
 import SaveFunctionDialog from './SaveFunctionDialog';
 import SignatureTablist from './SignatureTablist';
+import { selectCurrentlyEditedFunction } from '../redux/signatures/selectors';
 
 
 const Tablist = styled.div`
@@ -22,24 +23,21 @@ const Tablist = styled.div`
 type Props = {
   isSaveFunctionDialogOpen: boolean
   functions: Function[]
-  editContext: { fn: Function | null, currentSignatureIdx: number | null }
+  editedFunction: Function | null
   closeSaveFunctionDialog: () => void
   editFunction: (uuid: string) => void
   unloadFunction: (uuid: string) => void
 }
 
 function mapStateToProps(state: RootState) {
-  const { editedFunctions, currentlyEditing } = state.signatures
   const { isSaveFunctionDialogOpen } = state.ui.editor
+  const { functions } = state.signatures
 
+  const sel = selectCurrentlyEditedFunction(state.signatures)
   return {
     isSaveFunctionDialogOpen,
-    editContext: {
-      // TODO selector
-      fn: editedFunctions.find(f => f.uuid === currentlyEditing.uuid),
-      currentSignatureIdx: currentlyEditing.currentSignatureIdx
-    },
-    functions: editedFunctions
+    editedFunction: sel ? sel.fn : null,
+    functions
   }
 }
 
@@ -56,30 +54,30 @@ class Editor extends React.Component<Props> {
     super(props)
   }
 
-
   render() {
-    const { fn } = this.props.editContext
+    const { editedFunction } = this.props
     return (
       <div>
         <EditorMenu />
         <Tablist>
           {
             this.props.functions
-              .map(s =>({ tabName: s.fnName, tabId: s.uuid }))
-              .map(({ tabName, tabId }) =>
+              .map(fn =>
                 <EditorTabIcon
-                  isSelected={tabId === (fn && fn.uuid)}
-                  key={tabId}
-                  tabName={tabName}
-                  onSelect={() => this.props.editFunction(tabId)}
-                  onClose={() => this.props.unloadFunction(tabId)}
+                  isSelected={fn.uuid === (editedFunction && editedFunction.uuid)}
+                  key={fn.uuid}
+                  tabName={fn.fnName}
+                  onSelect={() => this.props.editFunction(fn.uuid)}
+                  onClose={() => this.props.unloadFunction(fn.uuid)}
                 />
             )
           }
         </Tablist>
-        <SignatureTablist />
+        <SignatureTablist
+          editedFunction={editedFunction}
+        />
         <SaveFunctionDialog
-          resultFunction={fn}
+          resultFunction={editedFunction}
           isOpen={this.props.isSaveFunctionDialogOpen}
           onSave={() => console.log('SaveFunctionDialog onSave')}
           onClose={this.props.closeSaveFunctionDialog}
