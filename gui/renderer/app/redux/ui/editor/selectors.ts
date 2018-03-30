@@ -1,5 +1,4 @@
-import { IFunctionMetaData } from '../../../../../../persistence';
-import { RootState } from "../../rootReducer";
+import { RootState } from '../../rootReducer';
 
 function flatMap<T>(arr: T[][]): T[] {
   return arr.reduce((all, curr) => all.concat(curr), [])

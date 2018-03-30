@@ -1,27 +1,31 @@
-import { Dispatch } from 'redux'
+import { Dispatch } from 'redux';
+
+import { IAction } from '../reduxUtils';
 import {
+  addFunctionArgumentAction,
+  addFunctionReturnValueAction,
+  addFunctionSignatureAction,
+  createNewFunctionSignatureAction,
   editFunctionAction,
   editFunctionSignatureAction,
-  updateReturnValueTypeAction,
-  updateReturnValueNameAction,
-  updateArgumentNameAction,
-  updateArgumentTypeAction,
-  addFunctionSignatureAction,
-  addFunctionReturnValueAction,
-  addFunctionArgumentAction,
-  removeFunctionSignatureAction,
+  makeFunctionArgumentOptionalAction,
   removeFunctionArgumentAction,
   removeFunctionReturnValueAction,
-  updateArgumentArrayDepthAction
+  removeFunctionSignatureAction,
+  updateArgumentArrayDepthAction,
+  updateArgumentDefaultValueAction,
+  updateArgumentNameAction,
+  updateArgumentTypeAction,
+  updateReturnValueArrayDepthAction,
+  updateReturnValueNameAction,
+  updateReturnValueTypeAction,
 } from './actionCreators';
-import { IAction } from '../reduxUtils';
-import { createNewFunctionSignatureAction, makeFunctionArgumentOptionalAction, updateReturnValueArrayDepthAction, updateArgumentDefaultValueAction } from './actionCreators';
 
 export default function() {
 
-  function editFunction(_id: string) {
+  function editFunction(uuid: string) {
     return function(dispatch: Dispatch<IAction<any>>) {
-      dispatch(editFunctionAction({ _id }))
+      dispatch(editFunctionAction({ uuid }))
     }
   }
 
@@ -94,12 +98,6 @@ export default function() {
   function createNewFunctionSignature(value: string) {
     return function(dispatch: Dispatch<IAction<any>>) {
       dispatch(createNewFunctionSignatureAction({ value }))
-    }
-  }
-
-  function makeFunctionArgument(argName: string) {
-    return function(dispatch: Dispatch<IAction<any>>) {
-      dispatch(removeFunctionArgumentAction({ argName }))
     }
   }
 

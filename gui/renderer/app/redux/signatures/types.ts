@@ -1,12 +1,12 @@
-import { IFunction, ISignature } from '../../../../../persistence/types';
+import { Function, Signature } from '@opencv4nodejs-gen/entities';
 
 export interface IEditFunctionContext {
-  currentFn: IFunction
+  currentFn: Function
   currentFnIdx: number
 }
 
 export interface IEditFunctionSignatureContext extends IEditFunctionContext {
-  currentSignature: ISignature
+  currentSignature: Signature
   currentSignatureIdx: number
 }
 
@@ -17,12 +17,12 @@ export enum ArgsArrayName {
 }
 
 export type CurrentlyEditing = {
-  _id?: string,
+  uuid?: string,
   currentSignatureIdx: number
 }
 
 export type State = {
-  readonly editedFunctions: IFunction[]
+  readonly editedFunctions: Function[]
   readonly currentlyEditing: CurrentlyEditing
 }
 

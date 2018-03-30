@@ -1,6 +1,11 @@
-import { Dispatch } from 'redux'
-import { searchFunctionsInputChangedAction, closeSaveFunctionDialogAction, openSaveFunctionDialogAction } from './actionCreators';
+import { Dispatch } from 'redux';
+
 import { IAction } from '../../reduxUtils';
+import {
+  closeSaveFunctionDialogAction,
+  openSaveFunctionDialogAction,
+  searchFunctionsInputChangedAction,
+} from './actionCreators';
 
 export function searchFunctionsInputChanged(value: string) {
   return function(dispatch: Dispatch<IAction<any>>) {

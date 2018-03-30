@@ -1,9 +1,7 @@
-import * as React from 'react';
+import { IFunction } from '@opencv4nodejs-gen/entities';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
-import RaisedButton from 'material-ui/RaisedButton';
-import { TextField } from 'material-ui';
-import { IFunction } from '@opencv4nodejs-gen/persistence';
+import * as React from 'react';
 import styled from 'styled-components';
 
 type Props = {

@@ -1,7 +1,8 @@
-import { Dispatch } from 'redux'
-import { IConnectionService } from './types'
-import { connectToDatabaseSuccessAction } from './actionCreators';
+import { Dispatch } from 'redux';
+
 import { IAction } from '../reduxUtils';
+import { connectToDatabaseSuccessAction } from './actionCreators';
+import { IConnectionService } from './types';
 
 export default function(service: IConnectionService) {
 

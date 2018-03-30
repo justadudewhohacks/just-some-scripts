@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux';
-import { State as EditorState  } from './editor/types'
-import editorReducer from './editor/reducer'
+
+import editorReducer from './editor/reducer';
+import { State as EditorState } from './editor/types';
 
 export type State = {
   readonly editor: EditorState

@@ -1,12 +1,13 @@
-import * as React from 'react'
-import TextField from 'material-ui/TextField';
-import styled from 'styled-components'
+import { IArgument } from '@opencv4nodejs-gen/entities';
 import AutoComplete from 'material-ui/AutoComplete';
-import { RemoveButton, AddButton } from './Buttons';
-import { IFunction, ISignature, IArgument } from '@opencv4nodejs-gen/persistence/types/index';
+import TextField from 'material-ui/TextField';
+import * as React from 'react';
+import styled from 'styled-components';
+
+import { AddButton, RemoveButton } from './Buttons';
 
 const Row = styled.div`
-  background: ${props => props.theme.colors.passive}
+  background: ${props => props.theme.colors.passive};
   display: inline-flex;
   align-items: baseline;
   margin-bottom: 10px;

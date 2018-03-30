@@ -8,15 +8,15 @@ import { createSignature, createAsyncFunctionWithId, createArgument, createState
 export function reduceSignatureTests() {
 
   it('should invoke reduceTarget correctly', () => {
-    const _id = 'function1'
+    const uuid = 'function1'
     const argument = createArgument('Mat', 'foo')
     const returnValues = [argument]
     const functions = [
-      createAsyncFunctionWithId(_id, [
+      createAsyncFunctionWithId(uuid, [
         createSignature(returnValues, [], [])
       ])
     ]
-    const state = createState(functions, functions, { _id, selectedSignatureIdx: 0 })
+    const state = createState(functions, functions, { uuid, selectedSignatureIdx: 0 })
 
     const reduceSpy = spy()
 

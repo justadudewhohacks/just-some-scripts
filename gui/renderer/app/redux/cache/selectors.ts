@@ -1,5 +1,4 @@
-import { IFunctionMetaData } from '../../../../../persistence';
-import { State } from "./types";
+import { State } from './types';
 
 const types = ['string', 'boolean', 'number', 'int', 'uint', 'char', 'uchar']
 

@@ -1,7 +1,6 @@
-import { IFunction } from '../../../../../persistence/types';
 import { actionCreator } from '../reduxUtils';
 
-export const editFunctionAction = actionCreator<{ _id: string }>('EDIT_FUNCTION')
+export const editFunctionAction = actionCreator<{ uuid: string }>('EDIT_FUNCTION')
 export const editFunctionSignatureAction = actionCreator<{ idx: number }>('EDIT_FUNCTION_SIGNATURE')
 
 export const updateReturnValueTypeAction = actionCreator<{ type: string, argName: string }>('UPDATE_FUNCTION_RETURN_VALUE_TYPE')

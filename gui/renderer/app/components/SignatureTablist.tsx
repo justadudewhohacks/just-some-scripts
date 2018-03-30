@@ -1,20 +1,21 @@
-import * as React from 'react'
-import { connect } from 'react-redux'
-import { Tabs, Tab } from 'material-ui/Tabs'
+import { Function } from '@opencv4nodejs-gen/entities';
 import ContentAdd from 'material-ui/svg-icons/content/add';
-import { IFunction } from '@opencv4nodejs-gen/persistence/types/index';
+import { Tab, Tabs } from 'material-ui/Tabs';
+import * as React from 'react';
+import { connect } from 'react-redux';
+
+import { selectors as cacheSelectors } from '../redux/cache';
+import { RootState } from '../redux/rootReducer';
+import { actions as signaturesActions } from '../redux/signatures';
+import { actions as editorActions } from '../redux/ui/editor';
+import { SaveButton } from './Buttons';
 import EditFunctionMetaData from './EditFunctionMetaData';
 import EditSignature from './EditSignature';
-import { SaveButton } from './Buttons'
-import { RootState } from '../redux/rootReducer';
-import { actions as signaturesActions } from '../redux/signatures'
-import { selectors as cacheSelectors } from '../redux/cache'
-import { actions as editorActions } from '../redux/ui/editor';
 
 
 type Props = {
   types: string[]
-  editContext: { fn: IFunction, currentSignatureIdx?: number }
+  editContext: { fn: Function, currentSignatureIdx?: number }
   editFunctionSignature: (tabId: string) => void
   openSaveFunctionDialog: () => void
 }
@@ -29,7 +30,7 @@ function getIndexFromTabId(tabId: string): number {
 
 function mapStateToProps(state: RootState) {
   const { signatures, cache } = state
-  const editedFunction = signatures.editedFunctions.find(f => f._id === signatures.currentlyEditing._id)
+  const editedFunction = signatures.editedFunctions.find(f => f.uuid === signatures.currentlyEditing.uuid)
   return {
     editContext: editedFunction && {
       fn: editedFunction,
@@ -62,7 +63,7 @@ const SignatureTablist = ({
   if (!editContext)
     return null
 
-  const { fn: { _id }, currentSignatureIdx } = editContext
+  const { fn: { uuid }, currentSignatureIdx } = editContext
 
   return (
     <div style={{ margin: 10 }}>
@@ -75,12 +76,12 @@ const SignatureTablist = ({
         editedFunctionMetaData={editContext.fn}
       />
       <Tabs
-        value={getTabId(_id, currentSignatureIdx)}
+        value={getTabId(uuid, currentSignatureIdx)}
         onChange={editFunctionSignature}
       >
         {
           editContext.fn.signatures
-            .map((s, i) => ({ signature: s, tabId: getTabId(_id, i)}))
+            .map((s, i) => ({ signature: s, tabId: getTabId(uuid, i)}))
             .map(({ signature, tabId }, i) =>
               <Tab
                 label={i}

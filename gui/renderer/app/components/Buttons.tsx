@@ -1,8 +1,8 @@
-import * as React from 'react'
 import RaisedButton from 'material-ui/RaisedButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import ContentRemove from 'material-ui/svg-icons/content/remove';
 import ContentSave from 'material-ui/svg-icons/content/save';
+import * as React from 'react';
 
 type Props = {
   label: string

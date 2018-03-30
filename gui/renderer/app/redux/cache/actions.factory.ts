@@ -1,12 +1,13 @@
-import { Dispatch } from 'redux'
-import { ISignaturesService } from './types';
+import { Dispatch } from 'redux';
+
+import { IAction } from '../reduxUtils';
 import {
-  fetchFunctionSuccessAction,
   fetchClassNamesSuccessAction,
   fetchFunctionMetaDataSuccessAction,
-  unloadFunctionAction
+  fetchFunctionSuccessAction,
+  unloadFunctionAction,
 } from './actionCreators';
-import { IAction } from '../reduxUtils';
+import { ISignaturesService } from './types';
 
 export default function(service: ISignaturesService) {
 
@@ -84,9 +85,9 @@ export default function(service: ISignaturesService) {
     }
   }
 
-  function unloadFunction(_id: string) {
+  function unloadFunction(uuid: string) {
     return function(dispatch: Dispatch<IAction<any>>) {
-      return dispatch(unloadFunctionAction({ _id }))
+      return dispatch(unloadFunctionAction({ uuid }))
     }
   }
 

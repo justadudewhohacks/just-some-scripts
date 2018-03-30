@@ -1,8 +1,9 @@
-import { Schema, Document, Model, model } from 'mongoose'
-import { declType, argType } from './commonTypes'
-import { IClassDocument } from '../types'
+import { IClass } from '@opencv4nodejs-gen/entities';
+import { Document, Model, model, Schema } from 'mongoose';
 
-export interface IClassModel extends IClassDocument, Document {}
+import { argType, declType } from './commonTypes';
+
+export interface IClassModel extends IClass, Document {}
 
 const ClassSchema = new Schema({
   className: { type: String, required: true, unique: true },

@@ -3,13 +3,13 @@ export * from './Class'
 export * from './Function'
 export * from './Signature'
 
-import { IFunction } from './Function';
+import { IFunctionEntity } from './Function';
 import { ISignature } from './Signature';
 
 export interface ICppSignature extends ISignature {
   allArgs: string
 }
 
-export interface ICppFunction extends IFunction {
+export interface ICppFunction extends IFunctionEntity {
   signatures: ICppSignature[]
 }

@@ -1,8 +1,9 @@
-import { Schema, Document, Model, model } from 'mongoose';
-import { IFunctionDocument } from '../types';
+import { IFunction } from '@opencv4nodejs-gen/entities';
+import { Document, Model, model, Schema } from 'mongoose';
+
 import { argType } from './commonTypes';
 
-export interface IFunctionModel extends IFunctionDocument, Document {}
+export interface IFunctionModel extends IFunction, Document {}
 
 const FunctionSchema = new Schema({
   fnName: { type: String, required: true },

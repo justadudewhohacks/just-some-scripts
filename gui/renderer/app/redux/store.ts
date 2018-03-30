@@ -1,9 +1,9 @@
-import { remote } from 'electron'
-import { createStore, applyMiddleware, compose  } from 'redux'
-import { createLogger } from 'redux-logger'
-import thunk from 'redux-thunk'
+import { applyMiddleware, createStore } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
-import rootReducer from './rootReducer'
+import { createLogger } from 'redux-logger';
+import thunk from 'redux-thunk';
+
+import rootReducer from './rootReducer';
 
 const store = process.env.NODE_ENV === 'development'
   ? createStore(rootReducer,

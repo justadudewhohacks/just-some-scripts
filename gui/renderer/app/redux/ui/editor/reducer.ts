@@ -1,7 +1,10 @@
-import { IFunction, IFunctionMetaData } from '../../../../../../persistence';
-import { State } from './types';
 import { IAction, isType } from '../../reduxUtils';
-import { searchFunctionsInputChangedAction, openSaveFunctionDialogAction, closeSaveFunctionDialogAction } from './actionCreators';
+import {
+  closeSaveFunctionDialogAction,
+  openSaveFunctionDialogAction,
+  searchFunctionsInputChangedAction,
+} from './actionCreators';
+import { State } from './types';
 
 const INITIAL_STATE: State = {
   searchFunctionsInput: '',

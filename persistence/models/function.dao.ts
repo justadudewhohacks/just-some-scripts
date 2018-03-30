@@ -1,11 +1,12 @@
-import { FunctionModel } from './function.model';
-import { IFunction, IFunctionMetaData } from '../types';
+import { IFunctionEntity, IFunctionMetaData } from '@opencv4nodejs-gen/entities';
 
-function find(owner: string, fnName: string): Promise<IFunction | null> {
+import { FunctionModel } from './function.model';
+
+function find(owner: string, fnName: string): Promise<IFunctionEntity | null> {
   return FunctionModel.findOne({ owner, fnName }).lean().exec()
 }
 
-function findAll(): Promise<IFunction[]> {
+function findAll(): Promise<IFunctionEntity[]> {
   return FunctionModel.find({}).lean().exec()
 }
 
@@ -17,11 +18,11 @@ function findAllMetaData(): Promise<IFunctionMetaData[]> {
     .exec()
 }
 
-function findByOwner(owner: string): Promise<IFunction[]> {
+function findByOwner(owner: string): Promise<IFunctionEntity[]> {
   return FunctionModel.find({ owner }).lean().exec()
 }
 
-function update(_id: string, doc: IFunction): Promise<any> {
+function update(_id: string, doc: IFunctionEntity): Promise<any> {
   return FunctionModel.update({ _id }, doc).exec()
 }
 

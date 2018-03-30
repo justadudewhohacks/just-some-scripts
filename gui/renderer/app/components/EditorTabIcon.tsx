@@ -1,9 +1,8 @@
-import * as React from 'react'
-import FontIcon from 'material-ui/FontIcon'
-import IconButton from 'material-ui/IconButton'
-import NavigationClose from 'material-ui/svg-icons/navigation/close'
-import FlatButton from 'material-ui/FlatButton'
-import styled from 'styled-components'
+import FlatButton from 'material-ui/FlatButton';
+import IconButton from 'material-ui/IconButton';
+import NavigationClose from 'material-ui/svg-icons/navigation/close';
+import * as React from 'react';
+import styled from 'styled-components';
 
 type TabProps = {
   isSelected: boolean,

@@ -1,11 +1,11 @@
-import * as React from 'react'
-import { connect } from 'react-redux'
-import TextField from 'material-ui/TextField';
-import styled from 'styled-components'
-import { IFunction, ISignature } from '@opencv4nodejs-gen/persistence/types/index';
-import { EditArgument } from './EditArgument';
+import { Signature } from '@opencv4nodejs-gen/entities';
+import * as React from 'react';
+import { connect } from 'react-redux';
+import styled from 'styled-components';
+
+import { actions as signaturesActions } from '../redux/signatures';
 import { AddButton, RemoveButton } from './Buttons';
-import { actions as signaturesActions } from '../redux/signatures'
+import { EditArgument } from './EditArgument';
 
 const Container = styled.div`
   display: flex;
@@ -15,7 +15,7 @@ const Container = styled.div`
 
 type Props = {
   types: string[]
-  signature: ISignature
+  signature: Signature
   idx: number
   updateReturnValueType: (type: string, argName: string) => void
   updateReturnValueName: (name: string, argName: string) => void
@@ -32,7 +32,7 @@ type Props = {
   makeFunctionArgumentOptional: (argName: string) => void
 }
 
-function mapStateToProps(state: any) {
+function mapStateToProps(_: any) {
   return {}
 }
 

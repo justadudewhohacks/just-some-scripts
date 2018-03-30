@@ -1,19 +1,39 @@
-import { IArgument, IFunction, ISignature, IDeclaration, Function, Signature } from '../../../../../persistence/types';
-import { State, ArgsArrayName } from './types';
-import { editFunctionAction, updateReturnValueNameAction, updateReturnValueTypeAction, editFunctionSignatureAction, updateArgumentTypeAction, updateArgumentNameAction, removeFunctionReturnValueAction, removeFunctionArgumentAction, addFunctionReturnValueAction, addFunctionArgumentAction, createNewFunctionSignatureAction, addFunctionSignatureAction, removeFunctionSignatureAction, updateArgumentArrayDepthAction, updateReturnValueArrayDepthAction, makeFunctionArgumentOptionalAction } from './actionCreators';
-import { replaceItem, removeItem, insertItem } from '../immutibilityUtils';
-import { IAction, isType } from '../reduxUtils';
-import { reduceArgumentChange } from './reduceArgumentChange';
-import { reduceArgumentAdd } from './reduceArgumentAdd';
+import { Argument, Function, OptionalArgument, Signature } from '@opencv4nodejs-gen/entities';
+
 import { hasFnIdPredicate } from '../../commons/hasFnIdPredicate';
 import { fetchFunctionSuccessAction, unloadFunctionAction } from '../cache/actionCreators';
-import { getCurrentlyEditedFunctionContext, getCurrentlyEditedFunctionSignatureContext, findArgumentByName } from './commons';
-import { IOptionalArgument } from '../../../../../persistence/index';
-import { OptionalArgument } from '../../../../../persistence/types/Argument';
+import { insertItem, removeItem, replaceItem } from '../immutibilityUtils';
+import { IAction, isType } from '../reduxUtils';
+import {
+  addFunctionArgumentAction,
+  addFunctionReturnValueAction,
+  addFunctionSignatureAction,
+  createNewFunctionSignatureAction,
+  editFunctionAction,
+  editFunctionSignatureAction,
+  makeFunctionArgumentOptionalAction,
+  removeFunctionArgumentAction,
+  removeFunctionReturnValueAction,
+  removeFunctionSignatureAction,
+  updateArgumentArrayDepthAction,
+  updateArgumentNameAction,
+  updateArgumentTypeAction,
+  updateReturnValueArrayDepthAction,
+  updateReturnValueNameAction,
+  updateReturnValueTypeAction,
+} from './actionCreators';
+import {
+  findArgumentByName,
+  getCurrentlyEditedFunctionContext,
+  getCurrentlyEditedFunctionSignatureContext,
+} from './commons';
+import { reduceArgumentAdd } from './reduceArgumentAdd';
+import { reduceArgumentChange } from './reduceArgumentChange';
+import { ArgsArrayName, State } from './types';
 
 const INITIAL_STATE: State = {
   editedFunctions: [],
-  currentlyEditing: { _id: null, currentSignatureIdx: 0 }
+  currentlyEditing: { uuid: null, currentSignatureIdx: 0 }
 }
 
 export default function(state = INITIAL_STATE, action: IAction<any>) : State {
@@ -21,10 +41,10 @@ export default function(state = INITIAL_STATE, action: IAction<any>) : State {
   if (isType(action, fetchFunctionSuccessAction)) {
 
     const { fn } = action.payload
-    const idx = state.editedFunctions.findIndex(hasFnIdPredicate(fn._id))
+    const idx = state.editedFunctions.findIndex(hasFnIdPredicate(fn.uuid))
 
     if (idx !== -1) {
-      return { ...state, editedFunctions: replaceItem<IFunction>(state.editedFunctions, fn, idx) }
+      return { ...state, editedFunctions: replaceItem<Function>(state.editedFunctions, fn, idx) }
     }
     return {
       ...state,
@@ -33,15 +53,15 @@ export default function(state = INITIAL_STATE, action: IAction<any>) : State {
 
   } else if (isType(action, editFunctionAction)) {
 
-    const { _id } = action.payload
+    const { uuid } = action.payload
 
-    if (!state.editedFunctions.some(hasFnIdPredicate(_id))) {
+    if (!state.editedFunctions.some(hasFnIdPredicate(uuid))) {
       return {
         ...state,
-        currentlyEditing: { _id, currentSignatureIdx: 0 }
+        currentlyEditing: { uuid, currentSignatureIdx: 0 }
       }
     }
-    return { ...state, currentlyEditing: { ...state.currentlyEditing, _id } }
+    return { ...state, currentlyEditing: { ...state.currentlyEditing, uuid } }
 
   } else if (isType(action, editFunctionSignatureAction)) {
 
@@ -58,7 +78,7 @@ export default function(state = INITIAL_STATE, action: IAction<any>) : State {
       state,
       [ArgsArrayName.returnValues],
       argName,
-      (argsArray, argsArrayIdx, arg) => replaceItem<IArgument>(argsArray, { ...arg, type }, argsArrayIdx)
+      (argsArray, argsArrayIdx, arg) => replaceItem<Argument>(argsArray, { ...arg, type }, argsArrayIdx)
     )
 
   } else if (isType(action, updateReturnValueNameAction)) {
@@ -69,7 +89,7 @@ export default function(state = INITIAL_STATE, action: IAction<any>) : State {
       state,
       [ArgsArrayName.returnValues],
       argName,
-      (argsArray, argsArrayIdx, arg) => replaceItem<IArgument>(argsArray, { ...arg, name }, argsArrayIdx)
+      (argsArray, argsArrayIdx, arg) => replaceItem<Argument>(argsArray, { ...arg, name }, argsArrayIdx)
     )
 
   } else if (isType(action, updateArgumentTypeAction)) {
@@ -80,7 +100,7 @@ export default function(state = INITIAL_STATE, action: IAction<any>) : State {
       state,
       [ArgsArrayName.requiredArgs, ArgsArrayName.optionalArgs],
       argName,
-      (argsArray, argsArrayIdx, arg) => replaceItem<IArgument>(argsArray, { ...arg, type }, argsArrayIdx)
+      (argsArray, argsArrayIdx, arg) => replaceItem<Argument>(argsArray, { ...arg, type }, argsArrayIdx)
     )
 
   } else if (isType(action, updateArgumentNameAction)) {
@@ -91,7 +111,7 @@ export default function(state = INITIAL_STATE, action: IAction<any>) : State {
       state,
       [ArgsArrayName.requiredArgs, ArgsArrayName.optionalArgs],
       argName,
-      (argsArray, argsArrayIdx, arg) => replaceItem<IArgument>(argsArray, { ...arg, name }, argsArrayIdx)
+      (argsArray, argsArrayIdx, arg) => replaceItem<Argument>(argsArray, { ...arg, name }, argsArrayIdx)
     )
 
   } else if (isType(action, updateReturnValueArrayDepthAction)) {
@@ -102,7 +122,7 @@ export default function(state = INITIAL_STATE, action: IAction<any>) : State {
       state,
       [ArgsArrayName.returnValues],
       argName,
-      (argsArray, argsArrayIdx, arg) => replaceItem<IOptionalArgument>(argsArray as any, { ...(arg as any), arrayDepth: depth }, argsArrayIdx)
+      (argsArray, argsArrayIdx, arg) => replaceItem<OptionalArgument>(argsArray as any, { ...(arg as any), arrayDepth: depth }, argsArrayIdx)
     )
 
   } else if (isType(action, updateArgumentArrayDepthAction)) {
@@ -113,7 +133,7 @@ export default function(state = INITIAL_STATE, action: IAction<any>) : State {
       state,
       [ArgsArrayName.requiredArgs, ArgsArrayName.optionalArgs],
       argName,
-      (argsArray, argsArrayIdx, arg) => replaceItem<IOptionalArgument>(argsArray as any, { ...(arg as any), arrayDepth: depth }, argsArrayIdx)
+      (argsArray, argsArrayIdx, arg) => replaceItem<OptionalArgument>(argsArray as any, { ...(arg as any), arrayDepth: depth }, argsArrayIdx)
     )
 
   } else if (isType(action, removeFunctionReturnValueAction)) {
@@ -122,7 +142,7 @@ export default function(state = INITIAL_STATE, action: IAction<any>) : State {
       state,
       [ArgsArrayName.returnValues],
       action.payload.argName,
-      (argsArray, argsArrayIdx) => removeItem<IArgument>(argsArray, argsArrayIdx)
+      (argsArray, argsArrayIdx) => removeItem<Argument>(argsArray, argsArrayIdx)
     )
 
   } else if (isType(action, removeFunctionArgumentAction)) {
@@ -131,7 +151,7 @@ export default function(state = INITIAL_STATE, action: IAction<any>) : State {
       state,
       [ArgsArrayName.requiredArgs, ArgsArrayName.optionalArgs],
       action.payload.argName,
-      (argsArray, argsArrayIdx) => removeItem<IArgument>(argsArray, argsArrayIdx)
+      (argsArray, argsArrayIdx) => removeItem<Argument>(argsArray, argsArrayIdx)
     )
 
   } else if (isType(action, addFunctionReturnValueAction)) {
@@ -139,7 +159,7 @@ export default function(state = INITIAL_STATE, action: IAction<any>) : State {
     return reduceArgumentAdd(
       state,
       ArgsArrayName.returnValues,
-      argsArray => insertItem<IArgument>(argsArray, { name: '', type: '' }, argsArray.length)
+      argsArray => insertItem<Argument>(argsArray, new Argument(), argsArray.length)
     )
 
   } else if (isType(action, addFunctionArgumentAction)) {
@@ -147,25 +167,23 @@ export default function(state = INITIAL_STATE, action: IAction<any>) : State {
     return reduceArgumentAdd(
       state,
       ArgsArrayName.requiredArgs,
-      argsArray => insertItem<IArgument>(argsArray, { name: '', type: '' }, argsArray.length)
+      argsArray => insertItem<Argument>(argsArray, new Argument(), argsArray.length)
     )
 
   } else if (isType(action, createNewFunctionSignatureAction)) {
 
-    const id = Date.now().toString()
-
     return {
       ...state,
-      editedFunctions: state.editedFunctions.concat(new Function(id, id))
+      editedFunctions: state.editedFunctions.concat(new Function())
     }
 
   } else if (isType(action, unloadFunctionAction)) {
 
-    const { _id } = action.payload
+    const { uuid } = action.payload
 
-    const idx = state.editedFunctions.findIndex(hasFnIdPredicate(_id))
+    const idx = state.editedFunctions.findIndex(hasFnIdPredicate(uuid))
     if (idx !== -1) {
-      return { ...state, editedFunctions: removeItem<IFunction>(state.editedFunctions, idx) }
+      return { ...state, editedFunctions: removeItem<Function>(state.editedFunctions, idx) }
     }
 
     return state
@@ -178,7 +196,7 @@ export default function(state = INITIAL_STATE, action: IAction<any>) : State {
 
     return {
       ...state,
-      editedFunctions: replaceItem<IFunction>(
+      editedFunctions: replaceItem<Function>(
         state.editedFunctions, {
           ...editContext.currentFn,
           signatures: editContext.currentFn.signatures.concat(new Signature())
@@ -195,10 +213,10 @@ export default function(state = INITIAL_STATE, action: IAction<any>) : State {
 
     return {
       ...state,
-      editedFunctions: replaceItem<IFunction>(
+      editedFunctions: replaceItem<Function>(
         state.editedFunctions, {
           ...editContext.currentFn,
-          signatures: removeItem<ISignature>(editContext.currentFn.signatures, editContext.currentSignatureIdx)
+          signatures: removeItem<Signature>(editContext.currentFn.signatures, editContext.currentSignatureIdx)
         },
         editContext.currentFnIdx
       )
@@ -216,16 +234,16 @@ export default function(state = INITIAL_STATE, action: IAction<any>) : State {
 
     const updatedSignature = {
       ...editContext.currentSignature,
-      requiredArgs: removeItem<IArgument>(editContext.currentSignature.requiredArgs, idx),
+      requiredArgs: removeItem<Argument>(editContext.currentSignature.requiredArgs, idx),
       optionalArgs: editContext.currentSignature.optionalArgs.concat(new OptionalArgument(arg))
     }
 
     return {
       ...state,
-      editedFunctions: replaceItem<IFunction>(
+      editedFunctions: replaceItem<Function>(
         state.editedFunctions, {
           ...editContext.currentFn,
-          signatures: replaceItem<ISignature>(editContext.currentFn.signatures, updatedSignature, editContext.currentSignatureIdx)
+          signatures: replaceItem<Signature>(editContext.currentFn.signatures, updatedSignature, editContext.currentSignatureIdx)
         },
         editContext.currentFnIdx
       )

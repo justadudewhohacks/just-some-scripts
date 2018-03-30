@@ -1,5 +1,6 @@
-import { ClassModel, IClassModel } from './class.model'
-import { IClass } from '../types';
+import { IClass } from '@opencv4nodejs-gen/entities';
+
+import { ClassModel, IClassModel } from './class.model';
 
 async function findAll(): Promise<IClassModel[]> {
   return ClassModel.find({}).lean().exec()

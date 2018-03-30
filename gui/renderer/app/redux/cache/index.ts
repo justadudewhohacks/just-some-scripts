@@ -1,5 +1,5 @@
-import actionsFactory from './actions.factory'
-import serviceFactory from './services.factory'
+import actionsFactory from './actions.factory';
+import serviceFactory from './services.factory';
 
 export * from './selectors'
 

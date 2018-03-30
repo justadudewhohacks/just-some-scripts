@@ -1,13 +1,14 @@
-import { ISignature, IFunction, IArgument } from '../../../../../persistence';
-import { State, ArgsArrayName, IEditFunctionSignatureContext } from './types';
+import { Argument, Function, Signature } from '@opencv4nodejs-gen/entities';
+
 import { replaceItem } from '../immutibilityUtils';
+import { ArgsArrayName, IEditFunctionSignatureContext } from './types';
 
 export function reduceFunctions(
-  functions: IFunction[],
+  functions: Function[],
   editContext: IEditFunctionSignatureContext,
   argsArrayName: ArgsArrayName,
-  reduceArgsArray: (targetArray: IArgument[]) => IArgument[]
-) : IFunction[] {
+  reduceArgsArray: (targetArray: Argument[]) => Argument[]
+) : Function[] {
   const {
     currentFn,
     currentFnIdx,
@@ -20,8 +21,8 @@ export function reduceFunctions(
     [argsArrayName]: reduceArgsArray(currentSignature[argsArrayName] || [])
   }
 
-  const updatedSignatures = replaceItem<ISignature>(currentFn.signatures, updatedSignature, currentSignatureIdx)
+  const updatedSignatures = replaceItem<Signature>(currentFn.signatures, updatedSignature, currentSignatureIdx)
   const updatedFunction = { ...currentFn, signatures: updatedSignatures }
 
-  return replaceItem<IFunction>(functions, updatedFunction, currentFnIdx)
+  return replaceItem<Function>(functions, updatedFunction, currentFnIdx)
 }

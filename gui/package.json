@@ -9,7 +9,7 @@
     "start": "npm run build && electron ./dist/gui/main/main.js"
   },
   "dependencies": {
-    "@opencv4nodejs-gen/persistence": "../persistence",
+    "@opencv4nodejs-gen/entities": "../entities",
     "@types/electron": "^1.6.10",
     "@types/node": "^9.4.1",
     "electron": "^1.8.3",
@@ -17,5 +17,7 @@
     "tslib": "^1.9.0",
     "typescript": "^2.7.2"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "tslint": "^5.9.1"
+  }
 }

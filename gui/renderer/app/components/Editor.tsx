@@ -1,18 +1,16 @@
-import * as React from 'react'
-import { connect } from 'react-redux'
-import { Route, Switch, Link } from 'react-router-dom'
-import { AutoComplete, FloatingActionButton, TextField } from 'material-ui'
-import ActionSearch from 'material-ui/svg-icons/action/search'
-import styled from 'styled-components'
-import { IFunction, IFunctionMetaData } from '../../../../persistence/types/index'
-import { EditorTabIcon } from './EditorTabIcon'
-import SignatureTablist from './SignatureTablist';
-import EditorMenu from './EditorMenu';
-import { RootState } from '../redux/rootReducer';
+import { Function } from '@opencv4nodejs-gen/entities';
+import * as React from 'react';
+import { connect } from 'react-redux';
+import styled from 'styled-components';
+
 import { actions as cacheActions } from '../redux/cache';
+import { RootState } from '../redux/rootReducer';
 import { actions as signaturesActions } from '../redux/signatures';
-import { actions as editorActions, selectors as editorSelectors } from '../redux/ui/editor';
+import { actions as editorActions } from '../redux/ui/editor';
+import EditorMenu from './EditorMenu';
+import { EditorTabIcon } from './EditorTabIcon';
 import SaveFunctionDialog from './SaveFunctionDialog';
+import SignatureTablist from './SignatureTablist';
 
 
 const Tablist = styled.div`
@@ -23,11 +21,11 @@ const Tablist = styled.div`
 `
 type Props = {
   isSaveFunctionDialogOpen: boolean
-  functions: IFunction[]
-  editContext: { fn: IFunction | null, currentSignatureIdx: number | null }
+  functions: Function[]
+  editContext: { fn: Function | null, currentSignatureIdx: number | null }
   closeSaveFunctionDialog: () => void
-  editFunction: (_id: string) => void
-  unloadFunction: (_id: string) => void
+  editFunction: (uuid: string) => void
+  unloadFunction: (uuid: string) => void
 }
 
 function mapStateToProps(state: RootState) {
@@ -38,7 +36,7 @@ function mapStateToProps(state: RootState) {
     isSaveFunctionDialogOpen,
     editContext: {
       // TODO selector
-      fn: editedFunctions.find(f => f._id === currentlyEditing._id),
+      fn: editedFunctions.find(f => f.uuid === currentlyEditing.uuid),
       currentSignatureIdx: currentlyEditing.currentSignatureIdx
     },
     functions: editedFunctions
@@ -47,8 +45,8 @@ function mapStateToProps(state: RootState) {
 
 function mapDispatchToProps(dispatch: any) {
   return {
-    editFunction: (_id: string) => dispatch(signaturesActions.editFunction(_id)),
-    unloadFunction: (_id: string) => dispatch(cacheActions.unloadFunction(_id)),
+    editFunction: (uuid: string) => dispatch(signaturesActions.editFunction(uuid)),
+    unloadFunction: (uuid: string) => dispatch(cacheActions.unloadFunction(uuid)),
     closeSaveFunctionDialog: () => dispatch(editorActions.closeSaveFunctionDialog())
   }
 }
@@ -67,10 +65,10 @@ class Editor extends React.Component<Props> {
         <Tablist>
           {
             this.props.functions
-              .map(s =>({ tabName: s.fnName, tabId: s._id }))
+              .map(s =>({ tabName: s.fnName, tabId: s.uuid }))
               .map(({ tabName, tabId }) =>
                 <EditorTabIcon
-                  isSelected={tabId === (fn && fn._id)}
+                  isSelected={tabId === (fn && fn.uuid)}
                   key={tabId}
                   tabName={tabName}
                   onSelect={() => this.props.editFunction(tabId)}

@@ -1,12 +1,13 @@
-import * as React from 'react'
-import { connect } from 'react-redux'
-import { AutoComplete, FloatingActionButton } from 'material-ui'
-import ActionSearch from 'material-ui/svg-icons/action/search'
-import { AddButton } from './Buttons';
+import { AutoComplete, FloatingActionButton } from 'material-ui';
+import ActionSearch from 'material-ui/svg-icons/action/search';
+import * as React from 'react';
+import { connect } from 'react-redux';
+
+import { actions as cacheActions } from '../redux/cache';
 import { RootState } from '../redux/rootReducer';
 import { actions as signatureActions } from '../redux/signatures';
-import { actions as cacheActions } from '../redux/cache';
 import { actions as editorActions, selectors as editorSelectors } from '../redux/ui/editor';
+import { AddButton } from './Buttons';
 
 type Props = {
   searchFunctionsInput: string

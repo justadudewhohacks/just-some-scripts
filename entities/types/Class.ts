@@ -1,6 +1,6 @@
 import { IDeclaration, IArgument, IOptionalArgument } from './Argument';
 
-export interface IClassDocument {
+export interface IClass {
   className: string,
   cvModule: string,
   fields: IDeclaration[],
@@ -11,6 +11,6 @@ export interface IClassDocument {
   }]
 }
 
-export interface IClass extends IClassDocument {
+export interface IClassEntity extends IClass {
   _id: string
 }

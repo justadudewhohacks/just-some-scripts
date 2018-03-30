@@ -1,13 +1,13 @@
-import * as React from 'react'
-import { HashRouter, Redirect, Route, Switch } from 'react-router-dom'
-import { connect } from 'react-redux'
-import { MuiThemeProvider } from 'material-ui/styles'
-import { ThemeProvider } from 'styled-components'
-import { IFunction, IFunctionMetaData } from '@opencv4nodejs-gen/persistence'
-import Editor from './components/Editor'
-import { RootState } from './redux/rootReducer'
-import { actions as databaseConnectionActions } from './redux/databaseConnection'
-import { actions as cacheActions } from './redux/cache'
+import { MuiThemeProvider } from 'material-ui/styles';
+import * as React from 'react';
+import { connect } from 'react-redux';
+import { HashRouter, Redirect, Route, Switch } from 'react-router-dom';
+import { ThemeProvider } from 'styled-components';
+
+import Editor from './components/Editor';
+import { actions as cacheActions } from './redux/cache';
+import { actions as databaseConnectionActions } from './redux/databaseConnection';
+import { RootState } from './redux/rootReducer';
 
 const theme = {
   colors: {

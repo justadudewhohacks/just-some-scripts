@@ -1,4 +1,3 @@
-import { ipcRenderer } from 'electron'
 import { ipcHandlerFactory } from '../../commons/ipcHandler.factory';
 import { IConnectionService } from './types';
 

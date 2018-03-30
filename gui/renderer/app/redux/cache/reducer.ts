@@ -1,9 +1,15 @@
-import { IFunction, IFunctionMetaData } from '../../../../../persistence';
-import { State } from './types';
-import { fetchFunctionSuccessAction, fetchClassNamesSuccessAction, fetchFunctionMetaDataSuccessAction, unloadFunctionAction } from './actionCreators';
-import { replaceItem, removeItem } from '../immutibilityUtils';
-import { IAction, isType } from '../reduxUtils';
+import { Function, IFunctionMetaData } from '@opencv4nodejs-gen/entities';
+
 import { hasFnIdPredicate } from '../../commons/hasFnIdPredicate';
+import { removeItem, replaceItem } from '../immutibilityUtils';
+import { IAction, isType } from '../reduxUtils';
+import {
+  fetchClassNamesSuccessAction,
+  fetchFunctionMetaDataSuccessAction,
+  fetchFunctionSuccessAction,
+  unloadFunctionAction,
+} from './actionCreators';
+import { State } from './types';
 
 const INITIAL_STATE: State = {
   classNames: [],
@@ -16,10 +22,10 @@ export default function(state = INITIAL_STATE, action: IAction<any>) : State {
   if (isType(action, fetchFunctionSuccessAction)) {
 
     const { fn } = action.payload
-    const idx = state.functions.findIndex(hasFnIdPredicate(fn._id))
+    const idx = state.functions.findIndex(hasFnIdPredicate(fn.uuid))
 
     if (idx !== -1) {
-      return { ...state, functions: replaceItem<IFunction>(state.functions, fn, idx) }
+      return { ...state, functions: replaceItem<Function>(state.functions, fn, idx) }
     }
     return { ...state, functions: state.functions.concat(fn) }
 
@@ -39,16 +45,16 @@ export default function(state = INITIAL_STATE, action: IAction<any>) : State {
 
   } else if (isType(action, unloadFunctionAction)) {
 
-    const { _id } = action.payload
-    
-    const idx = state.functions.findIndex(hasFnIdPredicate(_id))
+    const { uuid } = action.payload
+
+    const idx = state.functions.findIndex(hasFnIdPredicate(uuid))
     if (idx !== -1) {
-      return { ...state, functions: removeItem<IFunction>(state.functions, idx) }
+      return { ...state, functions: removeItem<Function>(state.functions, idx) }
     }
 
     return state
 
-  } 
+  }
 
   return state
 }

@@ -1,11 +1,10 @@
-import * as React from 'react'
-import { connect } from 'react-redux'
-import { AutoComplete, FloatingActionButton, Checkbox, TextField } from 'material-ui'
-import ActionSearch from 'material-ui/svg-icons/action/search'
-import { AddButton } from './Buttons';
+import { IFunctionMetaData } from '@opencv4nodejs-gen/entities';
+import { Checkbox, TextField } from 'material-ui';
+import * as React from 'react';
+import { connect } from 'react-redux';
+import styled from 'styled-components';
+
 import { RootState } from '../redux/rootReducer';
-import { IFunction, IFunctionMetaData } from '../../../../persistence/types/Function';
-import styled from 'styled-components'
 
 
 const Container = styled.div`
@@ -20,11 +19,11 @@ type Props = {
   editedFunctionMetaData: IFunctionMetaData
 }
 
-function mapStateToProps(state: RootState) {
+function mapStateToProps(_: RootState) {
   return {}
 }
 
-function mapDispatchToProps(dispatch: any) {
+function mapDispatchToProps(_: any) {
   return {
   }
 }

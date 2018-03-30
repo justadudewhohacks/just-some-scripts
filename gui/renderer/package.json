@@ -9,7 +9,7 @@
   "author": "justadudewhohacks",
   "license": "MIT",
   "dependencies": {
-    "@opencv4nodejs-gen/persistence": "../../persistence",
+    "@opencv4nodejs-gen/entities": "../../entities",
     "@types/material-ui": "^0.21.1",
     "@types/react": "^16.0.37",
     "@types/react-dom": "^16.0.4",
@@ -37,6 +37,7 @@
     "react-hot-loader": "^3.1.3",
     "redux-devtools-extension": "^2.13.2",
     "sinon": "^4.4.8",
+    "tslint": "^5.9.1",
     "ts-loader": "^3.5.0",
     "ts-node": "^5.0.1",
     "webpack-dev-server": "^2.11.1"

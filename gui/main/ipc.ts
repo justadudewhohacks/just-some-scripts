@@ -1,5 +1,7 @@
-import { ipcMain } from 'electron'
-import { connection, FunctionDao, stringifyId, ClassDao } from '../../persistence'
+import { ipcMain } from 'electron';
+
+import { Function } from '../../entities';
+import { ClassDao, connection, FunctionDao, stringifyId } from '../../persistence';
 import { FetchFunctionSignatureArgs } from '../types';
 
 let connected = false
@@ -37,7 +39,7 @@ ipcMain.on('close', (event: any) => {
 ipcMain.on('fetchFunction', async (event: any, args: FetchFunctionSignatureArgs) => {
   try {
     const result = await FunctionDao.find(args.owner, args.className)
-    event.sender.send('fetchFunction', { result: result ? stringifyId(result) : result })
+    event.sender.send('fetchFunction', { result: result ? new Function(stringifyId(result)) : result })
   } catch (error) {
     event.sender.send('fetchFunction', { error: error.toString() })
   }

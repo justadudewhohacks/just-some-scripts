@@ -22,13 +22,13 @@ export function createSignature(
   }
 }
 
-export function createAsyncFunctionWithId(_id: string, signatures: ISignature[]): IFunction {
+export function createAsyncFunctionWithId(uuid: string, signatures: ISignature[]): IFunction {
   return {
     cvModule: 'foo',
     owner: 'foo',
     fnName: 'foo',
     hasAsync: true,
-    _id,
+    uuid,
     signatures
   }
 }

@@ -1,12 +1,12 @@
-import { combineReducers } from 'redux'
+import { combineReducers } from 'redux';
 
-import databaseConnectionReducer from './databaseConnection/reducer'
-import signaturesReducer from './signatures/reducer'
-import cacheReducer from './cache/reducer'
-import { State as DatabaseConnectionState } from './databaseConnection/types'
-import { State as SignaturesState } from './signatures/types'
-import { State as CacheState } from './cache/types'
-import { State as UiState, reducer as UiStateReducer } from './ui'
+import cacheReducer from './cache/reducer';
+import { State as CacheState } from './cache/types';
+import databaseConnectionReducer from './databaseConnection/reducer';
+import { State as DatabaseConnectionState } from './databaseConnection/types';
+import signaturesReducer from './signatures/reducer';
+import { State as SignaturesState } from './signatures/types';
+import { reducer as UiStateReducer, State as UiState } from './ui';
 
 export type RootState = {
   readonly databaseConnection: DatabaseConnectionState

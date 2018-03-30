@@ -1,14 +1,13 @@
 {
-  "name": "@opencv4nodejs-gen/persistence",
+  "name": "@opencv4nodejs-gen/entities",
   "version": "0.0.0",
   "description": "",
   "author": "justadudewhohacks",
   "dependencies": {
-    "@opencv4nodejs-gen/entities": "../entities",
-    "@types/mongoose": "^5.0.1",
     "@types/node": "^9.4.1",
-    "mongoose": "^5.0.3",
-    "typescript": "^2.7.2"
+    "@types/uuid": "^3.4.3",
+    "typescript": "^2.7.2",
+    "uuid": "^3.2.1"
   },
   "devDependencies": {
     "tslint": "^5.9.1"
