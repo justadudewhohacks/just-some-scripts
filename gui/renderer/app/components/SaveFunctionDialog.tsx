@@ -15,6 +15,10 @@ const Indent = styled.span`
   margin-left: 20px;
 `
 
+function removeIdsAndVersion(result: string[]): string[] {
+  return result.filter(l => !l.includes('"uuid":'))
+}
+
 export default class SaveFunctionDialog extends React.Component<Props> {
   render() {
     const actions = [
@@ -41,8 +45,9 @@ export default class SaveFunctionDialog extends React.Component<Props> {
         autoScrollBodyContent
       >
         {
-          (JSON.stringify(this.props.resultFunction, null, '\t') || '')
-            .split('\n')
+          removeIdsAndVersion(
+            (JSON.stringify(this.props.resultFunction, null, '\t') || '').split('\n')
+          )
             .map(l =>
               <p>
                 {
