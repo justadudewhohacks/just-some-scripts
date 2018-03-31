@@ -1,13 +1,8 @@
 {
-  "name": "@opencv4nodejs-gen/gui-renderer",
-  "version": "0.0.0",
-  "description": "",
   "scripts": {
     "start": "webpack-dev-server",
     "test": "mocha -r ts-node/register ./tests/**/*.test.ts"
   },
-  "author": "justadudewhohacks",
-  "license": "MIT",
   "dependencies": {
     "@opencv4nodejs-gen/entities": "../../entities",
     "@types/material-ui": "^0.21.1",

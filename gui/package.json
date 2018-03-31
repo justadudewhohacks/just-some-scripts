@@ -1,9 +1,4 @@
 {
-  "name": "@opencv4nodejs-gen/gui",
-  "version": "0.0.0",
-  "description": "",
-  "author": "justadudewhohacks",
-  "license": "MIT",
   "scripts": {
     "build": "tsc",
     "start": "npm run build && electron ./dist/gui/main/main.js"

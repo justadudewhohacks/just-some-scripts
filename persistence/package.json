@@ -1,8 +1,4 @@
 {
-  "name": "@opencv4nodejs-gen/persistence",
-  "version": "0.0.0",
-  "description": "",
-  "author": "justadudewhohacks",
   "dependencies": {
     "@opencv4nodejs-gen/entities": "../entities",
     "@types/mongoose": "^5.0.1",

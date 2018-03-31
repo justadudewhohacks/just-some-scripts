@@ -1,8 +1,4 @@
 {
-  "name": "@opencv4nodejs-gen/entities",
-  "version": "0.0.0",
-  "description": "",
-  "author": "justadudewhohacks",
   "dependencies": {
     "@types/node": "^9.4.1",
     "@types/uuid": "^3.4.3",
