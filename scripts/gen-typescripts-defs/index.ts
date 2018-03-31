@@ -1,5 +1,6 @@
-import { createClassDefinitions } from './createClassDefinitions'
-import { connection } from '@opencv4nodejs-gen/persistence'
+import { connection } from '@opencv4nodejs-gen/persistence';
+
+import { createClassDefinitions } from './createClassDefinitions';
 
 async function run(className: string) {
   await connection.connect()

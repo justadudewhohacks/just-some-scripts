@@ -1,4 +1,4 @@
-import { IType, IArgument, IOptionalArgument, IDeclaration } from '@opencv4nodejs-gen/persistence';
+import { IType, IArgument, IOptionalArgument, IDeclaration } from '@opencv4nodejs-gen/entities';
 
 const numberTypes = ['uint', 'int', 'uchar']
 
@@ -14,7 +14,7 @@ export function argWithType(arg: IDeclaration, opt = false) : string {
   return `${arg.name}${opt ? '?' : ''}: ${typeOrArrayType(arg)}`
 }
 
-export function returnValue(returnValues?: IArgument[]) : string {
+export function returnValue(returnValues: IArgument[] | null) : string {
   return returnValues && returnValues.length
     ? (
       returnValues.length === 1

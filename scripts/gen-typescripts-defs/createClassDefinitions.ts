@@ -1,12 +1,10 @@
-import * as path from 'path'
-import * as fs from 'fs'
-import {
-  ClassDao,
-  FunctionDao,
-  IFunction
-} from '@opencv4nodejs-gen/persistence';
-import { createFunctionSignatures, createConstructor } from './createFunctionSignatures';
+import { IFunction } from '@opencv4nodejs-gen/entities';
+import { ClassDao, FunctionDao } from '@opencv4nodejs-gen/persistence';
+import * as fs from 'fs';
+import * as path from 'path';
+
 import { createClassFields } from './commons';
+import { createConstructor, createFunctionSignatures } from './createFunctionSignatures';
 
 const lineBreak = '\r\n'
 

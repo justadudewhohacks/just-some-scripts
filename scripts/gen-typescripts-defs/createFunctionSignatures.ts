@@ -1,4 +1,5 @@
-import { ISignature, IFunction } from '@opencv4nodejs-gen/persistence';
+import { IFunction, ISignature } from '@opencv4nodejs-gen/entities';
+
 import { argList, returnValue } from './commons';
 
 export function syncFunctionSignature(name: string, sig: ISignature) : string {
