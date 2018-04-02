@@ -1,5 +1,4 @@
-import { Argument } from '@opencv4nodejs-gen/entities';
-
+import { ArgumentInstance } from '../../classes';
 import { findArgsArrayNameByArgUuid, findArgument } from './commons';
 import { reduceFunctions } from './reduceFunctions';
 import { selectFunctionSignature } from './selectors';
@@ -10,7 +9,7 @@ export function reduceArgumentChange(
   state: State,
   argsArrayNames: ArgsArrayName[],
   uuid: string,
-  reduceArgsArray: (argsArray: Argument[], argsArrayIdx: number, arg: Argument) => Argument[]
+  reduceArgsArray: (argsArray: ArgumentInstance[], argsArrayIdx: number, arg: ArgumentInstance) => ArgumentInstance[]
 ): State {
   const sel = selectFunctionSignature(state, state.currentlyEditing.sigUuid)
   if (!sel)

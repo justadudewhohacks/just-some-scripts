@@ -1,4 +1,4 @@
-import { IClass } from '@opencv4nodejs-gen/entities';
+import { IClass } from '@opencv4nodejs/entities';
 
 import { ClassModel, IClassModel } from './class.model';
 

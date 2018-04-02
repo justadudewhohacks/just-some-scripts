@@ -1,4 +1,4 @@
-import { IType, IArgument, IOptionalArgument, IDeclaration } from '@opencv4nodejs-gen/entities';
+import { IType, IArgument, IOptionalArgument, IDeclaration } from '@opencv4nodejs/entities';
 
 const numberTypes = ['uint', 'int', 'uchar']
 

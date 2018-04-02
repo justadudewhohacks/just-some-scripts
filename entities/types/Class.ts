@@ -1,14 +1,11 @@
-import { IDeclaration, IArgument, IOptionalArgument } from './Argument';
+import { IDeclaration } from './Argument';
+import { IConstructor } from './Signature';
 
 export interface IClass {
-  className: string,
-  cvModule: string,
-  fields: IDeclaration[],
-  constructors: [{
-    requiredArgs: IArgument[],
-    optionalArgs: IOptionalArgument[],
-    returnsOther: String
-  }]
+  className: string
+  cvModule: string
+  fields: IDeclaration[]
+  constructors: IConstructor[]
 }
 
 export interface IClassEntity extends IClass {

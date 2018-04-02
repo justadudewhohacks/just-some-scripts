@@ -1,4 +1,4 @@
-import { ISignature, IFunction } from '@opencv4nodejs-gen/persistence/index';
+import { ISignature, IFunction } from '@opencv4nodejs/persistence/index';
 import { IArgument, IOptionalArgument } from '../../../../../persistence/types/index';
 import { CurrentlyEditing } from '../../../../app/redux/signatures/types';
 import { State } from 'app/redux/Signatures/types';

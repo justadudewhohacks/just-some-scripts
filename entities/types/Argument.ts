@@ -1,12 +1,10 @@
 export interface IType {
-  arrayDepth?: number
   type: string
+  arrayDepth?: number
 }
 
-export interface IDeclaration {
-  type: string
+export interface IDeclaration extends IType {
   name: string
-  arrayDepth?: number
   defaultValue?: string
 }
 

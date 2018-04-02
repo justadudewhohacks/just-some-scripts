@@ -1,17 +1,9 @@
-import { v1 as uuid } from 'uuid'
 import { IArgument, IOptionalArgument } from '../types';
+import { Declaration } from './Declaration';
 
-export class Argument implements IArgument {
-  uuid: string
-  type: string
-  name: string
-  arrayDepth?: number
-
+export class Argument extends Declaration implements IArgument {
   constructor(arg?: IArgument) {
-    this.uuid = uuid()
-    this.type = arg ? arg.type : ''
-    this.name =  arg ? arg.name : ''
-    this.arrayDepth =  arg ? arg.arrayDepth : 0
+    super(arg)
   }
 }
 

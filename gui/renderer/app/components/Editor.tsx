@@ -1,4 +1,3 @@
-import { Function } from '@opencv4nodejs-gen/entities';
 import * as React from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
@@ -12,6 +11,7 @@ import { EditorTabIcon } from './EditorTabIcon';
 import SaveFunctionDialog from './SaveFunctionDialog';
 import SignatureTablist from './SignatureTablist';
 import { selectCurrentlyEditedFunction } from '../redux/signatures/selectors';
+import { FunctionInstance } from '../classes';
 
 
 const Tablist = styled.div`
@@ -22,8 +22,8 @@ const Tablist = styled.div`
 `
 type Props = {
   isSaveFunctionDialogOpen: boolean
-  functions: Function[]
-  editedFunction: Function | null
+  functions: FunctionInstance[]
+  editedFunction: FunctionInstance | null
   closeSaveFunctionDialog: () => void
   editFunction: (uuid: string) => void
   unloadFunction: (uuid: string) => void

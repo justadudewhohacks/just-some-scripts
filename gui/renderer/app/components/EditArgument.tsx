@@ -1,11 +1,10 @@
-import { Argument, OptionalArgument } from '@opencv4nodejs-gen/entities';
 import AutoComplete from 'material-ui/AutoComplete';
 import TextField from 'material-ui/TextField';
 import * as React from 'react';
 import styled from 'styled-components';
 
+import { ArgumentInstance, OptionalArgumentInstance, ReturnValueInstance } from '../classes';
 import { AddButton, RemoveButton } from './Buttons';
-import { ReturnValue } from '../../../../entities/classes/Argument';
 
 const Row = styled.div`
   background: ${props => props.theme.colors.passive};
@@ -18,7 +17,7 @@ const Row = styled.div`
 `
 
 type Props = {
-  arg: Argument | OptionalArgument
+  arg: ArgumentInstance | OptionalArgumentInstance
   index: number
   types: string[]
   onTypeChanged: (type: string, argUuid: string) => void
@@ -55,7 +54,7 @@ export const EditArgument = ({ arg, index, types, onTypeChanged, onNameChanged, 
       style={{ width: 120 }}
     />
     {
-      (arg instanceof OptionalArgument) &&
+      (arg instanceof OptionalArgumentInstance) &&
         <TextField
           value={arg.defaultValue || ''}
           floatingLabelText="Name"
@@ -65,7 +64,7 @@ export const EditArgument = ({ arg, index, types, onTypeChanged, onNameChanged, 
         />
     }
     {
-      !(arg instanceof OptionalArgument) && !(arg instanceof ReturnValue) &&
+      !(arg instanceof OptionalArgumentInstance) && !(arg instanceof ReturnValueInstance) &&
       <AddButton
         label="Optional"
         onClick={() => onMakeOptional(arg.uuid)}

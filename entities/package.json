@@ -1,8 +1,10 @@
 {
+  "name": "@opencv4nodejs/entities",
+  "version": "0.0.0",
+  "author": "justadudewhohacks",
   "dependencies": {
     "@types/node": "^9.4.1",
-    "@types/uuid": "^3.4.3",
-    "typescript": "^2.7.2",
-    "uuid": "^3.2.1"
+    "tslib": "^1.9.0",
+    "typescript": "^2.7.2"
   }
 }

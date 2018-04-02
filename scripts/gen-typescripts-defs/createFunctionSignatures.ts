@@ -1,4 +1,4 @@
-import { IFunction, ISignature } from '@opencv4nodejs-gen/entities';
+import { IFunction, ISignature } from '@opencv4nodejs/entities';
 
 import { argList, returnValue } from './commons';
 

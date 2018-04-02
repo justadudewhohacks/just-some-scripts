@@ -4,7 +4,7 @@
     "test": "mocha -r ts-node/register ./tests/**/*.test.ts"
   },
   "dependencies": {
-    "@opencv4nodejs-gen/entities": "../../entities",
+    "@opencv4nodejs/entities": "../../entities",
     "@types/material-ui": "^0.21.1",
     "@types/react": "^16.0.37",
     "@types/react-dom": "^16.0.4",

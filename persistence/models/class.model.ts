@@ -1,4 +1,4 @@
-import { IClass } from '@opencv4nodejs-gen/entities';
+import { IClass } from '@opencv4nodejs/entities';
 import { Document, Model, model, Schema } from 'mongoose';
 
 import { argType, declType } from './commonTypes';

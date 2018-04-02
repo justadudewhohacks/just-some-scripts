@@ -1,12 +1,12 @@
-import { Signature } from '@opencv4nodejs-gen/entities';
 import * as React from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 
-import { OptionalArgument } from '../../../../entities/classes/Argument';
+import { SignatureInstance } from '../classes';
 import { actions as signaturesActions } from '../redux/signatures';
 import { AddButton, RemoveButton } from './Buttons';
 import { EditArgument } from './EditArgument';
+import { OptionalArgumentInstance } from '../classes/index';
 
 const Container = styled.div`
   display: flex;
@@ -16,7 +16,7 @@ const Container = styled.div`
 
 type Props = {
   types: string[]
-  signature: Signature
+  signature: SignatureInstance
   updateReturnValueType: (type: string, argUuid: string) => void
   updateReturnValueName: (name: string, argUuid: string) => void
   updateReturnValueArrayDepth: (value: string, argUuid: string) => void
@@ -111,8 +111,8 @@ const EditSignature = ({
               onNameChanged={updateArgumentName}
               onRemove={removeFunctionArgument}
               onArrayDepthChanged={updateArgumentArrayDepth}
-              onMakeOptional={(arg instanceof OptionalArgument) ? null : makeFunctionArgumentOptional}
-              onDefaultValueChanged={(arg instanceof OptionalArgument) ? updateArgumentDefaultValue : null}
+              onMakeOptional={(arg instanceof OptionalArgumentInstance) ? null : makeFunctionArgumentOptional}
+              onDefaultValueChanged={(arg instanceof OptionalArgumentInstance) ? updateArgumentDefaultValue : null}
             />
           )
       }

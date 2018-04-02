@@ -1,6 +1,8 @@
 import 'mocha';
+
 import { expect } from 'chai';
-import { typeOrArrayType, argWithType, returnValue, argList } from '../../gen-typescripts-defs/commons';
+
+import { argList, argWithType, returnValue, typeOrArrayType } from '../../gen-typescripts-defs/commons';
 
 export function commonTests() {
 
@@ -159,7 +161,7 @@ export function commonTests() {
           {
             type: 'number',
             name: 'bar',
-            defaultValue: 1
+            defaultValue: '1'
           }
         ])
       ).to.equal('foo?: string, bar?: number')
@@ -185,7 +187,7 @@ export function commonTests() {
           {
             type: 'number',
             name: 'barfoo',
-            defaultValue: 1
+            defaultValue: '1'
           }
         ])
       ).to.equal('foo: string, bar: number, foobar?: string, barfoo?: number')

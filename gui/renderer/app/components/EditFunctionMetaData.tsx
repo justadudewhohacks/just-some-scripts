@@ -1,4 +1,4 @@
-import { IFunctionMetaData } from '@opencv4nodejs-gen/entities';
+import { IFunctionMetaData } from '@opencv4nodejs/entities';
 import { Checkbox, TextField } from 'material-ui';
 import * as React from 'react';
 import { connect } from 'react-redux';

@@ -1,4 +1,4 @@
-import { connection } from '@opencv4nodejs-gen/persistence';
+import { connection } from '@opencv4nodejs/persistence';
 
 import { createClassDefinitions } from './createClassDefinitions';
 

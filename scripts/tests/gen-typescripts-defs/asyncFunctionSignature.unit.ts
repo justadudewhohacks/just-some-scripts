@@ -1,5 +1,7 @@
-import 'mocha'
+import 'mocha';
+
 import { expect } from 'chai';
+
 import { asyncFunctionSignature } from '../../gen-typescripts-defs/createFunctionSignatures';
 
 export function asyncFunctionSignatureTests() {
@@ -94,7 +96,7 @@ export function asyncFunctionSignatureTests() {
             {
               type: 'number',
               name: 'bar',
-              defaultValue: 1
+              defaultValue: '1'
             }
           ],
           returnValues: []
@@ -127,7 +129,7 @@ export function asyncFunctionSignatureTests() {
             {
               type: 'number',
               name: 'barfoo',
-              defaultValue: 1
+              defaultValue: '1'
             }
           ],
           returnValues: []

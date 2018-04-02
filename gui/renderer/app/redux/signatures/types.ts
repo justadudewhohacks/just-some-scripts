@@ -1,12 +1,11 @@
-import { Function, Signature } from '@opencv4nodejs-gen/entities';
-
+import { SignatureInstance, FunctionInstance } from '../../classes';
 export interface IFunctionSelection {
-  fn: Function
+  fn: FunctionInstance
   fnIdx: number
 }
 
 export interface IFunctionSignatureSelection extends IFunctionSelection {
-  sig: Signature
+  sig: SignatureInstance
   sigIdx: number
 }
 
@@ -22,7 +21,7 @@ export type CurrentlyEditing = {
 }
 
 export type State = {
-  readonly functions: Function[]
+  readonly functions: FunctionInstance[]
   readonly currentlyEditing: CurrentlyEditing
 }
 

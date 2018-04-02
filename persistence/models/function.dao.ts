@@ -1,4 +1,4 @@
-import { IFunctionEntity, IFunctionMetaData } from '@opencv4nodejs-gen/entities';
+import { IFunctionEntity, IFunctionMetaData } from '@opencv4nodejs/entities';
 
 import { FunctionModel } from './function.model';
 

@@ -1,5 +1,5 @@
-import { IFunction } from '@opencv4nodejs-gen/entities';
-import { ClassDao, FunctionDao } from '@opencv4nodejs-gen/persistence';
+import { IFunction } from '@opencv4nodejs/entities';
+import { ClassDao, FunctionDao } from '@opencv4nodejs/persistence';
 import * as fs from 'fs';
 import * as path from 'path';
 

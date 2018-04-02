@@ -1,22 +1,22 @@
-import { Function } from '@opencv4nodejs-gen/entities';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import { Tab, Tabs } from 'material-ui/Tabs';
 import * as React from 'react';
 import { connect } from 'react-redux';
 
+import { FunctionInstance } from '../classes';
 import { selectors as cacheSelectors } from '../redux/cache';
 import { RootState } from '../redux/rootReducer';
 import { actions as signaturesActions } from '../redux/signatures';
+import { selectCurrentlyEditedFunctionSignature } from '../redux/signatures/selectors';
 import { actions as editorActions } from '../redux/ui/editor';
 import { SaveButton } from './Buttons';
 import EditFunctionMetaData from './EditFunctionMetaData';
 import EditSignature from './EditSignature';
-import { selectCurrentlyEditedFunctionSignature } from '../redux/signatures/selectors';
 
 
 type Props = {
   types: string[]
-  editedFunction: Function | null,
+  editedFunction: FunctionInstance | null,
   editedSignatureUuid: string | null,
   editFunctionSignature: (uuid: string) => void
   openSaveFunctionDialog: () => void

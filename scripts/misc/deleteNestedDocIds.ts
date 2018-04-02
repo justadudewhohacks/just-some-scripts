@@ -1,4 +1,4 @@
-import { ClassDao, connection } from '@opencv4nodejs-gen/persistence';
+import { ClassDao, connection } from '@opencv4nodejs/persistence';
 
 function removeIds(obj: any) {
   if (obj._id) {

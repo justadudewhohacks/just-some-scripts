@@ -1,5 +1,6 @@
-import { Function, IFunctionMetaData } from '@opencv4nodejs-gen/entities';
+import { IFunctionMetaData } from '@opencv4nodejs/entities';
 
+import { FunctionInstance } from '../../classes';
 import { removeItem, replaceItem } from '../immutibilityUtils';
 import { IAction, isType } from '../reduxUtils';
 import {
@@ -21,10 +22,10 @@ export default function(state = INITIAL_STATE, action: IAction<any>) : State {
   if (isType(action, fetchFunctionSuccessAction)) {
 
     const { fn } = action.payload
-    const idx = state.functions.findIndex(f => f.uuid === fn.uuid)
+    const idx = state.functions.findIndex(f => f._id === fn._id)
 
     if (idx !== -1) {
-      return { ...state, functions: replaceItem<Function>(state.functions, fn, idx) }
+      return { ...state, functions: replaceItem<FunctionInstance>(state.functions, fn, idx) }
     }
     return { ...state, functions: state.functions.concat(fn) }
 
@@ -48,7 +49,7 @@ export default function(state = INITIAL_STATE, action: IAction<any>) : State {
 
     const idx = state.functions.findIndex(f => f.uuid === uuid)
     if (idx !== -1) {
-      return { ...state, functions: removeItem<Function>(state.functions, idx) }
+      return { ...state, functions: removeItem<FunctionInstance>(state.functions, idx) }
     }
 
     return state

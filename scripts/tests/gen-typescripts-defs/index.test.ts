@@ -1,10 +1,12 @@
-import 'mocha'
+import 'mocha';
+
+import { IFunction } from '@opencv4nodejs/entities';
 import { expect } from 'chai';
-import { IFunction } from '@opencv4nodejs-gen/persistence';
-import { commonTests } from "./commons.unit";
-import { syncFunctionSignatureTests } from './syncFunctionSignature.unit';
-import { asyncFunctionSignatureTests } from './asyncFunctionSignature.unit';
+
 import { createFunctionSignatures } from '../../gen-typescripts-defs/createFunctionSignatures';
+import { asyncFunctionSignatureTests } from './asyncFunctionSignature.unit';
+import { commonTests } from './commons.unit';
+import { syncFunctionSignatureTests } from './syncFunctionSignature.unit';
 
 
 describe('gen-typescripts-defs', () => {

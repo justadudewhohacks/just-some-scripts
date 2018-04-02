@@ -1,13 +1,12 @@
-import { Argument } from '@opencv4nodejs-gen/entities';
-
 import { reduceFunctions } from './reduceFunctions';
 import { ArgsArrayName, State } from './types';
 import { selectFunctionSignature } from './selectors';
+import { ArgumentInstance } from '../../classes';
 
 export function reduceArgumentAdd(
   state: State,
   argsArrayName: ArgsArrayName,
-  reduceArgsArray: (argsArray: Argument[]) => Argument[]
+  reduceArgsArray: (argsArray: ArgumentInstance[]) => ArgumentInstance[]
 ): State {
   const sel = selectFunctionSignature(state, state.currentlyEditing.sigUuid)
   if (!sel)

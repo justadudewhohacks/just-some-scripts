@@ -1,3 +1,5 @@
 export * from './Argument'
+export * from './Class'
+export * from './Declaration'
 export * from './Function'
 export * from './Signature'
